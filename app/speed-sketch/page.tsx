@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import SpeedSketch from "../components/SpeedSketch";
+import RelatedGames from "../components/RelatedGames";
 
 export const metadata: Metadata = {
   title: "Speed Sketch - 30 Second Drawing Challenge | DoodleLab",
   description:
     "Draw the prompt as fast as you can in 30 seconds. Free timed drawing game with random prompts. No sign-up required.",
   keywords: ["speed sketch", "timed drawing", "drawing challenge", "quick draw", "30 second draw"],
+  openGraph: {
+    title: "Speed Sketch - 30 Second Drawing Challenge | DoodleLab",
+    description:
+      "Draw the prompt as fast as you can in 30 seconds. Free timed drawing game with random prompts. No sign-up required.",
+    type: "website",
+  },
 };
 
 export default function SpeedSketchPage() {
@@ -28,6 +35,62 @@ export default function SpeedSketchPage() {
           with friends, or just having a creative minute of fun.
         </p>
       </section>
+      <RelatedGames current="/speed-sketch" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            name: "Speed Sketch",
+            url: "https://doodlelab.fun/speed-sketch",
+            applicationCategory: "GameApplication",
+            description:
+              "Draw the prompt as fast as you can in 30 seconds. Free timed drawing game with random prompts. No sign-up required.",
+            operatingSystem: "All",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "How does Speed Sketch work?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "You get a random word prompt and 30 seconds to draw it. Use the color palette and brush tools to create your sketch before time runs out. Save your drawing or try again with a new prompt.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I play Speed Sketch on mobile?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes! Speed Sketch works on phones and tablets with touch drawing support. The canvas adapts to your screen size for the best experience.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Is Speed Sketch good for improving drawing skills?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Timed drawing forces you to focus on essential shapes and details, which is great practice for quick sketching and visual thinking.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
     </main>
   );
 }

@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import OneLineDraw from "../components/OneLineDraw";
+import RelatedGames from "../components/RelatedGames";
 
 export const metadata: Metadata = {
   title: "One Line Art - Continuous Line Drawing | DoodleLab",
   description:
     "Draw without lifting your pen. Create art with one continuous stroke. A creative challenge for artists of all levels.",
   keywords: ["one line art", "continuous line", "single stroke drawing", "line art", "one line drawing"],
+  openGraph: {
+    title: "One Line Art - Single Stroke Drawing Challenge | DoodleLab",
+    description:
+      "Draw without lifting your pen. Create art with one continuous stroke. A creative challenge for artists of all levels.",
+    type: "website",
+  },
 };
 
 export default function OneLinePage() {
@@ -29,6 +36,62 @@ export default function OneLinePage() {
           counter tracks how long your line gets.
         </p>
       </section>
+      <RelatedGames current="/one-line" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            name: "One Line Art",
+            url: "https://doodlelab.fun/one-line",
+            applicationCategory: "GameApplication",
+            description:
+              "Draw without lifting your pen. Create art with one continuous stroke. A creative challenge for artists of all levels.",
+            operatingSystem: "All",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "What is one line art?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "One line art (also called single line drawing) is creating an image with one continuous stroke — you never lift your pen. Famous artists like Picasso used this technique.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Is one line drawing hard?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "It requires planning your path carefully, but anyone can do it. Start with simple shapes and work up to more complex designs. The constraint actually makes it more creative.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I use one line art professionally?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes! One line art is popular for logos, tattoos, T-shirt designs, and minimalist wall art. It's a recognized artistic style with commercial applications.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
     </main>
   );
 }
