@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { saveImage } from "../utils/saveImage";
 
 const GRID_SIZE = 16;
 const PALETTE = [
@@ -77,10 +78,7 @@ export default function PixelArt() {
       ctx.fillStyle = grid[i];
       ctx.fillRect(x, y, scale, scale);
     }
-    const link = document.createElement("a");
-    link.download = "pixel-art.png";
-    link.href = canvas.toDataURL();
-    link.click();
+    saveImage(canvas.toDataURL(), "pixel-art.png");
   };
 
   const cellSize = `${100 / gridSize}%`;

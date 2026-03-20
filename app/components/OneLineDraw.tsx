@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { saveImage } from "../utils/saveImage";
 
 export default function OneLineDraw() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -88,13 +89,10 @@ export default function OneLineDraw() {
     }
   };
 
-  const saveImage = () => {
+  const handleSave = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const link = document.createElement("a");
-    link.download = "one-line-art.png";
-    link.href = canvas.toDataURL();
-    link.click();
+    saveImage(canvas.toDataURL(), "one-line-art.png");
   };
 
   const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
@@ -116,7 +114,7 @@ export default function OneLineDraw() {
             Start Over
           </button>
           <button
-            onClick={saveImage}
+            onClick={handleSave}
             className="px-3 py-1.5 text-sm bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-lg"
           >
             Save

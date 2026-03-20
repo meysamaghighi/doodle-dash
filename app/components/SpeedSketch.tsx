@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { saveImage } from "../utils/saveImage";
 
 const PROMPTS = [
   "cat", "house", "tree", "sun", "car", "fish", "star", "heart", "flower",
@@ -94,13 +95,10 @@ export default function SpeedSketch() {
     lastPos.current = null;
   };
 
-  const saveImage = () => {
+  const handleSave = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const link = document.createElement("a");
-    link.download = `doodledash-${prompt}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
+    saveImage(canvas.toDataURL(), `doodledash-${prompt}.png`);
   };
 
   const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899", "#000000"];
@@ -180,7 +178,7 @@ export default function SpeedSketch() {
           {phase === "done" && (
             <div className="mt-4 flex gap-3 justify-center">
               <button
-                onClick={saveImage}
+                onClick={handleSave}
                 className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
               >
                 Save Drawing

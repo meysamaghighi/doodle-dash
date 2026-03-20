@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { saveImage } from "../utils/saveImage";
 
 interface Shape {
   type: "circle" | "rect" | "triangle" | "star";
@@ -308,6 +309,14 @@ export default function MemoryDraw() {
             </div>
           </div>
           <div className="flex gap-3 justify-center mt-4">
+            {drawingImage && (
+              <button
+                onClick={() => saveImage(drawingImage, "memory-draw.png")}
+                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+              >
+                Save Drawing
+              </button>
+            )}
             <button
               onClick={() => {
                 setLevel((l) => l + 1);
