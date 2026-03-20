@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
 import { getDrawingStats } from "../utils/canvasStats";
+import { usePersonalBest } from "../hooks/usePersonalBest";
 
 const PROMPTS = [
   "cat", "house", "tree", "sun", "car", "fish", "star", "heart", "flower",
@@ -21,6 +22,7 @@ export default function SpeedSketch() {
   const [color, setColor] = useState("#ffffff");
   const [brushSize, setBrushSize] = useState(3);
   const [stats, setStats] = useState<{ coverage: number; colorsUsed: number } | null>(null);
+  const pb = usePersonalBest("pb-speed-sketch", "higher", phase === "done" && stats ? stats.coverage : null);
   const drawing = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
 
@@ -195,6 +197,12 @@ export default function SpeedSketch() {
                 </div>
                 <div className="text-gray-500">Grade</div>
               </div>
+            </div>
+          )}
+          {phase === "done" && (
+            <div className="text-center mt-2">
+              {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm animate-pulse">New Personal Best!</p>}
+              {pb.best !== null && !pb.isNewBest && <p className="text-gray-500 text-xs">Personal Best: {pb.best}% coverage</p>}
             </div>
           )}
 

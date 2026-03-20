@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
 import { compareImages } from "../utils/canvasStats";
+import { usePersonalBest } from "../hooks/usePersonalBest";
 
 interface Shape {
   type: "circle" | "rect" | "triangle" | "star";
@@ -87,6 +88,7 @@ export default function MemoryDraw() {
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [drawingImage, setDrawingImage] = useState<string | null>(null);
   const [similarity, setSimilarity] = useState<number | null>(null);
+  const pb = usePersonalBest("pb-memory-draw", "higher", phase === "compare" ? similarity : null);
   const drawingRef = useRef(false);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
   // Off-screen canvas for generating the reference image
@@ -301,6 +303,8 @@ export default function MemoryDraw() {
                    similarity >= 40 ? "Not bad! Try again?" :
                    "Keep practicing!"}
                 </p>
+                {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm mt-1 animate-pulse">New Personal Best!</p>}
+                {pb.best !== null && !pb.isNewBest && <p className="text-gray-500 text-xs mt-1">Personal Best: {pb.best}%</p>}
               </div>
             )}
           </div>
