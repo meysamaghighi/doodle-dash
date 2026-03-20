@@ -19,6 +19,7 @@ export default function PixelArt() {
   const [gridSize, setGridSize] = useState(GRID_SIZE);
   const painting = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const resetGrid = (size: number) => {
     setGridSize(size);
@@ -47,7 +48,8 @@ export default function PixelArt() {
     [gridSize]
   );
 
-  const paintCell = (index: number) => {
+  const paintCell = useCallback((index: number) => {
+    if (index < 0 || index >= gridSize * gridSize) return;
     if (tool === "fill") {
       setGrid((g) => floodFill(index, g[index], color, g));
     } else if (tool === "erase") {
@@ -63,6 +65,42 @@ export default function PixelArt() {
         return n;
       });
     }
+  }, [tool, color, gridSize, floodFill]);
+
+  const getCellFromPoint = (clientX: number, clientY: number): number => {
+    const el = gridRef.current;
+    if (!el) return -1;
+    const rect = el.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const col = Math.floor((x / rect.width) * gridSize);
+    const row = Math.floor((y / rect.height) * gridSize);
+    if (col < 0 || col >= gridSize || row < 0 || row >= gridSize) return -1;
+    return row * gridSize + col;
+  };
+
+  const lastPaintedCell = useRef(-1);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    painting.current = true;
+    const idx = getCellFromPoint(e.clientX, e.clientY);
+    lastPaintedCell.current = idx;
+    paintCell(idx);
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!painting.current) return;
+    const idx = getCellFromPoint(e.clientX, e.clientY);
+    if (idx !== lastPaintedCell.current && idx >= 0) {
+      lastPaintedCell.current = idx;
+      paintCell(idx);
+    }
+  };
+
+  const handlePointerUp = () => {
+    painting.current = false;
+    lastPaintedCell.current = -1;
   };
 
   const exportImage = () => {
@@ -80,8 +118,6 @@ export default function PixelArt() {
     }
     saveImage(canvas.toDataURL(), "pixel-art.png");
   };
-
-  const cellSize = `${100 / gridSize}%`;
 
   return (
     <div className="max-w-lg mx-auto">
@@ -135,24 +171,23 @@ export default function PixelArt() {
       </div>
 
       <div
-        className="aspect-square border border-gray-700 rounded-xl overflow-hidden relative select-none touch-none"
-        style={{ display: "grid", gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
-        onMouseDown={() => (painting.current = true)}
-        onMouseUp={() => (painting.current = false)}
-        onMouseLeave={() => (painting.current = false)}
-        onTouchEnd={() => (painting.current = false)}
+        ref={gridRef}
+        className="aspect-square border border-gray-700 rounded-xl overflow-hidden select-none touch-none cursor-pointer"
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+          gridTemplateRows: `repeat(${gridSize}, 1fr)`,
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
       >
         {grid.map((cellColor, i) => (
           <div
             key={i}
-            style={{ backgroundColor: cellColor, width: cellSize, paddingBottom: cellSize }}
-            className="cursor-pointer"
-            onMouseDown={() => paintCell(i)}
-            onMouseEnter={() => painting.current && paintCell(i)}
-            onTouchStart={() => {
-              painting.current = true;
-              paintCell(i);
-            }}
+            style={{ backgroundColor: cellColor }}
+            className="pointer-events-none"
           />
         ))}
       </div>
