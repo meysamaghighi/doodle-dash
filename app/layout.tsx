@@ -37,6 +37,11 @@ export default function RootLayout({
           name="google-adsense-account"
           content="ca-pub-2621005924235240"
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-37XZTPKVB8"></script>
+        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-37XZTPKVB8');` }} />
       </head>
       <body className="bg-gray-950 text-white min-h-screen font-sans antialiased">
         <nav className="border-b border-gray-800 sticky top-0 z-50 bg-gray-950/90 backdrop-blur">
