@@ -44,7 +44,7 @@ export function compareImages(refDataUrl: string, drawDataUrl: string): Promise<
               // Both have content -- check color similarity
               const dr = rRef - rDraw, dg = gRef - gDraw, db = bRef - bDraw;
               const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-              if (dist < 120) covered++;
+              if (dist < 200) covered++;
             }
           }
         }
@@ -57,9 +57,9 @@ export function compareImages(refDataUrl: string, drawDataUrl: string): Promise<
         // Coverage: what % of reference shapes did you draw?
         const coverageScore = covered / refShapePixels;
 
-        // Penalty: what % of background did you accidentally draw on?
+        // Penalty: only penalize if you drew A LOT on empty areas
         const wrongRatio = refBgPixels > 0 ? wrongPixels / refBgPixels : 0;
-        const penalty = Math.min(wrongRatio * 3, 0.5); // max 50% penalty
+        const penalty = Math.min(wrongRatio * 1.5, 0.3); // max 30% penalty, gentle multiplier
 
         const finalScore = Math.max(0, Math.round((coverageScore - penalty) * 100));
         resolve(finalScore);
