@@ -76,34 +76,39 @@ function drawShape(ctx: CanvasRenderingContext2D, shape: Shape) {
 type Phase = "ready" | "memorize" | "draw" | "compare";
 
 export default function MemoryDraw() {
-  const referenceRef = useRef<HTMLCanvasElement>(null);
   const drawRef = useRef<HTMLCanvasElement>(null);
   const [phase, setPhase] = useState<Phase>("ready");
   const [level, setLevel] = useState(1);
-  const [shapes, setShapes] = useState<Shape[]>([]);
   const [color, setColor] = useState("#ffffff");
   const [brushSize, setBrushSize] = useState(3);
   const [memorizeTime, setMemorizeTime] = useState(0);
+  const [referenceImage, setReferenceImage] = useState<string | null>(null);
+  const [drawingImage, setDrawingImage] = useState<string | null>(null);
   const drawingRef = useRef(false);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
+  // Off-screen canvas for generating the reference image
+  const offscreenRef = useRef<HTMLCanvasElement | null>(null);
 
   const startRound = useCallback(() => {
     const newShapes = generateShapes(level);
-    setShapes(newShapes);
     setPhase("memorize");
+    setReferenceImage(null);
+    setDrawingImage(null);
 
     const duration = Math.max(2, 5 - level * 0.5);
     setMemorizeTime(Math.ceil(duration));
 
-    setTimeout(() => {
-      const refCanvas = referenceRef.current;
-      if (refCanvas) {
-        const ctx = refCanvas.getContext("2d")!;
-        ctx.fillStyle = "#111827";
-        ctx.fillRect(0, 0, 512, 512);
-        newShapes.forEach((s) => drawShape(ctx, s));
-      }
-    }, 50);
+    // Draw reference on an offscreen canvas and capture as data URL
+    if (!offscreenRef.current) {
+      offscreenRef.current = document.createElement("canvas");
+      offscreenRef.current.width = 512;
+      offscreenRef.current.height = 512;
+    }
+    const offCtx = offscreenRef.current.getContext("2d")!;
+    offCtx.fillStyle = "#111827";
+    offCtx.fillRect(0, 0, 512, 512);
+    newShapes.forEach((s) => drawShape(offCtx, s));
+    setReferenceImage(offscreenRef.current.toDataURL());
 
     setTimeout(() => {
       setPhase("draw");
@@ -162,6 +167,15 @@ export default function MemoryDraw() {
     [phase, color, brushSize]
   );
 
+  const handleCompare = () => {
+    // Capture the drawing canvas before unmounting it
+    const drawCanvas = drawRef.current;
+    if (drawCanvas) {
+      setDrawingImage(drawCanvas.toDataURL());
+    }
+    setPhase("compare");
+  };
+
   const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
 
   return (
@@ -188,12 +202,13 @@ export default function MemoryDraw() {
               Memorize! {memorizeTime}s
             </span>
           </div>
-          <canvas
-            ref={referenceRef}
-            width={512}
-            height={512}
-            className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-gray-700"
-          />
+          {referenceImage && (
+            <img
+              src={referenceImage}
+              alt="Shapes to memorize"
+              className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-gray-700"
+            />
+          )}
         </div>
       )}
 
@@ -254,7 +269,7 @@ export default function MemoryDraw() {
           />
           <div className="text-center mt-4">
             <button
-              onClick={() => setPhase("compare")}
+              onClick={handleCompare}
               className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg"
             >
               Done - Compare
@@ -273,21 +288,23 @@ export default function MemoryDraw() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-center text-sm text-gray-400 mb-2">Original</p>
-              <canvas
-                ref={referenceRef}
-                width={512}
-                height={512}
-                className="w-full aspect-square rounded-xl border border-gray-700"
-              />
+              {referenceImage && (
+                <img
+                  src={referenceImage}
+                  alt="Original shapes"
+                  className="w-full aspect-square rounded-xl border border-gray-700"
+                />
+              )}
             </div>
             <div>
               <p className="text-center text-sm text-gray-400 mb-2">Yours</p>
-              <canvas
-                ref={drawRef}
-                width={512}
-                height={512}
-                className="w-full aspect-square rounded-xl border border-gray-700"
-              />
+              {drawingImage && (
+                <img
+                  src={drawingImage}
+                  alt="Your drawing"
+                  className="w-full aspect-square rounded-xl border border-gray-700"
+                />
+              )}
             </div>
           </div>
           <div className="flex gap-3 justify-center mt-4">
