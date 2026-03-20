@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
+import { getDrawingStats } from "../utils/canvasStats";
 
 const PROMPTS = [
   "cat", "house", "tree", "sun", "car", "fish", "star", "heart", "flower",
@@ -19,6 +20,7 @@ export default function SpeedSketch() {
   const [timeLeft, setTimeLeft] = useState(30);
   const [color, setColor] = useState("#ffffff");
   const [brushSize, setBrushSize] = useState(3);
+  const [stats, setStats] = useState<{ coverage: number; colorsUsed: number } | null>(null);
   const drawing = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
 
@@ -38,6 +40,8 @@ export default function SpeedSketch() {
   useEffect(() => {
     if (phase !== "drawing") return;
     if (timeLeft <= 0) {
+      const canvas = canvasRef.current;
+      if (canvas) setStats(getDrawingStats(canvas));
       setPhase("done");
       return;
     }
@@ -172,6 +176,25 @@ export default function SpeedSketch() {
                 className="w-24 accent-orange-500"
               />
               <span className="text-xs text-gray-500">{brushSize}px</span>
+            </div>
+          )}
+
+          {phase === "done" && stats && (
+            <div className="mt-3 flex items-center justify-center gap-6 text-sm">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-400">{stats.coverage}%</div>
+                <div className="text-gray-500">Canvas used</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-400">{stats.colorsUsed}</div>
+                <div className="text-gray-500">Colors</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-cyan-400">
+                  {stats.coverage >= 15 ? (stats.colorsUsed >= 3 ? "A" : "B") : (stats.coverage >= 5 ? "C" : "D")}
+                </div>
+                <div className="text-gray-500">Grade</div>
+              </div>
             </div>
           )}
 

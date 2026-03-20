@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
+import { compareImages } from "../utils/canvasStats";
 
 interface Shape {
   type: "circle" | "rect" | "triangle" | "star";
@@ -85,6 +86,7 @@ export default function MemoryDraw() {
   const [memorizeTime, setMemorizeTime] = useState(0);
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [drawingImage, setDrawingImage] = useState<string | null>(null);
+  const [similarity, setSimilarity] = useState<number | null>(null);
   const drawingRef = useRef(false);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
   // Off-screen canvas for generating the reference image
@@ -95,6 +97,7 @@ export default function MemoryDraw() {
     setPhase("memorize");
     setReferenceImage(null);
     setDrawingImage(null);
+    setSimilarity(null);
 
     const duration = Math.max(2, 5 - level * 0.5);
     setMemorizeTime(Math.ceil(duration));
@@ -168,11 +171,13 @@ export default function MemoryDraw() {
     [phase, color, brushSize]
   );
 
-  const handleCompare = () => {
-    // Capture the drawing canvas before unmounting it
+  const handleCompare = async () => {
     const drawCanvas = drawRef.current;
-    if (drawCanvas) {
-      setDrawingImage(drawCanvas.toDataURL());
+    if (drawCanvas && referenceImage) {
+      const drawUrl = drawCanvas.toDataURL();
+      setDrawingImage(drawUrl);
+      const score = await compareImages(referenceImage, drawUrl);
+      setSimilarity(score);
     }
     setPhase("compare");
   };
@@ -282,9 +287,22 @@ export default function MemoryDraw() {
       {phase === "compare" && (
         <div>
           <div className="text-center mb-4">
-            <span className="text-lg font-bold text-gray-300">
-              How did you do?
-            </span>
+            {similarity !== null && (
+              <div className="mb-2">
+                <span className={`text-3xl font-black ${
+                  similarity >= 70 ? "text-green-400" :
+                  similarity >= 40 ? "text-yellow-400" :
+                  "text-red-400"
+                }`}>
+                  {similarity}% Match
+                </span>
+                <p className="text-gray-400 text-sm mt-1">
+                  {similarity >= 70 ? "Amazing memory!" :
+                   similarity >= 40 ? "Not bad! Try again?" :
+                   "Keep practicing!"}
+                </p>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>

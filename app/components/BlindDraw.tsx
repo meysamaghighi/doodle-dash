@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
+import { getDrawingStats } from "../utils/canvasStats";
 
 const PROMPTS = [
   "cat", "house", "tree", "car", "fish", "star", "heart", "flower",
@@ -17,6 +18,7 @@ export default function BlindDraw() {
   const [prompt, setPrompt] = useState("");
   const [color, setColor] = useState("#ffffff");
   const [brushSize, setBrushSize] = useState(4);
+  const [stats, setStats] = useState<{ coverage: number; colorsUsed: number } | null>(null);
   const drawingRef = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
 
@@ -90,7 +92,11 @@ export default function BlindDraw() {
     lastPos.current = null;
   };
 
-  const reveal = () => setPhase("revealed");
+  const reveal = () => {
+    const canvas = canvasRef.current;
+    if (canvas) setStats(getDrawingStats(canvas));
+    setPhase("revealed");
+  };
 
   const handleSave = () => {
     const canvas = canvasRef.current;
@@ -197,6 +203,18 @@ export default function BlindDraw() {
               >
                 Reveal Drawing
               </button>
+            )}
+            {phase === "revealed" && stats && (
+              <div className="flex items-center gap-6 text-sm">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-red-400">{stats.coverage}%</div>
+                  <div className="text-gray-500">Canvas used</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-400">{stats.colorsUsed}</div>
+                  <div className="text-gray-500">Colors</div>
+                </div>
+              </div>
             )}
             {phase === "revealed" && (
               <>
