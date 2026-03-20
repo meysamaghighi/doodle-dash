@@ -1,4 +1,6 @@
-/** Compare two images pixel-by-pixel and return a similarity percentage (0-100). */
+/** Compare two images and return a similarity percentage (0-100).
+ *  Scores how well the drawing covers the reference shapes,
+ *  with a penalty for drawing in wrong areas. */
 export function compareImages(refDataUrl: string, drawDataUrl: string): Promise<number> {
   return new Promise((resolve) => {
     const canvas = document.createElement("canvas");
@@ -17,34 +19,50 @@ export function compareImages(refDataUrl: string, drawDataUrl: string): Promise<
         ctx.drawImage(drawImg, 0, 0);
         const drawData = ctx.getImageData(0, 0, 512, 512).data;
 
-        let matching = 0;
-        let total = 0;
         const BG_R = 0x11, BG_G = 0x18, BG_B = 0x27;
+        const isBg = (r: number, g: number, b: number) =>
+          Math.abs(r - BG_R) < 30 && Math.abs(g - BG_G) < 30 && Math.abs(b - BG_B) < 30;
+
+        let refShapePixels = 0;   // pixels that have content in reference
+        let covered = 0;          // ref shape pixels where drawing also has content nearby in color
+        let wrongPixels = 0;      // pixels where drawing has content but reference doesn't
+        let refBgPixels = 0;
 
         for (let i = 0; i < refData.length; i += 4) {
           const rRef = refData[i], gRef = refData[i + 1], bRef = refData[i + 2];
           const rDraw = drawData[i], gDraw = drawData[i + 1], bDraw = drawData[i + 2];
 
-          const refIsBg = Math.abs(rRef - BG_R) < 10 && Math.abs(gRef - BG_G) < 10 && Math.abs(bRef - BG_B) < 10;
-          const drawIsBg = Math.abs(rDraw - BG_R) < 10 && Math.abs(gDraw - BG_G) < 10 && Math.abs(bDraw - BG_B) < 10;
+          const refIsBg = isBg(rRef, gRef, bRef);
+          const drawIsBg = isBg(rDraw, gDraw, bDraw);
 
-          // Only compare pixels where at least one image has content
-          if (refIsBg && drawIsBg) continue;
-
-          total++;
-          const dr = rRef - rDraw;
-          const dg = gRef - gDraw;
-          const db = bRef - bDraw;
-          const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-          // Max distance is ~441 (black vs white), count as match if close
-          if (dist < 80) matching++;
+          if (refIsBg) {
+            refBgPixels++;
+            if (!drawIsBg) wrongPixels++;
+          } else {
+            refShapePixels++;
+            if (!drawIsBg) {
+              // Both have content -- check color similarity
+              const dr = rRef - rDraw, dg = gRef - gDraw, db = bRef - bDraw;
+              const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+              if (dist < 120) covered++;
+            }
+          }
         }
 
-        if (total === 0) {
+        if (refShapePixels === 0) {
           resolve(0);
           return;
         }
-        resolve(Math.round((matching / total) * 100));
+
+        // Coverage: what % of reference shapes did you draw?
+        const coverageScore = covered / refShapePixels;
+
+        // Penalty: what % of background did you accidentally draw on?
+        const wrongRatio = refBgPixels > 0 ? wrongPixels / refBgPixels : 0;
+        const penalty = Math.min(wrongRatio * 3, 0.5); // max 50% penalty
+
+        const finalScore = Math.max(0, Math.round((coverageScore - penalty) * 100));
+        resolve(finalScore);
       };
       drawImg.src = drawDataUrl;
     };
