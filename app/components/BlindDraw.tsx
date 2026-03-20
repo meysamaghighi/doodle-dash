@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
 import { getDrawingStats } from "../utils/canvasStats";
+import { usePersonalBest } from "../hooks/usePersonalBest";
 
 const PROMPTS = [
   "cat", "house", "tree", "car", "fish", "star", "heart", "flower",
@@ -19,6 +20,7 @@ export default function BlindDraw() {
   const [color, setColor] = useState("#ffffff");
   const [brushSize, setBrushSize] = useState(4);
   const [stats, setStats] = useState<{ coverage: number; colorsUsed: number } | null>(null);
+  const pb = usePersonalBest("pb-blind-draw", "higher", phase === "revealed" && stats ? stats.coverage : null);
   const drawingRef = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
 
@@ -214,6 +216,12 @@ export default function BlindDraw() {
                   <div className="text-2xl font-bold text-purple-400">{stats.colorsUsed}</div>
                   <div className="text-gray-500">Colors</div>
                 </div>
+              </div>
+            )}
+            {phase === "revealed" && (
+              <div className="text-center">
+                {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm animate-pulse">New Personal Best!</p>}
+                {pb.best !== null && !pb.isNewBest && <p className="text-gray-500 text-xs">Personal Best: {pb.best}% coverage</p>}
               </div>
             )}
             {phase === "revealed" && (
