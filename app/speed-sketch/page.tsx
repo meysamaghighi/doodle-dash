@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SpeedSketch from "../components/SpeedSketch";
 
 export const metadata: Metadata = {
-  title: "Speed Sketch - 30 Second Drawing Challenge | DoodleDash",
+  title: "Speed Sketch - 30 Second Drawing Challenge | DoodleLab",
   description:
     "Draw the prompt as fast as you can in 30 seconds. Free timed drawing game with random prompts. No sign-up required.",
   keywords: ["speed sketch", "timed drawing", "drawing challenge", "quick draw", "30 second draw"],

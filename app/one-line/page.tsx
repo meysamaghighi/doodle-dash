@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import OneLineDraw from "../components/OneLineDraw";
 
 export const metadata: Metadata = {
-  title: "One Line Art - Continuous Line Drawing | DoodleDash",
+  title: "One Line Art - Continuous Line Drawing | DoodleLab",
   description:
     "Draw without lifting your pen. Create art with one continuous stroke. A creative challenge for artists of all levels.",
   keywords: ["one line art", "continuous line", "single stroke drawing", "line art", "one line drawing"],

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://doodledash.vercel.app";
+  const base = "https://doodlelab.fun";
   const routes = [
     "/",
     "/speed-sketch",

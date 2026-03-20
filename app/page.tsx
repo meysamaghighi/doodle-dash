@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "DoodleDash - Free Drawing Challenges & Creative Games",
+  title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
     "Free online drawing games: speed sketch, pixel art, mirror draw, memory draw, one-line art, and blind drawing challenges. No sign-up required.",
   openGraph: {
-    title: "DoodleDash - Free Drawing Challenges",
+    title: "DoodleLab - Free Drawing Challenges",
     description:
       "6 creative drawing games. Sketch, pixel art, mirror draw, and more. Free, no sign-up.",
     type: "website",
@@ -135,7 +135,7 @@ export default function Home() {
           Free Drawing Games for Everyone
         </h2>
         <p>
-          DoodleDash is a collection of creative drawing challenges that run
+          DoodleLab is a collection of creative drawing challenges that run
           entirely in your browser. Test your speed with timed sketching, explore
           pixel art, try mirror drawing, or challenge your visual memory. All
           games are free, require no account, and your art stays on your device.
