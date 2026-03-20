@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { saveImage } from "../utils/saveImage";
 
 type MirrorMode = "vertical" | "horizontal" | "quad";
 
@@ -116,13 +117,10 @@ export default function MirrorDraw() {
     lastPos.current = null;
   };
 
-  const saveImage = () => {
+  const handleSave = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const link = document.createElement("a");
-    link.download = "mirror-draw.png";
-    link.href = canvas.toDataURL();
-    link.click();
+    saveImage(canvas.toDataURL(), "mirror-draw.png");
   };
 
   const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899", "#000000"];
@@ -146,7 +144,7 @@ export default function MirrorDraw() {
           Clear
         </button>
         <button
-          onClick={saveImage}
+          onClick={handleSave}
           className="px-3 py-1.5 text-sm bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg ml-auto"
         >
           Save
