@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import BlindDraw from "../components/BlindDraw";
 
 export const metadata: Metadata = {
-  title: "Blind Draw - Hidden Canvas Drawing Game | DoodleDash",
+  title: "Blind Draw - Hidden Canvas Drawing Game | DoodleLab",
   description:
     "Draw a prompt without seeing the canvas. Your strokes are hidden until you reveal the result. A hilarious drawing challenge!",
   keywords: ["blind draw", "blind drawing", "hidden canvas", "drawing game", "funny drawing"],

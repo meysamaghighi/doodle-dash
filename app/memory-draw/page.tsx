@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import MemoryDraw from "../components/MemoryDraw";
 
 export const metadata: Metadata = {
-  title: "Memory Draw - Visual Memory Drawing Game | DoodleDash",
+  title: "Memory Draw - Visual Memory Drawing Game | DoodleLab",
   description:
     "Study shapes briefly, then draw them from memory. A visual memory challenge that gets harder with each level.",
   keywords: ["memory draw", "visual memory", "drawing game", "memory challenge", "shape memory"],

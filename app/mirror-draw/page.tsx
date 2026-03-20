@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import MirrorDraw from "../components/MirrorDraw";
 
 export const metadata: Metadata = {
-  title: "Mirror Draw - Symmetrical Drawing Tool | DoodleDash",
+  title: "Mirror Draw - Symmetrical Drawing Tool | DoodleLab",
   description:
     "Draw with real-time symmetry. Vertical, horizontal, or quad mirror modes create beautiful symmetrical patterns automatically.",
   keywords: ["mirror draw", "symmetry drawing", "kaleidoscope", "symmetrical art", "mandala maker"],

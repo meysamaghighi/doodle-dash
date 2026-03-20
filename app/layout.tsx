@@ -4,15 +4,15 @@ import MobileNav from "./components/MobileNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://doodledash.vercel.app"),
-  title: "DoodleDash - Free Drawing Challenges & Creative Games",
+  metadataBase: new URL("https://doodlelab.fun"),
+  title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
     "Free online drawing games: speed sketch, pixel art, mirror draw, memory draw, one-line art, and blind drawing challenges. No sign-up required.",
   openGraph: {
-    title: "DoodleDash - Free Drawing Challenges",
+    title: "DoodleLab - Free Drawing Challenges",
     description: "6 creative drawing games. Sketch, pixel art, mirror draw, and more. Free, no sign-up.",
     type: "website",
-    siteName: "DoodleDash",
+    siteName: "DoodleLab",
   },
 };
 
@@ -45,7 +45,7 @@ export default function RootLayout({
               <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" />
               </svg>
-              DoodleDash
+              DoodleLab
             </Link>
             <MobileNav links={navLinks} />
           </div>
@@ -61,7 +61,7 @@ export default function RootLayout({
               {" | "}
               <Link href="https://cashcalcs.com" className="hover:text-gray-300">CashCalcs</Link>
               {" | "}
-              <Link href="/" className="hover:text-gray-300">DoodleDash</Link>
+              <Link href="/" className="hover:text-gray-300">DoodleLab</Link>
             </p>
           </div>
         </footer>

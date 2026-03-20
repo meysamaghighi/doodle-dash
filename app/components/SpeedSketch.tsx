@@ -102,7 +102,7 @@ export default function SpeedSketch() {
   const handleSave = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    saveImage(canvas.toDataURL(), `doodledash-${prompt}.png`);
+    saveImage(canvas.toDataURL(), `doodlelab-${prompt}.png`);
   };
 
   const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899", "#000000"];
