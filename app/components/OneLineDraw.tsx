@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
+import { usePersonalBest } from "../hooks/usePersonalBest";
 
 export default function OneLineDraw() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -97,14 +98,23 @@ export default function OneLineDraw() {
 
   const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
   const penLifted = hasStarted && !isDrawing;
+  const roundedLength = Math.round(lineLength);
+  const { best, isNewBest } = usePersonalBest("pb-one-line", "higher", penLifted ? roundedLength : null);
 
   return (
     <div className="max-w-lg mx-auto">
       <div className="flex items-center gap-2 mb-3 flex-wrap">
         {penLifted && (
-          <span className="text-yellow-400 text-sm font-medium">
-            Pen lifted! Save or start over.
-          </span>
+          <div className="flex flex-col">
+            <span className="text-yellow-400 text-sm font-medium">
+              Pen lifted! {roundedLength}px drawn.
+            </span>
+            {isNewBest ? (
+              <span className="text-emerald-400 text-xs font-bold">New Personal Best!</span>
+            ) : best !== null ? (
+              <span className="text-gray-500 text-xs">Best: {best}px</span>
+            ) : null}
+          </div>
         )}
         <div className="ml-auto flex gap-2">
           <button
