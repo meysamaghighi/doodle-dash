@@ -64,6 +64,8 @@ gtag('config', 'G-37XZTPKVB8');` }} />
               <Link href="https://cashcalcs.com" className="hover:text-gray-300">CashCalcs</Link>
               {" | "}
               <Link href="/" className="hover:text-gray-300">DoodleLab</Link>
+              {" | "}
+              <Link href="https://playmini.fun" className="hover:text-gray-300">PlayMini</Link>
             </p>
           </div>
         </footer>
