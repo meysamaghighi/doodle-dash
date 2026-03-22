@@ -92,6 +92,32 @@ const games = [
       </svg>
     ),
   },
+  {
+    href: "/dot-connect",
+    label: "Dot Connect",
+    description: "Connect numbered dots in order as fast as you can!",
+    color: "from-cyan-500 to-blue-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="4" cy="4" r="2" fill="currentColor" />
+        <circle cx="20" cy="8" r="2" fill="currentColor" />
+        <circle cx="12" cy="20" r="2" fill="currentColor" />
+        <path strokeLinecap="round" strokeWidth={1.5} d="M5.5 5l13 2.5M19 9.5L13 19" />
+      </svg>
+    ),
+  },
+  {
+    href: "/trace-master",
+    label: "Trace Master",
+    description: "Trace over ghost shapes as accurately as possible.",
+    color: "from-green-500 to-emerald-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} strokeDasharray="3 3" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2l3.09 6.26L22 9.27" opacity="0.5" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
@@ -102,7 +128,7 @@ export default function Home() {
           Draw, Create, Challenge
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          6 free drawing games to test your creativity and skill. No sign-up, no
+          8 free drawing games to test your creativity and skill. No sign-up, no
           downloads. Just pick a game and start drawing.
         </p>
       </section>

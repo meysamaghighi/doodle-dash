@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/memory-draw",
     "/one-line",
     "/blind-draw",
+    "/dot-connect",
+    "/trace-master",
   ];
 
   return routes.map((route) => ({

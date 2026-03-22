@@ -23,6 +23,8 @@ const navLinks = [
   { href: "/memory-draw", label: "Memory Draw" },
   { href: "/one-line", label: "One Line" },
   { href: "/blind-draw", label: "Blind Draw" },
+  { href: "/dot-connect", label: "Dot Connect" },
+  { href: "/trace-master", label: "Trace Master" },
 ];
 
 export default function RootLayout({
