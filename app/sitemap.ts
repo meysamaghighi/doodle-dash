@@ -12,6 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/blind-draw",
     "/dot-connect",
     "/trace-master",
+    "/symmetry",
+    "/color-fill",
   ];
 
   return routes.map((route) => ({

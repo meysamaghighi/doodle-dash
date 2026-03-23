@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
-    "Free online drawing games: speed sketch, pixel art, mirror draw, memory draw, one-line art, and blind drawing challenges. No sign-up required.",
+    "Free online drawing games: speed sketch, pixel art, mirror draw, symmetry draw, color fill, memory draw, one-line art, and blind drawing challenges. No sign-up required.",
   openGraph: {
     title: "DoodleLab - Free Drawing Challenges",
     description:
-      "6 creative drawing games. Sketch, pixel art, mirror draw, and more. Free, no sign-up.",
+      "10 creative drawing games. Sketch, pixel art, symmetry draw, color fill, and more. Free, no sign-up.",
     type: "website",
   },
 };
@@ -118,6 +118,28 @@ const games = [
       </svg>
     ),
   },
+  {
+    href: "/symmetry",
+    label: "Symmetry Draw",
+    description: "Draw on the left and watch it mirror on the right in real-time.",
+    color: "from-blue-500 to-cyan-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18 M9 7l-4 5 4 5 M15 7l4 5-4 5" />
+      </svg>
+    ),
+  },
+  {
+    href: "/color-fill",
+    label: "Color Fill",
+    description: "Fill line-art patterns with colors by tapping regions.",
+    color: "from-purple-500 to-pink-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
@@ -128,7 +150,7 @@ export default function Home() {
           Draw, Create, Challenge
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          8 free drawing games to test your creativity and skill. No sign-up, no
+          10 free drawing games to test your creativity and skill. No sign-up, no
           downloads. Just pick a game and start drawing.
         </p>
       </section>

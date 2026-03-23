@@ -12,6 +12,11 @@ interface Dot {
   number: number;
 }
 
+interface Segment {
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+}
+
 const LEVELS = [
   { dots: 5, name: "Beginner" },
   { dots: 8, name: "Easy" },
@@ -31,6 +36,9 @@ export default function DotConnect() {
   const pb = usePersonalBest("pb-dot-connect", "lower", completionTime);
   const drawing = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
+  // Store completed segments (dot-to-dot connections) and freehand strokes
+  const segmentsRef = useRef<Segment[]>([]);
+  const freehandRef = useRef<Segment[]>([]);
 
   const generateDots = (count: number): Dot[] => {
     const margin = 60;
@@ -52,22 +60,38 @@ export default function DotConnect() {
     setPhase("playing");
     setStartTime(Date.now());
     setCompletionTime(null);
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    segmentsRef.current = [];
+    freehandRef.current = [];
   };
 
-  const drawDots = useCallback(() => {
+  const redrawCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas || dots.length === 0) return;
     const ctx = canvas.getContext("2d")!;
 
-    // Clear and redraw background
+    // Clear
     ctx.fillStyle = "#111827";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw completed connection lines (dot-to-dot)
+    ctx.strokeStyle = "#22c55e";
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    for (const seg of segmentsRef.current) {
+      ctx.beginPath();
+      ctx.moveTo(seg.from.x, seg.from.y);
+      ctx.lineTo(seg.to.x, seg.to.y);
+      ctx.stroke();
+    }
+
+    // Draw freehand strokes
+    for (const seg of freehandRef.current) {
+      ctx.beginPath();
+      ctx.moveTo(seg.from.x, seg.from.y);
+      ctx.lineTo(seg.to.x, seg.to.y);
+      ctx.stroke();
+    }
 
     // Draw dots
     dots.forEach((dot) => {
@@ -75,9 +99,20 @@ export default function DotConnect() {
       const isPast = dot.number < currentDot;
 
       ctx.beginPath();
-      ctx.arc(dot.x, dot.y, isNext ? 12 : 8, 0, Math.PI * 2);
+      ctx.arc(dot.x, dot.y, isNext ? 14 : 10, 0, Math.PI * 2);
       ctx.fillStyle = isPast ? "#22c55e" : isNext ? "#f97316" : "#ffffff";
       ctx.fill();
+
+      // Pulsing ring on next dot
+      if (isNext) {
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 18, 0, Math.PI * 2);
+        ctx.strokeStyle = "#f9731680";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.strokeStyle = "#22c55e";
+        ctx.lineWidth = 3;
+      }
 
       ctx.font = isPast ? "12px sans-serif" : isNext ? "bold 14px sans-serif" : "12px sans-serif";
       ctx.fillStyle = "#111827";
@@ -88,10 +123,10 @@ export default function DotConnect() {
   }, [dots, currentDot]);
 
   useEffect(() => {
-    if (phase === "playing") {
-      drawDots();
+    if (phase === "playing" || phase === "done") {
+      redrawCanvas();
     }
-  }, [phase, drawDots]);
+  }, [phase, redrawCanvas]);
 
   const getPos = (e: React.MouseEvent | React.TouchEvent) => {
     const canvas = canvasRef.current!;
@@ -114,8 +149,6 @@ export default function DotConnect() {
   const draw = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       if (!drawing.current || phase !== "playing") return;
-      const canvas = canvasRef.current!;
-      const ctx = canvas.getContext("2d")!;
       const pos = getPos(e);
 
       // Check if near next dot
@@ -125,26 +158,47 @@ export default function DotConnect() {
         const dy = pos.y - nextDot.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 20) {
-          setCurrentDot((c) => c + 1);
+          // Add a connection line from previous dot to this dot
+          if (currentDot > 1) {
+            const prevDot = dots.find((d) => d.number === currentDot - 1);
+            if (prevDot) {
+              segmentsRef.current.push({
+                from: { x: prevDot.x, y: prevDot.y },
+                to: { x: nextDot.x, y: nextDot.y },
+              });
+            }
+          }
+
           if (currentDot === dots.length) {
-            // Completed!
             const time = ((Date.now() - startTime) / 1000).toFixed(2);
             setCompletionTime(parseFloat(time));
+            setCurrentDot(currentDot + 1);
             setPhase("done");
             return;
           }
+          setCurrentDot((c) => c + 1);
         }
       }
 
+      // Draw freehand stroke
       if (lastPos.current) {
-        ctx.beginPath();
-        ctx.strokeStyle = "#22c55e";
-        ctx.lineWidth = 3;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.moveTo(lastPos.current.x, lastPos.current.y);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
+        freehandRef.current.push({
+          from: { x: lastPos.current.x, y: lastPos.current.y },
+          to: { x: pos.x, y: pos.y },
+        });
+        // Incremental draw (no full redraw needed)
+        const canvas = canvasRef.current;
+        if (canvas) {
+          const ctx = canvas.getContext("2d")!;
+          ctx.beginPath();
+          ctx.strokeStyle = "#22c55e";
+          ctx.lineWidth = 3;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.moveTo(lastPos.current.x, lastPos.current.y);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+        }
       }
       lastPos.current = pos;
     },
@@ -222,7 +276,7 @@ export default function DotConnect() {
             </div>
             {phase === "playing" && (
               <div className="text-sm font-mono text-gray-300">
-                Dot {currentDot} of {dots.length}
+                Dot {Math.min(currentDot, dots.length)} of {dots.length}
               </div>
             )}
             {phase === "done" && completionTime && (
