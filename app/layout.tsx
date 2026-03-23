@@ -25,6 +25,8 @@ const navLinks = [
   { href: "/blind-draw", label: "Blind Draw" },
   { href: "/dot-connect", label: "Dot Connect" },
   { href: "/trace-master", label: "Trace Master" },
+  { href: "/symmetry", label: "Symmetry Draw" },
+  { href: "/color-fill", label: "Color Fill" },
 ];
 
 export default function RootLayout({

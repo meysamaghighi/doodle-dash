@@ -12,25 +12,48 @@ interface Shape {
   draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void;
 }
 
+// Each shape sets its own strokeStyle + lineWidth to be fully self-contained
 const SHAPES: Shape[] = [
   {
     name: "Circle",
     draw: (ctx, w, h) => {
       ctx.beginPath();
+      ctx.strokeStyle = ctx.strokeStyle; // use inherited
       ctx.arc(w / 2, h / 2, 120, 0, Math.PI * 2);
+      ctx.stroke();
+    },
+  },
+  {
+    name: "Square",
+    draw: (ctx, w, h) => {
+      const size = 200;
+      ctx.beginPath();
+      ctx.rect((w - size) / 2, (h - size) / 2, size, size);
+      ctx.stroke();
+    },
+  },
+  {
+    name: "Triangle",
+    draw: (ctx, w, h) => {
+      const cx = w / 2, cy = h / 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 110);
+      ctx.lineTo(cx - 110, cy + 80);
+      ctx.lineTo(cx + 110, cy + 80);
+      ctx.closePath();
       ctx.stroke();
     },
   },
   {
     name: "Star",
     draw: (ctx, w, h) => {
-      const cx = w / 2, cy = h / 2, r = 120;
+      const cx = w / 2, cy = h / 2, outerR = 120, innerR = 50;
       ctx.beginPath();
       for (let i = 0; i < 10; i++) {
         const angle = (i * Math.PI) / 5 - Math.PI / 2;
-        const rad = i % 2 === 0 ? r : r / 2;
-        const x = cx + Math.cos(angle) * rad;
-        const y = cy + Math.sin(angle) * rad;
+        const r = i % 2 === 0 ? outerR : innerR;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
@@ -41,15 +64,32 @@ const SHAPES: Shape[] = [
   {
     name: "Heart",
     draw: (ctx, w, h) => {
-      const cx = w / 2, cy = h / 2 + 20;
+      const cx = w / 2, cy = h / 2 + 10;
+      const s = 1.2; // scale
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.bezierCurveTo(cx, cy - 30, cx - 60, cy - 80, cx - 80, cy - 60);
-      ctx.bezierCurveTo(cx - 100, cy - 40, cx - 100, cy - 10, cx - 80, cy + 10);
-      ctx.bezierCurveTo(cx - 60, cy + 30, cx, cy + 60, cx, cy + 80);
-      ctx.bezierCurveTo(cx, cy + 60, cx + 60, cy + 30, cx + 80, cy + 10);
-      ctx.bezierCurveTo(cx + 100, cy - 10, cx + 100, cy - 40, cx + 80, cy - 60);
-      ctx.bezierCurveTo(cx + 60, cy - 80, cx, cy - 30, cx, cy);
+      ctx.moveTo(cx, cy + 80 * s);
+      // Left side
+      ctx.bezierCurveTo(
+        cx - 5 * s, cy + 60 * s,
+        cx - 80 * s, cy + 30 * s,
+        cx - 80 * s, cy - 10 * s
+      );
+      ctx.bezierCurveTo(
+        cx - 80 * s, cy - 50 * s,
+        cx - 40 * s, cy - 70 * s,
+        cx, cy - 40 * s
+      );
+      // Right side
+      ctx.bezierCurveTo(
+        cx + 40 * s, cy - 70 * s,
+        cx + 80 * s, cy - 50 * s,
+        cx + 80 * s, cy - 10 * s
+      );
+      ctx.bezierCurveTo(
+        cx + 80 * s, cy + 30 * s,
+        cx + 5 * s, cy + 60 * s,
+        cx, cy + 80 * s
+      );
       ctx.stroke();
     },
   },
@@ -58,13 +98,13 @@ const SHAPES: Shape[] = [
     draw: (ctx, w, h) => {
       const cx = w / 2, cy = h / 2;
       ctx.beginPath();
-      let r = 5;
-      for (let angle = 0; angle < Math.PI * 6; angle += 0.1) {
+      let first = true;
+      for (let angle = 0; angle < Math.PI * 6; angle += 0.05) {
+        const r = 5 + angle * 6;
         const x = cx + Math.cos(angle) * r;
         const y = cy + Math.sin(angle) * r;
-        if (angle === 0) ctx.moveTo(x, y);
+        if (first) { ctx.moveTo(x, y); first = false; }
         else ctx.lineTo(x, y);
-        r += 0.8;
       }
       ctx.stroke();
     },
@@ -73,43 +113,27 @@ const SHAPES: Shape[] = [
     name: "Wave",
     draw: (ctx, w, h) => {
       ctx.beginPath();
-      ctx.moveTo(50, h / 2);
-      for (let x = 50; x < w - 50; x += 5) {
-        const y = h / 2 + Math.sin((x - 50) * 0.03) * 60;
-        ctx.lineTo(x, y);
+      let first = true;
+      for (let x = 50; x < w - 50; x += 2) {
+        const y = h / 2 + Math.sin((x - 50) * 0.04) * 70;
+        if (first) { ctx.moveTo(x, y); first = false; }
+        else ctx.lineTo(x, y);
       }
-      ctx.stroke();
-    },
-  },
-  {
-    name: "Square",
-    draw: (ctx, w, h) => {
-      const size = 200;
-      ctx.strokeRect((w - size) / 2, (h - size) / 2, size, size);
-    },
-  },
-  {
-    name: "Triangle",
-    draw: (ctx, w, h) => {
-      const cx = w / 2, cy = h / 2;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - 100);
-      ctx.lineTo(cx - 100, cy + 80);
-      ctx.lineTo(cx + 100, cy + 80);
-      ctx.closePath();
       ctx.stroke();
     },
   },
   {
     name: "Infinity",
     draw: (ctx, w, h) => {
-      const cx = w / 2, cy = h / 2;
-      const a = 80;
+      const cx = w / 2, cy = h / 2, a = 90;
       ctx.beginPath();
-      for (let t = 0; t <= Math.PI * 2; t += 0.01) {
-        const x = cx + (a * Math.cos(t)) / (1 + Math.sin(t) ** 2);
-        const y = cy + (a * Math.sin(t) * Math.cos(t)) / (1 + Math.sin(t) ** 2);
-        if (t === 0) ctx.moveTo(x, y);
+      let first = true;
+      for (let t = 0; t <= Math.PI * 2 + 0.01; t += 0.02) {
+        const sinT = Math.sin(t);
+        const denom = 1 + sinT * sinT;
+        const x = cx + (a * Math.cos(t)) / denom;
+        const y = cy + (a * sinT * Math.cos(t)) / denom;
+        if (first) { ctx.moveTo(x, y); first = false; }
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
@@ -132,15 +156,14 @@ export default function TraceMaster() {
 
   const shape = SHAPES[shapeIndex];
 
-  const drawGhostShape = useCallback(() => {
-    const canvas = ghostCanvasRef.current;
-    if (!canvas) return;
+  const drawShapeOnCanvas = useCallback((canvas: HTMLCanvasElement, alpha: number) => {
     const ctx = canvas.getContext("2d")!;
-    ctx.fillStyle = "#111827";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.globalAlpha = alpha;
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 4;
     shape.draw(ctx, canvas.width, canvas.height);
+    ctx.restore();
   }, [shape]);
 
   const startGame = () => {
@@ -148,21 +171,26 @@ export default function TraceMaster() {
     setStartTime(Date.now());
     setElapsedTime(0);
     setScore(null);
+
+    // Draw ghost on main canvas (faded guide)
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext("2d")!;
       ctx.fillStyle = "#111827";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      drawShapeOnCanvas(canvas, 0.25);
+    }
 
-      // Draw faded ghost shape
-      ctx.save();
-      ctx.globalAlpha = 0.2;
+    // Draw ghost on hidden canvas (for comparison)
+    const ghost = ghostCanvasRef.current;
+    if (ghost) {
+      const ctx = ghost.getContext("2d")!;
+      ctx.fillStyle = "#111827";
+      ctx.fillRect(0, 0, ghost.width, ghost.height);
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 4;
-      shape.draw(ctx, canvas.width, canvas.height);
-      ctx.restore();
+      shape.draw(ctx, ghost.width, ghost.height);
     }
-    drawGhostShape();
   };
 
   useEffect(() => {
@@ -179,7 +207,6 @@ export default function TraceMaster() {
     const ghostCanvas = ghostCanvasRef.current;
     if (!canvas || !ghostCanvas) return;
 
-    // Calculate score
     const refDataUrl = ghostCanvas.toDataURL();
     const drawDataUrl = canvas.toDataURL();
     const similarity = await compareImages(refDataUrl, drawDataUrl);
@@ -260,9 +287,27 @@ export default function TraceMaster() {
 
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-gray-400 mb-4">
+          <p className="text-gray-400 mb-2">
             Shape {shapeIndex + 1} of {SHAPES.length}: {shape.name}
           </p>
+          {/* Preview of the shape */}
+          <div className="mx-auto w-32 h-32 mb-4 bg-gray-900 rounded-xl border border-gray-700 overflow-hidden">
+            <canvas
+              ref={(el) => {
+                if (el) {
+                  const ctx = el.getContext("2d")!;
+                  ctx.fillStyle = "#111827";
+                  ctx.fillRect(0, 0, 128, 128);
+                  ctx.strokeStyle = "#ffffff";
+                  ctx.lineWidth = 2;
+                  shape.draw(ctx, 128, 128);
+                }
+              }}
+              width={128}
+              height={128}
+              className="w-full h-full"
+            />
+          </div>
           <p className="text-gray-500 text-sm mb-6">
             Trace over the faded shape as accurately as you can.
           </p>
