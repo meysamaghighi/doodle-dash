@@ -7,10 +7,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://doodlelab.fun"),
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
-    "Free online drawing games: speed sketch, pixel art, mirror draw, memory draw, one-line art, and blind drawing challenges. No sign-up required.",
+    "Free online drawing games: speed sketch, pixel art, mirror draw, memory draw, spiral draw, kaleidoscope, gradient paint, and more. 15 creative games. No sign-up required.",
   openGraph: {
     title: "DoodleLab - Free Drawing Challenges",
-    description: "6 creative drawing games. Sketch, pixel art, mirror draw, and more. Free, no sign-up.",
+    description: "15 creative drawing games. Sketch, pixel art, mirror draw, kaleidoscope, and more. Free, no sign-up.",
     type: "website",
     siteName: "DoodleLab",
   },
@@ -27,6 +27,11 @@ const navLinks = [
   { href: "/trace-master", label: "Trace Master" },
   { href: "/symmetry", label: "Symmetry Draw" },
   { href: "/color-fill", label: "Color Fill" },
+  { href: "/spiral-draw", label: "Spiral Draw" },
+  { href: "/sketch-copy", label: "Sketch Copy" },
+  { href: "/kaleidoscope", label: "Kaleidoscope" },
+  { href: "/shape-builder", label: "Shape Builder" },
+  { href: "/gradient-paint", label: "Gradient Paint" },
 ];
 
 export default function RootLayout({
