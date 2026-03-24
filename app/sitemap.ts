@@ -14,6 +14,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/trace-master",
     "/symmetry",
     "/color-fill",
+    "/spiral-draw",
+    "/sketch-copy",
+    "/kaleidoscope",
+    "/shape-builder",
+    "/gradient-paint",
   ];
 
   return routes.map((route) => ({

@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
-    "Free online drawing games: speed sketch, pixel art, mirror draw, symmetry draw, color fill, memory draw, one-line art, and blind drawing challenges. No sign-up required.",
+    "Free online drawing games: speed sketch, pixel art, mirror draw, spiral draw, kaleidoscope, gradient paint, memory draw, and more. 15 creative games. No sign-up required.",
   openGraph: {
     title: "DoodleLab - Free Drawing Challenges",
     description:
-      "10 creative drawing games. Sketch, pixel art, symmetry draw, color fill, and more. Free, no sign-up.",
+      "15 creative drawing games. Sketch, pixel art, symmetry draw, kaleidoscope, gradient paint, and more. Free, no sign-up.",
     type: "website",
   },
 };
@@ -140,6 +140,67 @@ const games = [
       </svg>
     ),
   },
+  {
+    href: "/spiral-draw",
+    label: "Spiral Draw",
+    description: "Draw a smooth spiral from center outward. How perfect can you get?",
+    color: "from-indigo-500 to-purple-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" opacity="0.3" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6c-3.314 0-6 2.686-6 6s2.686 6 6 6" />
+      </svg>
+    ),
+  },
+  {
+    href: "/sketch-copy",
+    label: "Sketch Copy",
+    description: "Copy the reference shape as accurately as you can. 5 levels!",
+    color: "from-teal-500 to-cyan-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/kaleidoscope",
+    label: "Kaleidoscope",
+    description: "Draw and watch it reflect in beautiful 4-12 way symmetry.",
+    color: "from-purple-500 to-pink-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 7h7l-5.5 4.5L17 21l-5-4-5 4 1.5-6.5L3 10h7l2-7z" />
+        <circle cx="12" cy="12" r="3" strokeWidth={1.5} />
+      </svg>
+    ),
+  },
+  {
+    href: "/shape-builder",
+    label: "Shape Builder",
+    description: "Combine circles, squares, triangles to build images. 10 levels!",
+    color: "from-pink-500 to-rose-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="8" cy="8" r="3" strokeWidth={1.5} />
+        <rect x="14" y="5" width="6" height="6" strokeWidth={1.5} />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16l3 5 3-5z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/gradient-paint",
+    label: "Gradient Paint",
+    description: "Paint with beautiful gradient brushes. Create colorful art!",
+    color: "from-pink-500 to-purple-500",
+    icon: (
+      <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485" />
+        <circle cx="7" cy="17" r="1" fill="currentColor" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
@@ -150,7 +211,7 @@ export default function Home() {
           Draw, Create, Challenge
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          10 free drawing games to test your creativity and skill. No sign-up, no
+          15 free drawing games to test your creativity and skill. No sign-up, no
           downloads. Just pick a game and start drawing.
         </p>
       </section>
