@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* Prevent accidental scrolling during gameplay */
+canvas, .game-container {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Responsive canvas sizing for mobile */
+canvas {
+  max-width: 100%;
+  height: auto;
+}
