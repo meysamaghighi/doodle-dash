@@ -53,6 +53,11 @@ gtag('js', new Date());
 gtag('config', 'G-37XZTPKVB8');` }} />
       </head>
       <body className="bg-gray-950 text-white min-h-screen font-sans antialiased">
+        <div className="bg-gradient-to-r from-pink-600 to-orange-500 text-white text-center py-2 px-4">
+          <p className="text-xs sm:text-sm font-medium">
+            BMW is Best! <span className="text-gray-200">P.S. My classmate said this not me!</span>
+          </p>
+        </div>
         <nav className="border-b border-gray-800 sticky top-0 z-50 bg-gray-950/90 backdrop-blur">
           <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="font-black text-lg text-white">
@@ -65,17 +70,17 @@ gtag('config', 'G-37XZTPKVB8');` }} />
         {children}
 
         <footer className="border-t border-gray-800 mt-16">
-          <div className="max-w-4xl mx-auto px-4 py-8 text-center text-xs text-gray-500">
-            <p>Free drawing challenges. No account required. Your art stays in your browser.</p>
-            <p className="mt-2">
-              <Link href="https://benchmybrain.com" className="hover:text-gray-300">BenchMyBrain</Link>
-              {" | "}
-              <Link href="https://cashcalcs.com" className="hover:text-gray-300">CashCalcs</Link>
-              {" | "}
-              <Link href="/" className="hover:text-gray-300">DoodleLab</Link>
-              {" | "}
-              <Link href="https://playmini.fun" className="hover:text-gray-300">PlayMini</Link>
-            </p>
+          <div className="max-w-4xl mx-auto px-4 py-8 text-center">
+            <p className="text-xs text-gray-500">Free drawing challenges. No account required. Your art stays in your browser.</p>
+            <div className="mt-4">
+              <p className="text-sm text-gray-400 mb-2">Check out our other sites:</p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link href="https://benchmybrain.com" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-full text-sm text-gray-200 transition-colors">BenchMyBrain</Link>
+                <Link href="https://cashcalcs.com" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-full text-sm text-gray-200 transition-colors">CashCalcs</Link>
+                <Link href="/" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-full text-sm text-gray-200 transition-colors">DoodleLab</Link>
+                <Link href="https://playmini.fun" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-full text-sm text-gray-200 transition-colors">PlayMini</Link>
+              </div>
+            </div>
           </div>
         </footer>
       </body>
