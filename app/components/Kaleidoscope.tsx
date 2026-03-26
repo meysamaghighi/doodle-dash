@@ -107,8 +107,8 @@ export default function Kaleidoscope() {
   };
 
   const COLORS = [
-    "#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6",
-    "#8b5cf6", "#ec4899", "#f43f5e", "#06b6d4", "#14b8a6", "#84cc16"
+    "#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#006400",
+    "#0033CC", "#8b5cf6", "#ec4899", "#f43f5e", "#8B4513", "#84cc16"
   ];
 
   return (

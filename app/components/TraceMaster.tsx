@@ -279,7 +279,7 @@ export default function TraceMaster() {
     }
   };
 
-  const COLORS = ["#22c55e", "#3b82f6", "#f97316", "#ec4899", "#eab308", "#8b5cf6", "#ffffff"];
+  const COLORS = ["#22c55e", "#006400", "#0033CC", "#f97316", "#ec4899", "#eab308", "#8b5cf6", "#8B4513", "#ffffff"];
 
   return (
     <div className="max-w-lg mx-auto">
