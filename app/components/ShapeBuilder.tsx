@@ -87,25 +87,34 @@ export default function ShapeBuilder() {
     setPhase("building");
     setPlacedShapes([]);
     setScore(null);
-
-    // Draw target
-    const target = LEVELS[level];
-    const canvas = targetRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, 256, 256);
-      target.forEach((shape) => drawShapeOnCanvas(ctx, shape));
-    }
-
-    // Clear working canvas
-    const workCanvas = canvasRef.current;
-    if (workCanvas) {
-      const ctx = workCanvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, 256, 256);
-    }
   };
+
+  // Draw target canvas when phase becomes "building"
+  useEffect(() => {
+    if (phase === "building") {
+      // Draw target
+      const target = LEVELS[level];
+      const canvas = targetRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#111827";
+          ctx.fillRect(0, 0, 256, 256);
+          target.forEach((shape) => drawShapeOnCanvas(ctx, shape));
+        }
+      }
+
+      // Clear working canvas
+      const workCanvas = canvasRef.current;
+      if (workCanvas) {
+        const ctx = workCanvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#111827";
+          ctx.fillRect(0, 0, 256, 256);
+        }
+      }
+    }
+  }, [phase, level]);
 
   const drawShapeOnCanvas = (ctx: CanvasRenderingContext2D, shape: { type: ShapeType; x: number; y: number; size: number; color: string }) => {
     ctx.fillStyle = shape.color;

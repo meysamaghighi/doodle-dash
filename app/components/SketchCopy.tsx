@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { compareImages } from "../utils/canvasStats";
 import { usePersonalBest } from "../hooks/usePersonalBest";
 
@@ -80,25 +80,34 @@ export default function SketchCopy() {
   const startLevel = () => {
     setPhase("drawing");
     setSimilarity(null);
-
-    // Draw reference shape
-    const refCanvas = refRef.current;
-    if (refCanvas) {
-      const ctx = refCanvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, 256, 256);
-      REFERENCE_SHAPES[level](ctx);
-      setReferenceImage(refCanvas.toDataURL());
-    }
-
-    // Clear drawing canvas
-    const drawCanvas = drawRef.current;
-    if (drawCanvas) {
-      const ctx = drawCanvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, 256, 256);
-    }
   };
+
+  // Draw reference canvas when phase becomes "drawing"
+  useEffect(() => {
+    if (phase === "drawing") {
+      // Draw reference shape
+      const refCanvas = refRef.current;
+      if (refCanvas) {
+        const ctx = refCanvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#111827";
+          ctx.fillRect(0, 0, 256, 256);
+          REFERENCE_SHAPES[level](ctx);
+          setReferenceImage(refCanvas.toDataURL());
+        }
+      }
+
+      // Clear drawing canvas
+      const drawCanvas = drawRef.current;
+      if (drawCanvas) {
+        const ctx = drawCanvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#111827";
+          ctx.fillRect(0, 0, 256, 256);
+        }
+      }
+    }
+  }, [phase, level]);
 
   const getPos = (e: React.MouseEvent | React.TouchEvent) => {
     const canvas = drawRef.current!;
@@ -159,7 +168,7 @@ export default function SketchCopy() {
     }
   };
 
-  const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
+  const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#006400", "#0033CC", "#8b5cf6", "#ec4899", "#8B4513"];
 
   return (
     <div className="max-w-2xl mx-auto">

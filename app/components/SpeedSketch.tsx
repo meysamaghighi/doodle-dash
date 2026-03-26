@@ -107,7 +107,7 @@ export default function SpeedSketch() {
     saveImage(canvas.toDataURL(), `doodlelab-${prompt}.png`);
   };
 
-  const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899", "#000000"];
+  const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#006400", "#0033CC", "#8b5cf6", "#ec4899", "#8B4513", "#000000"];
 
   return (
     <div className="max-w-lg mx-auto">

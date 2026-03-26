@@ -6,8 +6,8 @@ import { saveImage } from "../utils/saveImage";
 const GRID_SIZE = 16;
 const PALETTE = [
   "#000000", "#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e",
-  "#14b8a6", "#3b82f6", "#6366f1", "#8b5cf6", "#ec4899", "#f43f5e",
-  "#78716c", "#a3a3a3", "#0ea5e9", "#a3e635",
+  "#14b8a6", "#0033CC", "#6366f1", "#8b5cf6", "#ec4899", "#f43f5e",
+  "#78716c", "#8B4513", "#006400", "#a3e635",
 ];
 
 export default function PixelArt() {

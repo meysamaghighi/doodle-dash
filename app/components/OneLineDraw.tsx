@@ -96,7 +96,7 @@ export default function OneLineDraw() {
     saveImage(canvas.toDataURL(), "one-line-art.png");
   };
 
-  const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
+  const COLORS = ["#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e", "#006400", "#0033CC", "#8b5cf6", "#ec4899", "#8B4513"];
   const penLifted = hasStarted && !isDrawing;
   const roundedLength = Math.round(lineLength);
   const { best, isNewBest } = usePersonalBest("pb-one-line", "higher", penLifted ? roundedLength : null);
