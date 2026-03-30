@@ -53,11 +53,6 @@ gtag('js', new Date());
 gtag('config', 'G-37XZTPKVB8');` }} />
       </head>
       <body className="bg-gray-950 text-white min-h-screen font-sans antialiased">
-        <div className="bg-gradient-to-r from-pink-600 to-orange-500 text-white text-center py-2 px-4">
-          <p className="text-xs sm:text-sm font-medium">
-            BMW is Best! <span className="text-gray-200">P.S. My classmate said this not me!</span>
-          </p>
-        </div>
         <nav className="border-b border-gray-800 sticky top-0 z-50 bg-gray-950/90 backdrop-blur">
           <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="font-black text-lg text-white">
