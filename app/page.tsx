@@ -15,6 +15,89 @@ export const metadata: Metadata = {
 
 const gameCategories = [
   {
+    category: "Most Popular",
+    games: [
+      {
+        href: "/kaleidoscope",
+        label: "Kaleidoscope",
+        description: "Draw and watch it reflect in beautiful 4-12 way symmetry.",
+        color: "from-purple-500 to-pink-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 7h7l-5.5 4.5L17 21l-5-4-5 4 1.5-6.5L3 10h7l2-7z" />
+            <circle cx="12" cy="12" r="3" strokeWidth={1.5} />
+          </svg>
+        ),
+      },
+      {
+        href: "/symmetry",
+        label: "Symmetry Draw",
+        description: "Draw on the left and watch it mirror on the right in real-time.",
+        color: "from-blue-500 to-cyan-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18 M9 7l-4 5 4 5 M15 7l4 5-4 5" />
+          </svg>
+        ),
+      },
+      {
+        href: "/mirror-draw",
+        label: "Mirror Draw",
+        description: "Draw on one side and watch it mirror in real time.",
+        color: "from-cyan-500 to-blue-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l-4 5 4 5" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7l4 5-4 5" />
+          </svg>
+        ),
+      },
+      {
+        href: "/color-fill",
+        label: "Color Fill",
+        description: "Fill line-art patterns with colors by tapping regions.",
+        color: "from-purple-500 to-pink-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+          </svg>
+        ),
+      },
+      {
+        href: "/pixel-art",
+        label: "Pixel Art",
+        description: "Create pixel art on a grid with a full color palette.",
+        color: "from-purple-500 to-pink-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="3" width="4" height="4" rx="0.5" />
+            <rect x="10" y="3" width="4" height="4" rx="0.5" />
+            <rect x="17" y="3" width="4" height="4" rx="0.5" />
+            <rect x="3" y="10" width="4" height="4" rx="0.5" />
+            <rect x="10" y="10" width="4" height="4" rx="0.5" />
+            <rect x="17" y="10" width="4" height="4" rx="0.5" />
+            <rect x="3" y="17" width="4" height="4" rx="0.5" />
+            <rect x="10" y="17" width="4" height="4" rx="0.5" />
+            <rect x="17" y="17" width="4" height="4" rx="0.5" />
+          </svg>
+        ),
+      },
+      {
+        href: "/gradient-paint",
+        label: "Gradient Paint",
+        description: "Paint with beautiful gradient brushes. Create colorful art!",
+        color: "from-pink-500 to-purple-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485" />
+            <circle cx="7" cy="17" r="1" fill="currentColor" />
+          </svg>
+        ),
+      },
+    ],
+  },
+  {
     category: "Challenge Games",
     games: [
       {
@@ -128,127 +211,53 @@ const gameCategories = [
       },
     ],
   },
-  {
-    category: "Creative Tools",
-    games: [
-      {
-        href: "/pixel-art",
-        label: "Pixel Art",
-        description: "Create pixel art on a grid with a full color palette.",
-        color: "from-purple-500 to-pink-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="3" y="3" width="4" height="4" rx="0.5" />
-            <rect x="10" y="3" width="4" height="4" rx="0.5" />
-            <rect x="17" y="3" width="4" height="4" rx="0.5" />
-            <rect x="3" y="10" width="4" height="4" rx="0.5" />
-            <rect x="10" y="10" width="4" height="4" rx="0.5" />
-            <rect x="17" y="10" width="4" height="4" rx="0.5" />
-            <rect x="3" y="17" width="4" height="4" rx="0.5" />
-            <rect x="10" y="17" width="4" height="4" rx="0.5" />
-            <rect x="17" y="17" width="4" height="4" rx="0.5" />
-          </svg>
-        ),
-      },
-      {
-        href: "/mirror-draw",
-        label: "Mirror Draw",
-        description: "Draw on one side and watch it mirror in real time.",
-        color: "from-cyan-500 to-blue-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l-4 5 4 5" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7l4 5-4 5" />
-          </svg>
-        ),
-      },
-      {
-        href: "/symmetry",
-        label: "Symmetry Draw",
-        description: "Draw on the left and watch it mirror on the right in real-time.",
-        color: "from-blue-500 to-cyan-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18 M9 7l-4 5 4 5 M15 7l4 5-4 5" />
-          </svg>
-        ),
-      },
-      {
-        href: "/kaleidoscope",
-        label: "Kaleidoscope",
-        description: "Draw and watch it reflect in beautiful 4-12 way symmetry.",
-        color: "from-purple-500 to-pink-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 7h7l-5.5 4.5L17 21l-5-4-5 4 1.5-6.5L3 10h7l2-7z" />
-            <circle cx="12" cy="12" r="3" strokeWidth={1.5} />
-          </svg>
-        ),
-      },
-      {
-        href: "/gradient-paint",
-        label: "Gradient Paint",
-        description: "Paint with beautiful gradient brushes. Create colorful art!",
-        color: "from-pink-500 to-purple-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485" />
-            <circle cx="7" cy="17" r="1" fill="currentColor" />
-          </svg>
-        ),
-      },
-      {
-        href: "/color-fill",
-        label: "Color Fill",
-        description: "Fill line-art patterns with colors by tapping regions.",
-        color: "from-purple-500 to-pink-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-          </svg>
-        ),
-      },
-    ],
-  },
 ];
 
 export default function Home() {
   return (
-    <main className="max-w-6xl mx-auto px-3 sm:px-4 py-8 sm:py-12">
-      <section className="text-center mb-8 sm:mb-12">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 sm:mb-4">
+    <main className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
+      <section className="text-center mb-6 sm:mb-8">
+        <h1 className="text-3xl sm:text-4xl font-black mb-2 sm:mb-3">
           Draw, Create, Challenge
         </h1>
-        <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
+        <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
           15 free drawing games to test your creativity and skill. No sign-up, no
           downloads. Just pick a game and start drawing.
         </p>
       </section>
 
+      <div className="flex flex-wrap justify-center gap-3 mb-6 text-xs text-gray-500">
+        <span>Also try:</span>
+        <a href="https://playmini.fun" className="text-purple-400 hover:text-purple-300 transition-colors">PlayMini - Browser Games</a>
+        <span className="text-gray-700">|</span>
+        <a href="https://benchmybrain.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">BenchMyBrain - Brain Tests</a>
+        <span className="text-gray-700">|</span>
+        <a href="https://cashcalcs.com" className="text-green-400 hover:text-green-300 transition-colors">CashCalcs - Financial Tools</a>
+      </div>
+
       {gameCategories.map((category) => (
-        <section key={category.category} className="mb-8 sm:mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-gray-100">
+        <section key={category.category} className="mb-6 sm:mb-10">
+          <h2 className="text-lg sm:text-xl font-bold mb-3 text-gray-100">
             {category.category}
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {category.games.map((game) => (
               <Link
                 key={game.href}
                 href={game.href}
-                className="group relative overflow-hidden rounded-lg sm:rounded-xl border border-gray-800 bg-gray-900 p-3 sm:p-4 hover:border-gray-700 transition-all hover:scale-[1.02]"
+                className="group relative overflow-hidden rounded-xl border border-gray-800 bg-gray-900 p-3 hover:border-gray-700 transition-colors"
               >
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-5 group-hover:opacity-10 transition-opacity`}
                 />
                 <div className="relative">
                   <div
-                    className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br ${game.color} bg-opacity-20 text-white mb-2 sm:mb-3`}
+                    className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br ${game.color} bg-opacity-20 text-white mb-2`}
                   >
                     {game.icon}
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold mb-1 sm:mb-2">{game.label}</h3>
-                  <p className="text-gray-400 text-xs sm:text-sm hidden sm:block">{game.description}</p>
+                  <h3 className="text-sm sm:text-base font-bold mb-1">{game.label}</h3>
+                  <p className="text-gray-400 text-xs hidden sm:block">{game.description}</p>
                 </div>
               </Link>
             ))}
@@ -256,8 +265,8 @@ export default function Home() {
         </section>
       ))}
 
-      <section className="mt-12 sm:mt-16 text-center text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">
+      <section className="mt-8 sm:mt-12 text-center text-gray-500 text-sm max-w-xl mx-auto">
+        <h2 className="text-base sm:text-lg font-bold text-white mb-2 sm:mb-3">
           Free Drawing Games for Everyone
         </h2>
         <p>
