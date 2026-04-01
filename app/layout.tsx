@@ -67,6 +67,9 @@ gtag('config', 'G-37XZTPKVB8');` }} />
         <footer className="border-t border-gray-800 mt-16">
           <div className="max-w-4xl mx-auto px-4 py-8 text-center">
             <p className="text-xs text-gray-500">Free drawing challenges. No account required. Your art stays in your browser.</p>
+            <div className="mt-3">
+              <Link href="/about" className="text-sm text-gray-400 hover:text-gray-300 underline">About & Privacy</Link>
+            </div>
             <div className="mt-4">
               <p className="text-sm text-gray-400 mb-2">Check out our other sites:</p>
               <div className="flex flex-wrap justify-center gap-3">
