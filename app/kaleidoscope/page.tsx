@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Draw on the canvas and see your strokes reflected in 4, 6, 8, or 12-way symmetry. Free creative drawing tool. No sign-up required.",
   keywords: ["kaleidoscope", "symmetry drawing", "mandala", "symmetrical art", "creative drawing"],
+  alternates: {
+    canonical: "/kaleidoscope",
+  },
   openGraph: {
     title: "Kaleidoscope - Symmetrical Drawing Art | DoodleLab",
     description:

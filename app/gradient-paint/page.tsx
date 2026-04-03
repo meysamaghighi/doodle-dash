@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Paint with beautiful gradient brushes. Pick start and end colors, adjust brush size, and create stunning gradient art. Export as PNG.",
   keywords: ["gradient paint", "gradient art", "creative drawing", "digital painting"],
+  alternates: {
+    canonical: "/gradient-paint",
+  },
   openGraph: {
     title: "Gradient Paint - Create Gradient Brush Art | DoodleLab",
     description:

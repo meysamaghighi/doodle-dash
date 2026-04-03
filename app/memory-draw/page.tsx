@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Study shapes briefly, then draw them from memory. A visual memory challenge that gets harder with each level.",
   keywords: ["memory draw", "visual memory", "drawing game", "memory challenge", "shape memory"],
+  alternates: {
+    canonical: "/memory-draw",
+  },
   openGraph: {
     title: "Memory Draw - Visual Memory Drawing Game | DoodleLab",
     description:

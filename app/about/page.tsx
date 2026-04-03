@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "About DoodleLab - Free Drawing Games & Creative Tools",
   description:
     "Learn about DoodleLab, a free creative drawing games site with 15 interactive tools. No accounts, no downloads, just pure creative fun.",
+  alternates: {
+    canonical: "/about",
+  },
   openGraph: {
     title: "About DoodleLab",
     description: "Free drawing games site with 15 interactive tools. Built for creativity, privacy-focused.",

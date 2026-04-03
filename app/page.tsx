@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
     "Free online drawing games: speed sketch, pixel art, mirror draw, spiral draw, kaleidoscope, gradient paint, memory draw, and more. 15 creative games. No sign-up required.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "DoodleLab - Free Drawing Challenges",
     description:

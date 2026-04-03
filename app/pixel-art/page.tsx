@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Create pixel art with a free online editor. Choose grid size, colors, and tools. Draw, fill, erase, and export your pixel art as PNG.",
   keywords: ["pixel art", "pixel art maker", "pixel editor", "online pixel art", "8-bit art"],
+  alternates: {
+    canonical: "/pixel-art",
+  },
   openGraph: {
     title: "Pixel Art Studio - Free Online Pixel Art Maker | DoodleLab",
     description:

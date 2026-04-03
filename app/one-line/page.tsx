@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Draw without lifting your pen. Create art with one continuous stroke. A creative challenge for artists of all levels.",
   keywords: ["one line art", "continuous line", "single stroke drawing", "line art", "one line drawing"],
+  alternates: {
+    canonical: "/one-line",
+  },
   openGraph: {
     title: "One Line Art - Single Stroke Drawing Challenge | DoodleLab",
     description:

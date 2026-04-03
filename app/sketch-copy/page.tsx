@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Copy reference shapes as accurately as possible. 5 levels of increasing difficulty. Free drawing game with pixel-similarity scoring.",
   keywords: ["sketch copy", "drawing challenge", "copy drawing", "art practice"],
+  alternates: {
+    canonical: "/sketch-copy",
+  },
   openGraph: {
     title: "Sketch Copy - Copy Drawing Challenge | DoodleLab",
     description:

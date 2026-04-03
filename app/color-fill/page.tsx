@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     "online coloring book",
     "free coloring app",
   ],
+  alternates: {
+    canonical: "/color-fill",
+  },
   openGraph: {
     title: "Color Fill - Online Coloring Game",
     description:

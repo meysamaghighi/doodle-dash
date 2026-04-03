@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Trace over faded shapes as accurately as you can. Free tracing game with 8 shapes from easy circles to complex spirals. No sign-up required.",
   keywords: ["trace shapes", "tracing game", "drawing accuracy", "shape tracing", "hand eye coordination"],
+  alternates: {
+    canonical: "/trace-master",
+  },
   openGraph: {
     title: "Trace Master - Shape Tracing Drawing Game | DoodleLab",
     description:

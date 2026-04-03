@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Draw with real-time symmetry. Vertical, horizontal, or quad mirror modes create beautiful symmetrical patterns automatically.",
   keywords: ["mirror draw", "symmetry drawing", "kaleidoscope", "symmetrical art", "mandala maker"],
+  alternates: {
+    canonical: "/mirror-draw",
+  },
   openGraph: {
     title: "Mirror Draw - Symmetrical Drawing Challenge | DoodleLab",
     description:

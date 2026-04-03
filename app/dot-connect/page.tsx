@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Connect numbered dots in order as fast as you can. Free dot-to-dot drawing game with 5 difficulty levels. No sign-up required.",
   keywords: ["dot connect", "connect the dots", "dot to dot", "drawing game", "timed challenge"],
+  alternates: {
+    canonical: "/dot-connect",
+  },
   openGraph: {
     title: "Dot Connect - Connect the Dots Drawing Game | DoodleLab",
     description:

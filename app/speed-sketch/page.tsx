@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Draw the prompt as fast as you can in 30 seconds. Free timed drawing game with random prompts. No sign-up required.",
   keywords: ["speed sketch", "timed drawing", "drawing challenge", "quick draw", "30 second draw"],
+  alternates: {
+    canonical: "/speed-sketch",
+  },
   openGraph: {
     title: "Speed Sketch - 30 Second Drawing Challenge | DoodleLab",
     description:

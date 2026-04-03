@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Drag and combine circles, squares, and triangles to build target images. 10 levels of increasing complexity. Free puzzle game.",
   keywords: ["shape builder", "puzzle game", "shape matching", "building game"],
+  alternates: {
+    canonical: "/shape-builder",
+  },
   openGraph: {
     title: "Shape Builder - Build with Shapes Puzzle Game | DoodleLab",
     description:

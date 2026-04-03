@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Draw a smooth spiral from the center outward. Free drawing game with scoring based on smoothness and roundness. No sign-up required.",
   keywords: ["spiral draw", "drawing challenge", "spiral art", "drawing game"],
+  alternates: {
+    canonical: "/spiral-draw",
+  },
   openGraph: {
     title: "Spiral Draw - Free Spiral Drawing Challenge | DoodleLab",
     description:

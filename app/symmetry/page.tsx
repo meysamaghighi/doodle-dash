@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     "free art tool",
     "creative drawing",
   ],
+  alternates: {
+    canonical: "/symmetry",
+  },
   openGraph: {
     title: "Symmetry Draw - Mirror Drawing Game",
     description:
