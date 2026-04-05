@@ -19,12 +19,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/kaleidoscope",
     "/shape-builder",
     "/gradient-paint",
+    "/about",
   ];
 
   return routes.map((route) => ({
     url: `${base}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: route === "/" ? 1 : 0.8,
+    priority: route === "/" ? 1 : route === "/about" ? 0.3 : 0.8,
   }));
 }
