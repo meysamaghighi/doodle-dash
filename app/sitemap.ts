@@ -4,6 +4,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://doodlelab.fun";
   const routes = [
     "/",
+    "/daily",
     "/speed-sketch",
     "/pixel-art",
     "/mirror-draw",
@@ -25,7 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
     url: `${base}${route}`,
     lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: route === "/" ? 1 : route === "/about" ? 0.3 : 0.8,
+    changeFrequency:
+      route === "/daily" ? ("daily" as const) : ("weekly" as const),
+    priority:
+      route === "/" ? 1 :
+      route === "/daily" ? 0.95 :
+      route === "/about" ? 0.3 :
+      0.8,
   }));
 }
