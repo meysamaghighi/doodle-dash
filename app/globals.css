@@ -1,6 +1,35 @@
 @import "tailwindcss";
 
-/* Prevent accidental scrolling during gameplay */
+:root {
+  --paper: #FBF6EB;
+  --paper-2: #F4ECDA;
+  --ink: #131A2A;
+  --ink-2: #495168;
+  --ink-3: #8B92A6;
+  --line: #E5DDC8;
+  --accent: oklch(0.74 0.16 25);
+  --accent-2: oklch(0.66 0.13 145);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
 canvas, .game-container {
   touch-action: none;
   -webkit-touch-callout: none;
@@ -8,7 +37,6 @@ canvas, .game-container {
   user-select: none;
 }
 
-/* Responsive canvas sizing for mobile */
 canvas {
   max-width: 100%;
   height: auto;
