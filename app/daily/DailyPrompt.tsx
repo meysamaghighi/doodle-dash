@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useProgress } from "../hooks/useProgress";
+import { generateShareCard, shareCard } from "../lib/shareCard";
 
 type Prompt = {
   noun: string;
@@ -83,6 +84,15 @@ export default function DailyPrompt() {
     bumpStreak();
   };
 
+  const handleShare = async () => {
+    const dataUrl = generateShareCard({
+      headline: `${streakCount}-day streak`,
+      subline: `Today's prompt · Draw a ${prompt.noun}`,
+    });
+    if (!dataUrl) return;
+    await shareCard(dataUrl, `doodlelab-streak-${streakCount}.png`);
+  };
+
   return (
     <main className="max-w-5xl mx-auto px-4 pt-6 pb-12">
       <section
@@ -134,6 +144,15 @@ export default function DailyPrompt() {
               {streakCount} {streakCount === 1 ? "day" : "days"}
             </span>
           </div>
+          {streakCount >= 1 && (
+            <button
+              type="button"
+              onClick={handleShare}
+              className="px-5 py-3 rounded-full text-sm text-ink-2 border border-line hover:bg-paper-2 transition-colors"
+            >
+              Share streak
+            </button>
+          )}
         </div>
 
         <p
