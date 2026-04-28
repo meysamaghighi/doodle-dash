@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BlindDraw from "../components/BlindDraw";
+import BlindDrawPlay from "./BlindDrawPlay";
 import RelatedGames from "../components/RelatedGames";
 
 export const metadata: Metadata = {
@@ -20,17 +20,16 @@ export const metadata: Metadata = {
 
 export default function BlindDrawPage() {
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-black text-center mb-2">Blind Draw</h1>
-      <p className="text-gray-400 text-center mb-8">
-        The canvas is hidden while you draw. Reveal your masterpiece when you're done!
-      </p>
-      <BlindDraw />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How Blind Draw Works</h2>
+    <main className="bg-paper text-ink">
+      <BlindDrawPlay />
+
+      <section className="max-w-xl mx-auto px-4 mt-12 text-ink-2 text-sm">
+        <h2 className="font-display text-xl text-ink mb-3" style={{ fontWeight: 700 }}>
+          How Blind Draw Works
+        </h2>
         <p className="mb-2">
           You get a word to draw, but the canvas is completely hidden. Draw
-          using your spatial memory and intuition. When you're ready, hit
+          using your spatial memory and intuition. When you&apos;re ready, hit
           Reveal to see the result.
         </p>
         <p>
@@ -38,7 +37,9 @@ export default function BlindDrawPage() {
           same prompt blindly and compare results. The funnier the better!
         </p>
       </section>
-      <RelatedGames current="/blind-draw" />
+      <div className="max-w-4xl mx-auto px-4">
+        <RelatedGames current="/blind-draw" />
+      </div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

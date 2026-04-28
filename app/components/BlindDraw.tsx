@@ -13,7 +13,18 @@ const PROMPTS = [
 
 type Phase = "ready" | "drawing" | "revealed";
 
-export default function BlindDraw() {
+export type BlindDrawProps = {
+  /** Fires when the user reveals their drawing. Lets a parent shell hook
+   * progress + gallery storage and gate the share-card. dataUrl is the
+   * full PNG of the canvas at reveal time. */
+  onReveal?: (
+    stats: { coverage: number; colorsUsed: number },
+    prompt: string,
+    dataUrl: string
+  ) => void;
+};
+
+export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [phase, setPhase] = useState<Phase>("ready");
   const [prompt, setPrompt] = useState("");
@@ -96,7 +107,14 @@ export default function BlindDraw() {
 
   const reveal = () => {
     const canvas = canvasRef.current;
-    if (canvas) setStats(getDrawingStats(canvas));
+    let nextStats: { coverage: number; colorsUsed: number } | null = null;
+    if (canvas) {
+      nextStats = getDrawingStats(canvas);
+      setStats(nextStats);
+      if (onReveal && nextStats) {
+        onReveal(nextStats, prompt, canvas.toDataURL("image/png"));
+      }
+    }
     setPhase("revealed");
   };
 
