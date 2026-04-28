@@ -3,6 +3,7 @@ import MobileNav from "./MobileNav";
 
 const navLinks = [
   { href: "/daily", label: "🔥 Daily" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/speed-sketch", label: "Speed Sketch" },
   { href: "/pixel-art", label: "Pixel Art" },
   { href: "/mirror-draw", label: "Mirror Draw" },

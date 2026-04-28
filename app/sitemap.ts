@@ -5,6 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "/",
     "/daily",
+    "/gallery",
     "/speed-sketch",
     "/pixel-art",
     "/mirror-draw",

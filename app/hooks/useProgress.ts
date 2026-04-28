@@ -155,10 +155,21 @@ export function useProgress() {
     return id;
   }, []);
 
+  const removeDrawing = useCallback((id: string) => {
+    setState(prev => {
+      const next: ProgressV1 = {
+        ...prev,
+        gallery: prev.gallery.filter(item => item.id !== id),
+      };
+      save(next);
+      return next;
+    });
+  }, []);
+
   const reset = useCallback(() => {
     setState(EMPTY);
     save(EMPTY);
   }, []);
 
-  return { state, recordPlay, bumpStreak, saveDrawing, reset };
+  return { state, recordPlay, bumpStreak, saveDrawing, removeDrawing, reset };
 }
