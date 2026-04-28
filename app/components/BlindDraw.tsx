@@ -130,12 +130,12 @@ export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
     <div className="max-w-lg mx-auto">
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-ink-2 mb-6">
+          <p className="text-gray-300 mb-6">
             Draw the prompt without seeing the canvas. Reveal when you're done!
           </p>
           <button
             onClick={startGame}
-            className="px-8 py-3 bg-red-500 hover:bg-red-600 text-ink font-bold rounded-xl transition-colors text-lg"
+            className="px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors text-lg"
           >
             Start
           </button>
@@ -145,11 +145,11 @@ export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
       {phase !== "ready" && (
         <>
           <div className="flex items-center justify-between mb-3">
-            <div className="text-lg font-bold">
+            <div className="text-lg font-bold text-white">
               Draw: <span className="text-red-400">{prompt}</span>
             </div>
             {phase === "drawing" && (
-              <span className="text-sm text-ink-2">Canvas is hidden!</span>
+              <span className="text-sm text-gray-300">Canvas is hidden!</span>
             )}
           </div>
 
@@ -219,7 +219,7 @@ export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
             {phase === "drawing" && (
               <button
                 onClick={reveal}
-                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-ink font-bold rounded-lg"
+                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg"
               >
                 Reveal Drawing
               </button>
@@ -228,31 +228,31 @@ export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
               <div className="flex items-center gap-6 text-sm">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-red-400">{stats.coverage}%</div>
-                  <div className="text-ink-3">Canvas used</div>
+                  <div className="text-gray-400">Canvas used</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-400">{stats.colorsUsed}</div>
-                  <div className="text-ink-3">Colors</div>
+                  <div className="text-gray-400">Colors</div>
                 </div>
               </div>
             )}
             {phase === "revealed" && (
               <div className="text-center">
                 {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm animate-pulse">New Personal Best!</p>}
-                {pb.best !== null && !pb.isNewBest && <p className="text-ink-3 text-xs">Personal Best: {pb.best}% coverage</p>}
+                {pb.best !== null && !pb.isNewBest && <p className="text-gray-400 text-xs">Personal Best: {pb.best}% coverage</p>}
               </div>
             )}
             {phase === "revealed" && (
               <>
                 <button
                   onClick={handleSave}
-                  className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg"
+                  className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
                 >
                   Save
                 </button>
                 <button
                   onClick={startGame}
-                  className="px-5 py-2 bg-red-500 hover:bg-red-600 text-ink rounded-lg"
+                  className="px-5 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
                 >
                   Play Again
                 </button>

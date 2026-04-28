@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MirrorDraw from "../components/MirrorDraw";
+import MirrorDrawPlay from "./MirrorDrawPlay";
 import RelatedGames from "../components/RelatedGames";
 
 export const metadata: Metadata = {
@@ -21,11 +21,7 @@ export const metadata: Metadata = {
 export default function MirrorDrawPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-black text-center mb-2">Mirror Draw</h1>
-      <p className="text-ink-2 text-center mb-8">
-        Draw on one side and watch it mirror in real time. Try quad mode for kaleidoscope effects.
-      </p>
-      <MirrorDraw />
+      <MirrorDrawPlay />
       <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
         <h2 className="text-lg font-bold text-ink mb-3">How Mirror Draw Works</h2>
         <p className="mb-2">

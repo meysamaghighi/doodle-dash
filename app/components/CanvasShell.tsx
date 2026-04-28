@@ -86,7 +86,7 @@ export default function CanvasShell({
       ref={wrapRef}
       data-activity={id}
       data-status={status}
-      className={`relative bg-paper text-ink${cssFs && isFs ? " fixed inset-0 z-[9999] overflow-auto" : ""}`}
+      className={`relative bg-paper text-ink flex flex-col${cssFs && isFs ? " fixed inset-0 z-[9999] overflow-y-auto" : ""}`}
     >
       <header className="flex items-center justify-between border-b border-line px-4 py-3">
         <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ export default function CanvasShell({
         </div>
       </header>
 
-      <div className="relative">{children}</div>
+      <div className="relative flex flex-col flex-1">{children}</div>
 
       {status === "ended" && result && (
         <div

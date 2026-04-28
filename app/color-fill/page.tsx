@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import ColorFill from "../components/ColorFill";
-
+import ColorFillPlay from "./ColorFillPlay";
 export const metadata: Metadata = {
   title: "Color Fill - Coloring Game with Line Art Patterns | DoodleLab",
   description:
@@ -29,14 +28,8 @@ export default function ColorFillPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-ink mb-3">Color Fill</h1>
-        <p className="text-ink-2">
-          Choose a pattern and fill it with colors by tapping regions.
-          Create colorful art from line drawings.
-        </p>
       </div>
-
-      <ColorFill />
+      <ColorFillPlay />
 
       <section className="mt-12 space-y-6">
         <div>

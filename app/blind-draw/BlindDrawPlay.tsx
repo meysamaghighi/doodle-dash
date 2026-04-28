@@ -43,7 +43,7 @@ export default function BlindDrawPlay() {
       // (back link, how-to, fullscreen) without duplicating the reveal card.
       status="idle"
     >
-      <div className="px-4 py-6 bg-gray-950">
+      <div className="flex-1 min-h-[520px] bg-gray-950 text-white px-4 py-6">
         <BlindDraw onReveal={handleReveal} />
       </div>
     </CanvasShell>

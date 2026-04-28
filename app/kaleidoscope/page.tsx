@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Kaleidoscope from "../components/Kaleidoscope";
+import KaleidoscopePlay from "./KaleidoscopePlay";
 import RelatedGames from "../components/RelatedGames";
 
 export const metadata: Metadata = {
@@ -22,11 +22,7 @@ export const metadata: Metadata = {
 export default function KaleidoscopePage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-black text-center mb-2">Kaleidoscope</h1>
-      <p className="text-ink-2 text-center mb-8">
-        Draw and watch your art reflect in beautiful symmetry. Create mesmerizing patterns!
-      </p>
-      <Kaleidoscope />
+      <KaleidoscopePlay />
       <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
         <h2 className="text-lg font-bold text-ink mb-3">How to Use</h2>
         <p className="mb-2">

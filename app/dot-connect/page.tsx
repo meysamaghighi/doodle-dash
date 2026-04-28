@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import DotConnect from "../components/DotConnect";
+import DotConnectPlay from "./DotConnectPlay";
 import RelatedGames from "../components/RelatedGames";
 
 export const metadata: Metadata = {
@@ -21,11 +21,7 @@ export const metadata: Metadata = {
 export default function DotConnectPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-black text-center mb-2">Dot Connect</h1>
-      <p className="text-ink-2 text-center mb-8">
-        Draw lines connecting the dots in numerical order. How fast can you complete each level?
-      </p>
-      <DotConnect />
+      <DotConnectPlay />
       <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
         <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">

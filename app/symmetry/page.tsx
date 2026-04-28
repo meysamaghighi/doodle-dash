@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import SymmetryDraw from "../components/SymmetryDraw";
-
+import SymmetryPlay from "./SymmetryPlay";
 export const metadata: Metadata = {
   title: "Symmetry Draw - Mirror Drawing Game | DoodleLab",
   description:
@@ -29,14 +28,8 @@ export default function SymmetryPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-ink mb-3">Symmetry Draw</h1>
-        <p className="text-ink-2">
-          Draw on the left half and watch your artwork mirror instantly on the right.
-          Create perfectly symmetrical designs effortlessly.
-        </p>
       </div>
-
-      <SymmetryDraw />
+      <SymmetryPlay />
 
       <section className="mt-12 space-y-6">
         <div>
