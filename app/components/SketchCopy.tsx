@@ -174,13 +174,13 @@ export default function SketchCopy() {
     <div className="max-w-2xl mx-auto">
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-gray-400 mb-2">Level {level + 1} of {REFERENCE_SHAPES.length}</p>
-          <p className="text-gray-400 mb-6">
+          <p className="text-ink-2 mb-2">Level {level + 1} of {REFERENCE_SHAPES.length}</p>
+          <p className="text-ink-2 mb-6">
             Copy the shape on the left as accurately as you can!
           </p>
           <button
             onClick={startLevel}
-            className="px-8 py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-xl transition-colors text-lg"
+            className="px-8 py-3 bg-teal-500 hover:bg-teal-600 text-ink font-bold rounded-xl transition-colors text-lg"
           >
             Start
           </button>
@@ -197,21 +197,21 @@ export default function SketchCopy() {
 
           <div className="grid grid-cols-2 gap-4 mb-3">
             <div>
-              <p className="text-center text-sm text-gray-400 mb-2">Reference</p>
+              <p className="text-center text-sm text-ink-2 mb-2">Reference</p>
               <canvas
                 ref={refRef}
                 width={256}
                 height={256}
-                className="w-full aspect-square rounded-xl border border-gray-700"
+                className="w-full aspect-square rounded-xl border border-line"
               />
             </div>
             <div>
-              <p className="text-center text-sm text-gray-400 mb-2">Your Drawing</p>
+              <p className="text-center text-sm text-ink-2 mb-2">Your Drawing</p>
               <canvas
                 ref={drawRef}
                 width={256}
                 height={256}
-                className="w-full aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none"
+                className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none"
                 onMouseDown={(e) => {
                   if (phase !== "drawing") return;
                   drawing.current = true;
@@ -247,7 +247,7 @@ export default function SketchCopy() {
                   <button
                     key={c}
                     onClick={() => setColor(c)}
-                    className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+                    className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-white scale-110" : "border-line"}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
@@ -262,7 +262,7 @@ export default function SketchCopy() {
               />
               <button
                 onClick={handleCompare}
-                className="px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-lg"
+                className="px-6 py-2 bg-teal-500 hover:bg-teal-600 text-ink font-bold rounded-lg"
               >
                 Compare
               </button>
@@ -272,21 +272,21 @@ export default function SketchCopy() {
           {phase === "compare" && similarity !== null && (
             <div className="text-center">
               <div className="text-3xl font-bold text-teal-400 mb-2">{similarity}%</div>
-              <p className="text-gray-400 text-sm mb-2">
+              <p className="text-ink-2 text-sm mb-2">
                 {similarity >= 80 ? "Excellent copy!" : similarity >= 60 ? "Good job!" : similarity >= 40 ? "Not bad!" : "Keep trying!"}
               </p>
               {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm animate-pulse">New Personal Best!</p>}
-              {pb.best !== null && !pb.isNewBest && <p className="text-gray-500 text-xs">Personal Best: {pb.best}%</p>}
+              {pb.best !== null && !pb.isNewBest && <p className="text-ink-3 text-xs">Personal Best: {pb.best}%</p>}
               <div className="flex gap-3 justify-center mt-4">
                 <button
                   onClick={startLevel}
-                  className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+                  className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg"
                 >
                   Retry
                 </button>
                 <button
                   onClick={nextLevel}
-                  className="px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-lg"
+                  className="px-6 py-2 bg-teal-500 hover:bg-teal-600 text-ink font-bold rounded-lg"
                 >
                   {level < REFERENCE_SHAPES.length - 1 ? "Next Level" : "Restart"}
                 </button>

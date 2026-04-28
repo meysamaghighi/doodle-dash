@@ -146,12 +146,12 @@ export default function SpiralDraw() {
     <div className="max-w-lg mx-auto">
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-gray-400 mb-6">
+          <p className="text-ink-2 mb-6">
             Draw a spiral from the center outward. Try to make it smooth and round!
           </p>
           <button
             onClick={startGame}
-            className="px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl transition-colors text-lg"
+            className="px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-ink font-bold rounded-xl transition-colors text-lg"
           >
             Start Drawing
           </button>
@@ -171,7 +171,7 @@ export default function SpiralDraw() {
             ref={canvasRef}
             width={512}
             height={512}
-            className="w-full aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none"
+            className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none"
             onMouseDown={startDraw}
             onMouseMove={draw}
             onMouseUp={stopDraw}
@@ -188,7 +188,7 @@ export default function SpiralDraw() {
                   <button
                     key={c}
                     onClick={() => setColor(c)}
-                    className={`w-7 h-7 rounded-full border-2 transition-transform ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+                    className={`w-7 h-7 rounded-full border-2 transition-transform ${color === c ? "border-white scale-110" : "border-line"}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
@@ -201,10 +201,10 @@ export default function SpiralDraw() {
                 onChange={(e) => setBrushSize(Number(e.target.value))}
                 className="w-24 accent-indigo-500"
               />
-              <span className="text-xs text-gray-500">{brushSize}px</span>
+              <span className="text-xs text-ink-3">{brushSize}px</span>
               <button
                 onClick={analyzeSpiral}
-                className="ml-auto px-5 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors"
+                className="ml-auto px-5 py-2 bg-indigo-500 hover:bg-indigo-600 text-ink rounded-lg transition-colors"
               >
                 Done
               </button>
@@ -214,14 +214,14 @@ export default function SpiralDraw() {
           {phase === "done" && score !== null && (
             <div className="mt-3 text-center">
               <div className="text-2xl font-bold text-indigo-400 mb-1">{score}%</div>
-              <div className="text-gray-500 text-sm mb-2">
+              <div className="text-ink-3 text-sm mb-2">
                 {score >= 80 ? "Perfect spiral!" : score >= 60 ? "Good spiral!" : score >= 40 ? "Not bad!" : "Keep practicing!"}
               </div>
               {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm animate-pulse">New Personal Best!</p>}
-              {pb.best !== null && !pb.isNewBest && <p className="text-gray-500 text-xs">Personal Best: {pb.best}%</p>}
+              {pb.best !== null && !pb.isNewBest && <p className="text-ink-3 text-xs">Personal Best: {pb.best}%</p>}
               <button
                 onClick={startGame}
-                className="mt-3 px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors"
+                className="mt-3 px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-ink rounded-lg transition-colors"
               >
                 Try Again
               </button>

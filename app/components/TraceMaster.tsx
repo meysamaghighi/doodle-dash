@@ -287,11 +287,11 @@ export default function TraceMaster() {
 
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-gray-400 mb-2">
+          <p className="text-ink-2 mb-2">
             Shape {shapeIndex + 1} of {SHAPES.length}: {shape.name}
           </p>
           {/* Preview of the shape */}
-          <div className="mx-auto w-32 h-32 mb-4 bg-gray-900 rounded-xl border border-gray-700 overflow-hidden">
+          <div className="mx-auto w-32 h-32 mb-4 bg-paper-2 rounded-xl border border-line overflow-hidden">
             <canvas
               ref={(el) => {
                 if (el) {
@@ -308,28 +308,28 @@ export default function TraceMaster() {
               className="w-full h-full"
             />
           </div>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-ink-3 text-sm mb-6">
             Trace over the faded shape as accurately as you can.
           </p>
           <div className="flex gap-3 justify-center">
             {shapeIndex > 0 && (
               <button
                 onClick={() => setShapeIndex(shapeIndex - 1)}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg transition-colors"
               >
                 Previous Shape
               </button>
             )}
             <button
               onClick={startGame}
-              className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-colors text-lg"
+              className="px-8 py-3 bg-green-500 hover:bg-green-600 text-ink font-bold rounded-xl transition-colors text-lg"
             >
               Start Tracing
             </button>
             {shapeIndex < SHAPES.length - 1 && (
               <button
                 onClick={() => setShapeIndex(shapeIndex + 1)}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg transition-colors"
               >
                 Next Shape
               </button>
@@ -341,11 +341,11 @@ export default function TraceMaster() {
       {phase !== "ready" && (
         <>
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-ink-2">
               {shape.name} ({shapeIndex + 1}/{SHAPES.length})
             </div>
             {phase === "tracing" && (
-              <div className="text-sm font-mono text-gray-300">
+              <div className="text-sm font-mono text-ink-2">
                 {elapsedTime.toFixed(1)}s
               </div>
             )}
@@ -358,7 +358,7 @@ export default function TraceMaster() {
             ref={canvasRef}
             width={512}
             height={512}
-            className="w-full aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none"
+            className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none"
             onMouseDown={startDraw}
             onMouseMove={draw}
             onMouseUp={stopDraw}
@@ -375,14 +375,14 @@ export default function TraceMaster() {
                   <button
                     key={c}
                     onClick={() => setColor(c)}
-                    className={`w-7 h-7 rounded-full border-2 transition-transform ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+                    className={`w-7 h-7 rounded-full border-2 transition-transform ${color === c ? "border-white scale-110" : "border-line"}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
               </div>
               <button
                 onClick={finishTrace}
-                className="px-5 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors font-medium"
+                className="px-5 py-2 bg-green-500 hover:bg-green-600 text-ink rounded-lg transition-colors font-medium"
               >
                 Done
               </button>
@@ -392,8 +392,8 @@ export default function TraceMaster() {
           {phase === "done" && score !== null && (
             <div className="mt-3 text-center">
               <div className="text-3xl font-bold text-green-400 mb-1">{score}%</div>
-              <div className="text-gray-500 text-sm mb-1">Accuracy</div>
-              <div className="text-xs text-gray-600">
+              <div className="text-ink-3 text-sm mb-1">Accuracy</div>
+              <div className="text-xs text-ink-3">
                 Time: {elapsedTime.toFixed(1)}s
               </div>
               {pb.isNewBest && (
@@ -402,7 +402,7 @@ export default function TraceMaster() {
                 </p>
               )}
               {pb.best !== null && !pb.isNewBest && (
-                <p className="text-gray-500 text-xs mt-2">Personal Best: {pb.best}%</p>
+                <p className="text-ink-3 text-xs mt-2">Personal Best: {pb.best}%</p>
               )}
             </div>
           )}
@@ -411,20 +411,20 @@ export default function TraceMaster() {
             <div className="mt-4 flex gap-3 justify-center">
               <button
                 onClick={handleSave}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg transition-colors"
               >
                 Save Drawing
               </button>
               <button
                 onClick={startGame}
-                className="px-5 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-green-500 hover:bg-green-600 text-ink rounded-lg transition-colors"
               >
                 Try Again
               </button>
               {shapeIndex < SHAPES.length - 1 && (
                 <button
                   onClick={nextShape}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-ink rounded-lg transition-colors"
                 >
                   Next Shape
                 </button>

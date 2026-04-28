@@ -235,31 +235,31 @@ export default function DotConnect() {
     <div className="max-w-lg mx-auto">
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-gray-400 mb-4">
+          <p className="text-ink-2 mb-4">
             Level {level + 1}: {LEVELS[level].name}
           </p>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-ink-3 text-sm mb-6">
             Connect {LEVELS[level].dots} dots in order as fast as you can.
           </p>
           <div className="flex gap-3 justify-center">
             {level > 0 && (
               <button
                 onClick={() => setLevel(level - 1)}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg transition-colors"
               >
                 Previous Level
               </button>
             )}
             <button
               onClick={startGame}
-              className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors text-lg"
+              className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-ink font-bold rounded-xl transition-colors text-lg"
             >
               Start
             </button>
             {level < LEVELS.length - 1 && (
               <button
                 onClick={() => setLevel(level + 1)}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg transition-colors"
               >
                 Next Level
               </button>
@@ -271,11 +271,11 @@ export default function DotConnect() {
       {phase !== "ready" && (
         <>
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-ink-2">
               Level {level + 1}: {LEVELS[level].name}
             </div>
             {phase === "playing" && (
-              <div className="text-sm font-mono text-gray-300">
+              <div className="text-sm font-mono text-ink-2">
                 Dot {Math.min(currentDot, dots.length)} of {dots.length}
               </div>
             )}
@@ -290,7 +290,7 @@ export default function DotConnect() {
             ref={canvasRef}
             width={512}
             height={512}
-            className="w-full aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none"
+            className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none"
             onMouseDown={startDraw}
             onMouseMove={draw}
             onMouseUp={stopDraw}
@@ -301,7 +301,7 @@ export default function DotConnect() {
           />
 
           {phase === "playing" && (
-            <p className="text-center text-gray-500 text-sm mt-3">
+            <p className="text-center text-ink-3 text-sm mt-3">
               Draw lines connecting the dots in numerical order
             </p>
           )}
@@ -311,14 +311,14 @@ export default function DotConnect() {
               <div className="text-2xl font-bold text-orange-400 mb-1">
                 {completionTime} seconds
               </div>
-              <div className="text-gray-500 text-sm">Completion Time</div>
+              <div className="text-ink-3 text-sm">Completion Time</div>
               {pb.isNewBest && (
                 <p className="text-yellow-400 font-bold text-sm animate-pulse mt-2">
                   New Personal Best!
                 </p>
               )}
               {pb.best !== null && !pb.isNewBest && (
-                <p className="text-gray-500 text-xs mt-2">
+                <p className="text-ink-3 text-xs mt-2">
                   Personal Best: {pb.best}s
                 </p>
               )}
@@ -329,20 +329,20 @@ export default function DotConnect() {
             <div className="mt-4 flex gap-3 justify-center">
               <button
                 onClick={handleSave}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg transition-colors"
               >
                 Save Drawing
               </button>
               <button
                 onClick={startGame}
-                className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-ink rounded-lg transition-colors"
               >
                 Play Again
               </button>
               {level < LEVELS.length - 1 && (
                 <button
                   onClick={nextLevel}
-                  className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                  className="px-5 py-2 bg-green-600 hover:bg-green-700 text-ink rounded-lg transition-colors"
                 >
                   Next Level
                 </button>

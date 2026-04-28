@@ -127,7 +127,7 @@ export default function PixelArt() {
             <button
               key={t}
               onClick={() => setTool(t)}
-              className={`px-3 py-1.5 text-sm rounded-lg capitalize ${tool === t ? "bg-purple-500 text-white" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
+              className={`px-3 py-1.5 text-sm rounded-lg capitalize ${tool === t ? "bg-purple-500 text-ink" : "bg-paper-2 text-ink-2 hover:bg-paper-2"}`}
             >
               {t}
             </button>
@@ -136,7 +136,7 @@ export default function PixelArt() {
         <select
           value={gridSize}
           onChange={(e) => resetGrid(Number(e.target.value))}
-          className="bg-gray-800 text-gray-300 text-sm rounded-lg px-2 py-1.5 border border-gray-700"
+          className="bg-paper-2 text-ink-2 text-sm rounded-lg px-2 py-1.5 border border-line"
         >
           <option value={8}>8x8</option>
           <option value={16}>16x16</option>
@@ -144,13 +144,13 @@ export default function PixelArt() {
         </select>
         <button
           onClick={() => resetGrid(gridSize)}
-          className="px-3 py-1.5 text-sm bg-gray-800 text-gray-400 hover:bg-gray-700 rounded-lg"
+          className="px-3 py-1.5 text-sm bg-paper-2 text-ink-2 hover:bg-paper-2 rounded-lg"
         >
           Clear
         </button>
         <button
           onClick={exportImage}
-          className="px-3 py-1.5 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-lg ml-auto"
+          className="px-3 py-1.5 text-sm bg-purple-500 hover:bg-purple-600 text-ink rounded-lg ml-auto"
         >
           Export PNG
         </button>
@@ -164,7 +164,7 @@ export default function PixelArt() {
               setColor(c);
               if (tool === "erase") setTool("draw");
             }}
-            className={`w-7 h-7 rounded-md border-2 transition-transform ${color === c && tool !== "erase" ? "border-white scale-110" : "border-gray-600"}`}
+            className={`w-7 h-7 rounded-md border-2 transition-transform ${color === c && tool !== "erase" ? "border-white scale-110" : "border-line"}`}
             style={{ backgroundColor: c }}
           />
         ))}
@@ -172,7 +172,7 @@ export default function PixelArt() {
 
       <div
         ref={gridRef}
-        className="aspect-square border border-gray-700 rounded-xl overflow-hidden select-none touch-none cursor-pointer"
+        className="aspect-square border border-line rounded-xl overflow-hidden select-none touch-none cursor-pointer"
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${gridSize}, 1fr)`,

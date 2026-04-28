@@ -37,22 +37,48 @@ export default function CanvasShell({
 }: CanvasShellProps) {
   const [showHowTo, setShowHowTo] = useState(false);
   const [isFs, setIsFs] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
+  const [cssFs, setCssFs] = useState(false);
+  const wrapRef = useRef<HTMLElement>(null);
+
+  type DocExt = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?(): void };
+  type ElExt = HTMLElement & { webkitRequestFullscreen?(): void };
 
   useEffect(() => {
-    const onChange = () =>
-      setIsFs(document.fullscreenElement === wrapRef.current);
-    document.addEventListener("fullscreenchange", onChange);
-    return () => document.removeEventListener("fullscreenchange", onChange);
-  }, []);
+    const sync = () => {
+      const doc = document as DocExt;
+      if (!(doc.fullscreenElement ?? doc.webkitFullscreenElement) && !cssFs) setIsFs(false);
+    };
+    document.addEventListener("fullscreenchange", sync);
+    document.addEventListener("webkitfullscreenchange", sync);
+    return () => {
+      document.removeEventListener("fullscreenchange", sync);
+      document.removeEventListener("webkitfullscreenchange", sync);
+    };
+  }, [cssFs]);
+
+  useEffect(() => {
+    if (!cssFs) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setIsFs(false); setCssFs(false); } };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [cssFs]);
 
   const toggleFs = async () => {
     if (!fullscreen || !wrapRef.current) return;
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-    } else {
-      await wrapRef.current.requestFullscreen().catch(() => {});
+    const el = wrapRef.current as ElExt;
+    const doc = document as DocExt;
+    if (isFs) {
+      setIsFs(false); setCssFs(false);
+      if (doc.fullscreenElement) doc.exitFullscreen().catch(() => {});
+      else if (doc.webkitFullscreenElement) doc.webkitExitFullscreen?.();
+      return;
     }
+    if (el.requestFullscreen) {
+      try { await el.requestFullscreen(); setIsFs(true); }
+      catch { setIsFs(true); setCssFs(true); }
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen(); setIsFs(true);
+    } else { setIsFs(true); setCssFs(true); }
   };
 
   return (
@@ -60,7 +86,7 @@ export default function CanvasShell({
       ref={wrapRef}
       data-activity={id}
       data-status={status}
-      className="relative bg-paper text-ink"
+      className={`relative bg-paper text-ink${cssFs && isFs ? " fixed inset-0 z-[9999] overflow-auto" : ""}`}
     >
       <header className="flex items-center justify-between border-b border-line px-4 py-3">
         <div className="flex items-center gap-3">

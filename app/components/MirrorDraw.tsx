@@ -132,20 +132,20 @@ export default function MirrorDraw() {
           <button
             key={m}
             onClick={() => setMode(m)}
-            className={`px-3 py-1.5 text-sm rounded-lg capitalize ${mode === m ? "bg-cyan-500 text-white" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
+            className={`px-3 py-1.5 text-sm rounded-lg capitalize ${mode === m ? "bg-cyan-500 text-ink" : "bg-paper-2 text-ink-2 hover:bg-paper-2"}`}
           >
             {m}
           </button>
         ))}
         <button
           onClick={clearCanvas}
-          className="px-3 py-1.5 text-sm bg-gray-800 text-gray-400 hover:bg-gray-700 rounded-lg"
+          className="px-3 py-1.5 text-sm bg-paper-2 text-ink-2 hover:bg-paper-2 rounded-lg"
         >
           Clear
         </button>
         <button
           onClick={handleSave}
-          className="px-3 py-1.5 text-sm bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg ml-auto"
+          className="px-3 py-1.5 text-sm bg-cyan-500 hover:bg-cyan-600 text-ink rounded-lg ml-auto"
         >
           Save
         </button>
@@ -157,7 +157,7 @@ export default function MirrorDraw() {
             <button
               key={c}
               onClick={() => setColor(c)}
-              className={`w-7 h-7 rounded-full border-2 transition-transform ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+              className={`w-7 h-7 rounded-full border-2 transition-transform ${color === c ? "border-white scale-110" : "border-line"}`}
               style={{ backgroundColor: c }}
             />
           ))}
@@ -170,14 +170,14 @@ export default function MirrorDraw() {
           onChange={(e) => setBrushSize(Number(e.target.value))}
           className="w-24 accent-cyan-500"
         />
-        <span className="text-xs text-gray-500">{brushSize}px</span>
+        <span className="text-xs text-ink-3">{brushSize}px</span>
       </div>
 
       <canvas
         ref={canvasRef}
         width={512}
         height={512}
-        className="w-full aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none"
+        className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none"
         onMouseDown={startDraw}
         onMouseMove={onMove}
         onMouseUp={stopDraw}

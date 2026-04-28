@@ -190,13 +190,13 @@ export default function MemoryDraw() {
     <div className="max-w-2xl mx-auto">
       {phase === "ready" && (
         <div className="text-center py-12">
-          <p className="text-gray-400 mb-2">Level {level}</p>
-          <p className="text-gray-400 mb-6">
+          <p className="text-ink-2 mb-2">Level {level}</p>
+          <p className="text-ink-2 mb-6">
             Study the shapes carefully, then draw them from memory.
           </p>
           <button
             onClick={startRound}
-            className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-colors text-lg"
+            className="px-8 py-3 bg-green-500 hover:bg-green-600 text-ink font-bold rounded-xl transition-colors text-lg"
           >
             Start
           </button>
@@ -214,7 +214,7 @@ export default function MemoryDraw() {
             <img
               src={referenceImage}
               alt="Shapes to memorize"
-              className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-gray-700"
+              className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-line"
             />
           )}
         </div>
@@ -233,7 +233,7 @@ export default function MemoryDraw() {
                 <button
                   key={c}
                   onClick={() => setColor(c)}
-                  className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+                  className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-white scale-110" : "border-line"}`}
                   style={{ backgroundColor: c }}
                 />
               ))}
@@ -251,7 +251,7 @@ export default function MemoryDraw() {
             ref={drawRef}
             width={512}
             height={512}
-            className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none"
+            className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-line cursor-crosshair touch-none"
             onMouseDown={(e) => {
               drawingRef.current = true;
               lastPosRef.current = getPos(e);
@@ -278,7 +278,7 @@ export default function MemoryDraw() {
           <div className="text-center mt-4">
             <button
               onClick={handleCompare}
-              className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg"
+              className="px-6 py-2 bg-green-500 hover:bg-green-600 text-ink font-bold rounded-lg"
             >
               Done - Compare
             </button>
@@ -298,34 +298,34 @@ export default function MemoryDraw() {
                 }`}>
                   {similarity}% Match
                 </span>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className="text-ink-2 text-sm mt-1">
                   {similarity >= 70 ? "Amazing memory!" :
                    similarity >= 40 ? "Not bad! Try again?" :
                    "Keep practicing!"}
                 </p>
                 {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm mt-1 animate-pulse">New Personal Best!</p>}
-                {pb.best !== null && !pb.isNewBest && <p className="text-gray-500 text-xs mt-1">Personal Best: {pb.best}%</p>}
+                {pb.best !== null && !pb.isNewBest && <p className="text-ink-3 text-xs mt-1">Personal Best: {pb.best}%</p>}
               </div>
             )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-center text-sm text-gray-400 mb-2">Original</p>
+              <p className="text-center text-sm text-ink-2 mb-2">Original</p>
               {referenceImage && (
                 <img
                   src={referenceImage}
                   alt="Original shapes"
-                  className="w-full aspect-square rounded-xl border border-gray-700"
+                  className="w-full aspect-square rounded-xl border border-line"
                 />
               )}
             </div>
             <div>
-              <p className="text-center text-sm text-gray-400 mb-2">Yours</p>
+              <p className="text-center text-sm text-ink-2 mb-2">Yours</p>
               {drawingImage && (
                 <img
                   src={drawingImage}
                   alt="Your drawing"
-                  className="w-full aspect-square rounded-xl border border-gray-700"
+                  className="w-full aspect-square rounded-xl border border-line"
                 />
               )}
             </div>
@@ -334,7 +334,7 @@ export default function MemoryDraw() {
             {drawingImage && (
               <button
                 onClick={() => saveImage(drawingImage, "memory-draw.png")}
-                className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+                className="px-5 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg"
               >
                 Save Drawing
               </button>
@@ -344,7 +344,7 @@ export default function MemoryDraw() {
                 setLevel((l) => l + 1);
                 setPhase("ready");
               }}
-              className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg"
+              className="px-6 py-2 bg-green-500 hover:bg-green-600 text-ink font-bold rounded-lg"
             >
               Next Level
             </button>
@@ -353,7 +353,7 @@ export default function MemoryDraw() {
                 setLevel(1);
                 setPhase("ready");
               }}
-              className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+              className="px-6 py-2 bg-paper-2 hover:bg-paper-2 text-ink rounded-lg"
             >
               Restart
             </button>

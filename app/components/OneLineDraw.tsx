@@ -112,14 +112,14 @@ export default function OneLineDraw() {
             {isNewBest ? (
               <span className="text-emerald-400 text-xs font-bold">New Personal Best!</span>
             ) : best !== null ? (
-              <span className="text-gray-500 text-xs">Best: {best}px</span>
+              <span className="text-ink-3 text-xs">Best: {best}px</span>
             ) : null}
           </div>
         )}
         <div className="ml-auto flex gap-2">
           <button
             onClick={clearCanvas}
-            className="px-3 py-1.5 text-sm bg-gray-800 text-gray-400 hover:bg-gray-700 rounded-lg"
+            className="px-3 py-1.5 text-sm bg-paper-2 text-ink-2 hover:bg-paper-2 rounded-lg"
           >
             Start Over
           </button>
@@ -138,7 +138,7 @@ export default function OneLineDraw() {
             <button
               key={c}
               onClick={() => setColor(c)}
-              className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+              className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-white scale-110" : "border-line"}`}
               style={{ backgroundColor: c }}
             />
           ))}
@@ -151,7 +151,7 @@ export default function OneLineDraw() {
           onChange={(e) => setBrushSize(Number(e.target.value))}
           className="w-24 accent-yellow-500"
         />
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-ink-3">
           {Math.round(lineLength)}px drawn
         </span>
       </div>
@@ -163,7 +163,7 @@ export default function OneLineDraw() {
         className={`w-full aspect-square rounded-xl border transition-colors touch-none ${
           penLifted
             ? "border-yellow-500/50 cursor-not-allowed"
-            : "border-gray-700 cursor-crosshair"
+            : "border-line cursor-crosshair"
         }`}
         onMouseDown={startDraw}
         onMouseMove={onMove}
@@ -175,7 +175,7 @@ export default function OneLineDraw() {
       />
 
       {!hasStarted && (
-        <p className="text-center text-gray-500 text-sm mt-3">
+        <p className="text-center text-ink-3 text-sm mt-3">
           Click and drag to draw. One continuous line -- don't lift your pen!
         </p>
       )}

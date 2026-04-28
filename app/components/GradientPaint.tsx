@@ -115,7 +115,7 @@ export default function GradientPaint() {
       <div className="flex items-center gap-3 mb-3 flex-wrap">
         <button
           onClick={clearCanvas}
-          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors"
+          className="px-4 py-2 bg-paper-2 hover:bg-paper-2 text-ink text-sm rounded-lg transition-colors"
         >
           Clear
         </button>
@@ -127,10 +127,10 @@ export default function GradientPaint() {
           onChange={(e) => setBrushSize(Number(e.target.value))}
           className="w-32 accent-pink-500"
         />
-        <span className="text-xs text-gray-500">{brushSize}px</span>
+        <span className="text-xs text-ink-3">{brushSize}px</span>
         <button
           onClick={handleSave}
-          className="ml-auto px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white text-sm rounded-lg transition-colors"
+          className="ml-auto px-4 py-2 bg-pink-500 hover:bg-pink-600 text-ink text-sm rounded-lg transition-colors"
         >
           Save PNG
         </button>
@@ -138,21 +138,21 @@ export default function GradientPaint() {
 
       <div className="flex items-center gap-3 mb-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <label className="text-xs text-gray-400">Start:</label>
+          <label className="text-xs text-ink-2">Start:</label>
           <input
             type="color"
             value={color1}
             onChange={(e) => setColor1(e.target.value)}
-            className="w-10 h-10 rounded-lg cursor-pointer bg-gray-800 border border-gray-700"
+            className="w-10 h-10 rounded-lg cursor-pointer bg-paper-2 border border-line"
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-xs text-gray-400">End:</label>
+          <label className="text-xs text-ink-2">End:</label>
           <input
             type="color"
             value={color2}
             onChange={(e) => setColor2(e.target.value)}
-            className="w-10 h-10 rounded-lg cursor-pointer bg-gray-800 border border-gray-700"
+            className="w-10 h-10 rounded-lg cursor-pointer bg-paper-2 border border-line"
           />
         </div>
       </div>
@@ -165,7 +165,7 @@ export default function GradientPaint() {
               setColor1(preset.color1);
               setColor2(preset.color2);
             }}
-            className="px-3 py-1.5 text-xs rounded-lg border border-gray-700 hover:border-gray-600 transition-colors"
+            className="px-3 py-1.5 text-xs rounded-lg border border-line hover:border-line transition-colors"
             style={{
               background: `linear-gradient(135deg, ${preset.color1}, ${preset.color2})`,
               color: "#ffffff",
@@ -181,7 +181,7 @@ export default function GradientPaint() {
         ref={canvasRef}
         width={512}
         height={512}
-        className="w-full aspect-square rounded-xl border border-gray-700 cursor-crosshair touch-none bg-gray-900"
+        className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none bg-paper-2"
         onMouseDown={startDraw}
         onMouseMove={draw}
         onMouseUp={stopDraw}

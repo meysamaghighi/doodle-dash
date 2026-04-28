@@ -482,7 +482,7 @@ export default function ColorFill() {
         <select
           value={selectedPattern}
           onChange={(e) => setSelectedPattern(e.target.value as PatternKey)}
-          className="bg-gray-800 text-gray-300 text-sm rounded-lg px-3 py-1.5 border border-gray-700"
+          className="bg-paper-2 text-ink-2 text-sm rounded-lg px-3 py-1.5 border border-line"
         >
           {Object.entries(PATTERNS).map(([key, pattern]) => (
             <option key={key} value={key}>
@@ -492,13 +492,13 @@ export default function ColorFill() {
         </select>
         <button
           onClick={drawPattern}
-          className="px-3 py-1.5 text-sm bg-gray-800 text-gray-400 hover:bg-gray-700 rounded-lg"
+          className="px-3 py-1.5 text-sm bg-paper-2 text-ink-2 hover:bg-paper-2 rounded-lg"
         >
           Reset
         </button>
         <button
           onClick={handleSave}
-          className="px-3 py-1.5 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-lg ml-auto"
+          className="px-3 py-1.5 text-sm bg-purple-500 hover:bg-purple-600 text-ink rounded-lg ml-auto"
         >
           Save
         </button>
@@ -509,7 +509,7 @@ export default function ColorFill() {
           <button
             key={c}
             onClick={() => setColor(c)}
-            className={`w-7 h-7 rounded-md border-2 transition-transform ${color === c ? "border-white scale-110" : "border-gray-600"}`}
+            className={`w-7 h-7 rounded-md border-2 transition-transform ${color === c ? "border-white scale-110" : "border-line"}`}
             style={{ backgroundColor: c }}
           />
         ))}
@@ -519,12 +519,12 @@ export default function ColorFill() {
         ref={canvasRef}
         width={512}
         height={512}
-        className="w-full aspect-square rounded-xl border border-gray-700 cursor-pointer touch-none"
+        className="w-full aspect-square rounded-xl border border-line cursor-pointer touch-none"
         onClick={handleCanvasClick}
         onTouchStart={handleCanvasClick}
       />
 
-      <p className="text-xs text-gray-500 text-center mt-3">
+      <p className="text-xs text-ink-3 text-center mt-3">
         Tap or click a region to fill it with the selected color
       </p>
     </div>
