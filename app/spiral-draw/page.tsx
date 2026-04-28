@@ -23,12 +23,12 @@ export default function SpiralDrawPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Spiral Draw</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Draw a smooth spiral from the center outward. Can you make a perfect spiral?
       </p>
       <SpiralDraw />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Play</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">
           Start from the center dot and draw a spiral that gradually moves outward.
           The game scores your spiral based on three factors: smoothness (consistent outward growth),

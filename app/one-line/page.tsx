@@ -22,12 +22,12 @@ export default function OneLinePage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">One Line Art</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Draw without lifting your pen. One continuous stroke -- that's the only rule.
       </p>
       <OneLineDraw />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">The One Line Challenge</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">The One Line Challenge</h2>
         <p className="mb-2">
           One Line Art forces you to plan ahead. Once you start drawing, you
           can't lift your pen. If you do, the canvas locks and you can save or

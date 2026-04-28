@@ -29,8 +29,8 @@ export default function SymmetryPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Symmetry Draw</h1>
-        <p className="text-gray-400">
+        <h1 className="text-4xl font-black text-ink mb-3">Symmetry Draw</h1>
+        <p className="text-ink-2">
           Draw on the left half and watch your artwork mirror instantly on the right.
           Create perfectly symmetrical designs effortlessly.
         </p>
@@ -40,10 +40,10 @@ export default function SymmetryPage() {
 
       <section className="mt-12 space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-ink mb-3">
             How to Use Symmetry Draw
           </h2>
-          <ul className="space-y-2 text-gray-400">
+          <ul className="space-y-2 text-ink-2">
             <li>• Choose your brush color from the palette</li>
             <li>• Adjust brush size with the slider</li>
             <li>• Draw on the canvas - every stroke mirrors automatically</li>
@@ -53,10 +53,10 @@ export default function SymmetryPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-ink mb-3">
             Why Symmetry Drawing?
           </h2>
-          <p className="text-gray-400 leading-relaxed">
+          <p className="text-ink-2 leading-relaxed">
             Symmetrical drawing helps create balanced, harmonious art without the
             difficulty of manual mirroring. It's perfect for creating mandalas,
             butterfly designs, decorative patterns, and abstract art. The real-time
@@ -65,10 +65,10 @@ export default function SymmetryPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-ink mb-3">
             Tips for Better Symmetrical Art
           </h2>
-          <ul className="space-y-2 text-gray-400">
+          <ul className="space-y-2 text-ink-2">
             <li>• Start with light strokes to plan your design</li>
             <li>• Use smaller brushes for detailed work</li>
             <li>• Try drawing from the center outward for radial patterns</li>

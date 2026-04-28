@@ -23,12 +23,12 @@ export default function ShapeBuilderPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Shape Builder</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Build the target image using circles, squares, and triangles. 10 levels to complete!
       </p>
       <ShapeBuilder />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Play</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">
           Look at the target image on the left. Select a shape (circle, square, or triangle)
           and click on the right canvas to place it. Try to match the positions, sizes, and

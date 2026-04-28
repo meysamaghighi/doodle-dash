@@ -22,12 +22,12 @@ export default function TraceMasterPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Trace Master</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Trace over the faded shape as accurately as possible. Can you get 100% accuracy?
       </p>
       <TraceMaster />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Play</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">
           When you start, you'll see a faded ghost shape on the canvas. Your goal is
           to trace over it as accurately as you can. Draw lines that follow the shape's
@@ -39,7 +39,7 @@ export default function TraceMasterPage() {
           simple (circle, square) to complex (spiral, infinity symbol).
         </p>
 
-        <h2 className="text-lg font-bold text-white mb-3 mt-6">About Trace Master</h2>
+        <h2 className="text-lg font-bold text-ink mb-3 mt-6">About Trace Master</h2>
         <p>
           Shape tracing is an excellent exercise for improving hand-eye coordination,
           fine motor control, and attention to detail. This game adds a scoring system

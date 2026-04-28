@@ -23,12 +23,12 @@ export default function KaleidoscopePage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Kaleidoscope</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Draw and watch your art reflect in beautiful symmetry. Create mesmerizing patterns!
       </p>
       <Kaleidoscope />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Use</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Use</h2>
         <p className="mb-2">
           Pick a color and brush size, then draw on the canvas. Your strokes are automatically
           mirrored in 4, 6, 8, or 12 directions to create beautiful kaleidoscope patterns.

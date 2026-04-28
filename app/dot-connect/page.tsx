@@ -22,12 +22,12 @@ export default function DotConnectPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Dot Connect</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Draw lines connecting the dots in numerical order. How fast can you complete each level?
       </p>
       <DotConnect />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Play</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">
           Hit Start and dots with numbers will appear on the canvas. Draw lines to
           connect the dots in order: 1 to 2 to 3, and so on. The timer starts when
@@ -38,7 +38,7 @@ export default function DotConnectPage() {
           Try to beat your personal best time on each level!
         </p>
 
-        <h2 className="text-lg font-bold text-white mb-3 mt-6">About Dot Connect</h2>
+        <h2 className="text-lg font-bold text-ink mb-3 mt-6">About Dot Connect</h2>
         <p>
           Dot Connect (also known as connect-the-dots or dot-to-dot) is a classic
           drawing exercise that helps with hand-eye coordination, number sequencing,

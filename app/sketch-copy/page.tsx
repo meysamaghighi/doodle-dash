@@ -23,12 +23,12 @@ export default function SketchCopyPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Sketch Copy</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Copy the reference shape as accurately as you can. 5 levels to master!
       </p>
       <SketchCopy />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Play</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">
           Look at the reference shape on the left and try to draw an exact copy on the right.
           Use the color palette and brush tools to match the shape as closely as possible.

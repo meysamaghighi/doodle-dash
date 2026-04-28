@@ -29,8 +29,8 @@ export default function ColorFillPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Color Fill</h1>
-        <p className="text-gray-400">
+        <h1 className="text-4xl font-black text-ink mb-3">Color Fill</h1>
+        <p className="text-ink-2">
           Choose a pattern and fill it with colors by tapping regions.
           Create colorful art from line drawings.
         </p>
@@ -40,10 +40,10 @@ export default function ColorFillPage() {
 
       <section className="mt-12 space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-ink mb-3">
             How to Play Color Fill
           </h2>
-          <ul className="space-y-2 text-gray-400">
+          <ul className="space-y-2 text-ink-2">
             <li>• Select a pattern from the dropdown menu</li>
             <li>• Choose a color from the palette</li>
             <li>• Tap or click any white region to fill it with your color</li>
@@ -53,27 +53,27 @@ export default function ColorFillPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-ink mb-3">
             Available Patterns
           </h2>
-          <p className="text-gray-400 leading-relaxed mb-3">
+          <p className="text-ink-2 leading-relaxed mb-3">
             Color Fill includes six unique line-art patterns:
           </p>
-          <ul className="space-y-2 text-gray-400">
-            <li>• <strong className="text-white">Mandala</strong> - Intricate circular patterns with radial symmetry</li>
-            <li>• <strong className="text-white">House</strong> - Simple architectural scene with geometric shapes</li>
-            <li>• <strong className="text-white">Flower</strong> - Delicate floral design with petals and stem</li>
-            <li>• <strong className="text-white">Butterfly</strong> - Elegant winged insect with symmetrical wings</li>
-            <li>• <strong className="text-white">Star</strong> - Multi-pointed celestial shape</li>
-            <li>• <strong className="text-white">Fish</strong> - Underwater creature with scales and fins</li>
+          <ul className="space-y-2 text-ink-2">
+            <li>• <strong className="text-ink">Mandala</strong> - Intricate circular patterns with radial symmetry</li>
+            <li>• <strong className="text-ink">House</strong> - Simple architectural scene with geometric shapes</li>
+            <li>• <strong className="text-ink">Flower</strong> - Delicate floral design with petals and stem</li>
+            <li>• <strong className="text-ink">Butterfly</strong> - Elegant winged insect with symmetrical wings</li>
+            <li>• <strong className="text-ink">Star</strong> - Multi-pointed celestial shape</li>
+            <li>• <strong className="text-ink">Fish</strong> - Underwater creature with scales and fins</li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">
+          <h2 className="text-2xl font-bold text-ink mb-3">
             Coloring Tips
           </h2>
-          <ul className="space-y-2 text-gray-400">
+          <ul className="space-y-2 text-ink-2">
             <li>• Try complementary colors for vibrant contrast</li>
             <li>• Use analogous colors for harmonious designs</li>
             <li>• Leave some areas white for a clean look</li>

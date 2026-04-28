@@ -22,12 +22,12 @@ export default function SpeedSketchPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-center mb-2">Speed Sketch</h1>
-      <p className="text-gray-400 text-center mb-8">
+      <p className="text-ink-2 text-center mb-8">
         Draw the prompt in 30 seconds. How good can you get under pressure?
       </p>
       <SpeedSketch />
-      <section className="mt-16 text-gray-500 text-sm max-w-xl mx-auto">
-        <h2 className="text-lg font-bold text-white mb-3">How to Play</h2>
+      <section className="mt-16 text-ink-3 text-sm max-w-xl mx-auto">
+        <h2 className="text-lg font-bold text-ink mb-3">How to Play</h2>
         <p className="mb-2">
           Hit Start and you'll get a random word to draw. You have 30 seconds to
           sketch it using the color palette and brush tools. When time's up, save
