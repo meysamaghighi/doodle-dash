@@ -1,5 +1,6 @@
 import Link from "next/link";
 import MobileNav from "./MobileNav";
+import CommandPalette from "./CommandPalette";
 
 const navLinks = [
   { href: "/daily", label: "🔥 Daily" },
@@ -35,7 +36,10 @@ export default function SiteHeader() {
         >
           DoodleLab
         </Link>
-        <MobileNav links={navLinks} />
+        <div className="flex items-center gap-2">
+          <CommandPalette />
+          <MobileNav links={navLinks} />
+        </div>
       </div>
     </nav>
   );
