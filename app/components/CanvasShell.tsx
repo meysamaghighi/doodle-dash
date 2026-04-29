@@ -63,6 +63,18 @@ export default function CanvasShell({
     return () => window.removeEventListener("keydown", onKey);
   }, [cssFs]);
 
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "f" && !e.ctrlKey && !e.metaKey && !e.altKey && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
+        toggleFs();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fullscreen, isFs, cssFs]);
+
   const toggleFs = async () => {
     if (!fullscreen || !wrapRef.current) return;
     const el = wrapRef.current as ElExt;
