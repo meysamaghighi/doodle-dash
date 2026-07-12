@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CrossPromoCard } from "./components/CrossPromo";
 
 export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
@@ -264,6 +265,10 @@ export default function Home() {
           </div>
         </section>
       ))}
+
+      <section className="mt-10 sm:mt-14 max-w-xl mx-auto">
+        <CrossPromoCard utmContent="homepage" />
+      </section>
 
       <section className="mt-8 sm:mt-12 text-center text-ink-2 text-sm max-w-xl mx-auto">
         <h2 className="text-base sm:text-lg font-bold text-ink mb-2 sm:mb-3">
