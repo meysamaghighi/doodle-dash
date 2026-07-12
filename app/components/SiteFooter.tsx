@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CrossPromoFooterLinks } from "./CrossPromo";
 
 export default function SiteFooter() {
   return (
@@ -23,12 +24,7 @@ export default function SiteFooter() {
             >
               PlayMini · Browser games
             </Link>
-            <Link
-              href="https://benchmybrain.com"
-              className="px-4 py-1.5 border border-line rounded-full text-sm text-ink hover:bg-paper-2 transition-colors"
-            >
-              BenchMyBrain · Cognitive tests
-            </Link>
+            <CrossPromoFooterLinks />
           </div>
         </div>
         <p className="mt-6 text-xs text-ink-3 font-mono">© 2026 · made by Meysam</p>
