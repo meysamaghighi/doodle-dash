@@ -64,41 +64,6 @@ export default function TraceMasterPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Trace Master work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "A faded ghost shape appears on the canvas. Draw over it to trace the shape as accurately as possible. When you're done, click 'Done' and the game calculates your accuracy score based on how well your lines match the original shape.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I play Trace Master on mobile?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Trace Master works great on phones and tablets with touch support. Use your finger to trace the shapes on the screen.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What shapes are in Trace Master?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "There are 8 shapes: Circle, Star, Heart, Spiral, Wave, Square, Triangle, and Infinity symbol. They range from simple geometric shapes to more complex curves.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

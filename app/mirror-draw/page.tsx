@@ -55,41 +55,6 @@ export default function MirrorDrawPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is mirror drawing?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Mirror drawing creates a symmetrical image — everything you draw on one side is automatically mirrored on the other. It's perfect for creating mandalas, butterflies, faces, and geometric patterns.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Why is symmetry satisfying to look at?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Humans are naturally drawn to symmetry because it signals health and order in nature. Symmetrical art feels balanced and aesthetically pleasing to most people.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Is mirror draw good for beginners?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Absolutely! The automatic mirroring makes even simple strokes look impressive. It's a great way to build confidence and experiment with patterns.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

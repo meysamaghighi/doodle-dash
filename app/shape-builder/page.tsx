@@ -56,41 +56,6 @@ export default function ShapeBuilderPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Shape Builder scoring work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Your score is based on how closely your placed shapes match the target positions, sizes, and types. Extra or missing shapes reduce your score.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I play Shape Builder on mobile?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Shape Builder works on phones and tablets. Tap to select shapes and tap the canvas to place them.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "How many levels are there?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "There are 10 levels with increasing complexity, from a simple circle to intricate patterns like castles and robots.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

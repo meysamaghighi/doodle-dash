@@ -56,41 +56,6 @@ export default function SketchCopyPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Sketch Copy scoring work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Your drawing is compared pixel-by-pixel to the reference shape. The score reflects how closely your shape matches in position, size, and color.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I play Sketch Copy on mobile?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Sketch Copy has full touch support for phones and tablets. Draw with your finger to copy the shapes.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "How many levels are there?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "There are 5 levels with increasing difficulty: circle, square, triangle, star, and house.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

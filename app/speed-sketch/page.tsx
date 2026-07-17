@@ -55,41 +55,6 @@ export default function SpeedSketchPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Speed Sketch work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "You get a random word prompt and 30 seconds to draw it. Use the color palette and brush tools to create your sketch before time runs out. Save your drawing or try again with a new prompt.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I play Speed Sketch on mobile?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Speed Sketch works on phones and tablets with touch drawing support. The canvas adapts to your screen size for the best experience.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Is Speed Sketch good for improving drawing skills?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes. Timed drawing forces you to focus on essential shapes and details, which is great practice for quick sketching and visual thinking.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

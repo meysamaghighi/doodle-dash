@@ -63,41 +63,6 @@ export default function DotConnectPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Dot Connect work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Numbered dots appear on the canvas. Draw lines to connect them in numerical order (1→2→3→...). The game tracks how fast you complete each level. There are 5 difficulty levels with increasing numbers of dots.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I play Dot Connect on mobile?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Dot Connect works perfectly on phones and tablets with touch support. Draw the connecting lines with your finger.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Is Dot Connect good for kids?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Absolutely. Connect-the-dots games help children with number recognition, sequencing, hand-eye coordination, and fine motor skills. The beginner level has just 5 dots, perfect for young learners.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

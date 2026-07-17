@@ -57,41 +57,6 @@ export default function GradientPaintPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is gradient painting?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Gradient painting uses brushes that blend smoothly between two colors, creating beautiful color transitions in your artwork. Each stroke fades from your start color to your end color.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I save my gradient art?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Click the Save PNG button to download your artwork. On mobile, you can share it directly to your photo gallery.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I create custom gradient colors?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Use the color pickers to choose any start and end colors. You can also use the preset gradients as a starting point and customize from there.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

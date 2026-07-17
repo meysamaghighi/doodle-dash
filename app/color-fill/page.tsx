@@ -95,50 +95,6 @@ export default function ColorFillPage() {
           }),
         }}
       />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How do I fill a region with color?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Select a color from the palette at the bottom, then tap or click on any white region in the pattern. The region will fill with your chosen color using flood-fill algorithm.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I change colors after filling a region?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Simply select a different color and click on a region you've already filled. It will change to the new color.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What happens if I click Reset?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Reset clears all colors and returns the pattern to its original black-and-white line art. Your pattern selection stays the same.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "How many patterns are available?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Color Fill currently includes 6 patterns: Mandala, House, Flower, Butterfly, Star, and Fish. Each pattern has multiple regions to color.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }
