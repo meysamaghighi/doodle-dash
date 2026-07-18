@@ -60,41 +60,6 @@ export default function BlindDrawPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Blind Draw work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "You draw on a hidden canvas — you can't see your strokes as you draw. When you reveal the canvas, you see the hilarious (or surprisingly good) result. Great for parties and laughs.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What's the point of blind drawing?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Blind drawing trains your hand-eye coordination and spatial awareness. It also removes the pressure of perfection, encouraging you to draw more freely and intuitively.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Is Blind Draw fun with friends?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Absolutely! Take turns drawing the same prompt blind, then reveal and compare. It's a hilarious party game that works great on phones and tablets.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

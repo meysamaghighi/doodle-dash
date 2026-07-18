@@ -56,41 +56,6 @@ export default function KaleidoscopePage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is kaleidoscope drawing?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Kaleidoscope drawing mirrors your brush strokes in multiple directions (4, 6, 8, or 12-way symmetry) to create beautiful, symmetrical patterns automatically as you draw.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I save my kaleidoscope art?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Click the Save button to download your creation as a PNG image. On mobile, you can share it directly to your photo gallery.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What's the difference between 4-way and 8-way symmetry?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "4-way symmetry reflects your drawing in 4 directions, while 8-way creates more complex patterns with 8 reflections. Higher numbers create denser, more intricate designs.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

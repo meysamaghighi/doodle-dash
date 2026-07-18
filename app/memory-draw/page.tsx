@@ -55,41 +55,6 @@ export default function MemoryDrawPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Memory Draw work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "You see an image briefly, then it disappears. Draw it from memory as accurately as you can. Your drawing is compared to the original with a pixel-similarity score showing your match percentage.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What is a good Memory Draw score?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "A similarity score above 60% is good. Above 75% is excellent. The challenge is remembering both the shapes and their positions on the canvas.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Does Memory Draw improve visual memory?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Regularly practicing visual recall through drawing strengthens your spatial memory and attention to detail — skills useful in art, design, and everyday life.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

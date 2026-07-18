@@ -55,41 +55,6 @@ export default function SpiralDrawPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How is my spiral scored?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Your spiral is scored on smoothness (consistent outward growth), roundness (maintaining circular shape), and total rotations. The maximum score is 100%.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I play Spiral Draw on mobile?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Spiral Draw works on phones and tablets with full touch support. Draw with your finger to create spirals.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What makes a good spiral?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "A good spiral grows outward smoothly without sudden jumps, maintains a circular shape, and completes multiple full rotations around the center.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

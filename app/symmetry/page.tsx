@@ -90,42 +90,6 @@ export default function SymmetryPage() {
           }),
         }}
       />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How does Symmetry Draw work?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Every stroke you draw on the canvas is automatically mirrored across the vertical center line. This creates perfect symmetry without manual effort.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I save my symmetrical artwork?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! Click the Save button to download your artwork as a PNG file. On mobile devices, you can share it directly to your photo gallery.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Is Symmetry Draw free to use?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Absolutely! Symmetry Draw is completely free with no sign-up required. Your artwork stays in your browser.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }

@@ -55,41 +55,6 @@ export default function PixelArtPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is pixel art?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Pixel art is a form of digital art where images are created at the pixel level on a grid. It's the art style used in classic video games like Mario and Zelda, and remains popular in indie games today.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What grid size should I use?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Start with a 16x16 grid for simple icons and characters. 32x32 is great for more detailed sprites. Larger grids (64x64+) allow for complex scenes but take longer.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I save my pixel art?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes! You can save your creation as a PNG image directly to your device. Share it on social media or use it in your own projects.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
     </main>
   );
 }
