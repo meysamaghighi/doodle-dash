@@ -218,8 +218,29 @@ const gameCategories = [
 ];
 
 export default function Home() {
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "DoodleLab Drawing Games",
+    description: "15 free online drawing games — no sign-up required.",
+    numberOfItems: gameCategories.reduce((sum, c) => sum + c.games.length, 0),
+    itemListElement: gameCategories
+      .flatMap((c) => c.games)
+      .map((game, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `https://doodlelab.fun${game.href}`,
+        name: game.label,
+      })),
+  };
+
   return (
-    <main className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <main className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
       <section className="text-center mb-6 sm:mb-8">
         <p className="font-mono text-xs uppercase tracking-wider text-ink-3 mb-3">
           Today&apos;s Prompt
@@ -281,6 +302,7 @@ export default function Home() {
           games are free, require no account, and your art stays on your device.
         </p>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
