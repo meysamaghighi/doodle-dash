@@ -4,7 +4,7 @@ import type { MetadataRoute } from "next";
 // crawlers every page "just changed" on every fetch, which erodes the sitemap's
 // lastmod signal and hurts indexing. Bump this when content materially changes.
 // (Matches the proven playmini fix, 8faf3a0.)
-const SITE_LAST_MODIFIED = "2026-07-16";
+const SITE_LAST_MODIFIED = "2026-07-25";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://doodlelab.fun";
@@ -27,6 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/kaleidoscope",
     "/shape-builder",
     "/gradient-paint",
+    "/spirograph",
     "/about",
   ];
 

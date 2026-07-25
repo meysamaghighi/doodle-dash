@@ -12,6 +12,7 @@ const allGames = [
   { href: "/kaleidoscope", label: "Kaleidoscope", color: "from-purple-500 to-pink-500" },
   { href: "/shape-builder", label: "Shape Builder", color: "from-pink-500 to-rose-500" },
   { href: "/gradient-paint", label: "Gradient Paint", color: "from-pink-500 to-purple-500" },
+  { href: "/spirograph", label: "Spirograph", color: "from-violet-500 to-indigo-500" },
 ];
 
 const relatedMap: Record<string, string[]> = {
@@ -21,11 +22,12 @@ const relatedMap: Record<string, string[]> = {
   "/memory-draw": ["/speed-sketch", "/blind-draw", "/sketch-copy"],
   "/one-line": ["/pixel-art", "/mirror-draw", "/spiral-draw"],
   "/blind-draw": ["/speed-sketch", "/memory-draw", "/one-line"],
-  "/spiral-draw": ["/one-line", "/sketch-copy", "/shape-builder"],
+  "/spiral-draw": ["/one-line", "/sketch-copy", "/spirograph"],
   "/sketch-copy": ["/memory-draw", "/shape-builder", "/speed-sketch"],
-  "/kaleidoscope": ["/mirror-draw", "/gradient-paint", "/pixel-art"],
+  "/kaleidoscope": ["/mirror-draw", "/gradient-paint", "/spirograph"],
   "/shape-builder": ["/sketch-copy", "/spiral-draw", "/pixel-art"],
-  "/gradient-paint": ["/kaleidoscope", "/pixel-art", "/mirror-draw"],
+  "/gradient-paint": ["/kaleidoscope", "/pixel-art", "/spirograph"],
+  "/spirograph": ["/kaleidoscope", "/gradient-paint", "/spiral-draw"],
 };
 
 export default function RelatedGames({ current }: { current: string }) {

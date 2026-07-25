@@ -20,6 +20,7 @@ const navLinks = [
   { href: "/kaleidoscope", label: "Kaleidoscope" },
   { href: "/shape-builder", label: "Shape Builder" },
   { href: "/gradient-paint", label: "Gradient Paint" },
+  { href: "/spirograph", label: "Spirograph" },
 ];
 
 export default function SiteHeader() {

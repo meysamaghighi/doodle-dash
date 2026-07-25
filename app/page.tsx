@@ -5,14 +5,14 @@ import { CrossPromoCard } from "./components/CrossPromo";
 export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
-    "Free online drawing games: speed sketch, pixel art, mirror draw, spiral draw, kaleidoscope, gradient paint, memory draw, and more. 15 creative games. No sign-up required.",
+    "Free online drawing games: speed sketch, pixel art, mirror draw, spiral draw, kaleidoscope, spirograph, gradient paint, memory draw, and more. 16 creative games. No sign-up required.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "DoodleLab - Free Drawing Challenges",
     description:
-      "15 creative drawing games. Sketch, pixel art, symmetry draw, kaleidoscope, gradient paint, and more. Free, no sign-up.",
+      "16 creative drawing games. Sketch, pixel art, symmetry draw, kaleidoscope, spirograph, gradient paint, and more. Free, no sign-up.",
     type: "website",
   },
 };
@@ -96,6 +96,19 @@ const gameCategories = [
           <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485" />
             <circle cx="7" cy="17" r="1" fill="currentColor" />
+          </svg>
+        ),
+      },
+      {
+        href: "/spirograph",
+        label: "Spirograph",
+        description: "Draw gear-in-gear curves with adjustable ring, gear, and pen offset.",
+        color: "from-violet-500 to-indigo-500",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" strokeWidth={1.5} />
+            <circle cx="12" cy="8" r="3.2" strokeWidth={1.5} />
+            <circle cx="12" cy="8" r="0.6" fill="currentColor" />
           </svg>
         ),
       },
@@ -222,7 +235,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "DoodleLab Drawing Games",
-    description: "15 free online drawing games — no sign-up required.",
+    description: "16 free online drawing games — no sign-up required.",
     numberOfItems: gameCategories.reduce((sum, c) => sum + c.games.length, 0),
     itemListElement: gameCategories
       .flatMap((c) => c.games)
@@ -252,7 +265,7 @@ export default function Home() {
           Draw, create, challenge.
         </h1>
         <p className="text-ink-2 text-sm sm:text-base max-w-xl mx-auto">
-          15 free drawing games to test your creativity and skill. No sign-up, no
+          16 free drawing games to test your creativity and skill. No sign-up, no
           downloads. Just pick a game and start drawing.
         </p>
       </section>
