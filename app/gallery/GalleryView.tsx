@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useProgress, type GalleryItem } from "../hooks/useProgress";
+import { saveImage } from "../utils/saveImage";
 
 function formatDate(iso: string): string {
   try {
@@ -115,7 +116,14 @@ export default function GalleryView() {
                   {formatDate(item.createdAt)}
                 </span>
               </figcaption>
-              <div className="absolute inset-x-0 bottom-0 hidden group-hover:flex group-focus-within:flex justify-center gap-2 p-2 bg-paper/90 border-t border-line">
+              <div className="absolute inset-x-0 bottom-0 flex md:hidden md:group-hover:flex md:group-focus-within:flex justify-center gap-2 p-2 bg-paper/90 border-t border-line">
+                <button
+                  type="button"
+                  onClick={() => saveImage(item.dataUrl, `${item.gameId}-${item.id}.png`)}
+                  className="px-3 py-1 rounded-full text-xs text-ink border border-line hover:bg-paper-2 transition-colors"
+                >
+                  Share
+                </button>
                 <button
                   type="button"
                   onClick={() => downloadItem(item)}
