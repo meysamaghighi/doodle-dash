@@ -25,6 +25,7 @@ const ITEMS: Item[] = [
   { label: "Kaleidoscope", href: "/kaleidoscope", group: "Games" },
   { label: "Shape Builder", href: "/shape-builder", group: "Games" },
   { label: "Gradient Paint", href: "/gradient-paint", group: "Games" },
+  { label: "Spirograph", href: "/spirograph", group: "Games" },
 ];
 
 function matches(item: Item, q: string): boolean {

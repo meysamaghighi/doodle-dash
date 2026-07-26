@@ -4,13 +4,13 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "About DoodleLab - Free Drawing Games & Creative Tools",
   description:
-    "Learn about DoodleLab, a free creative drawing games site with 15 interactive tools. No accounts, no downloads, just pure creative fun.",
+    "Learn about DoodleLab, a free creative drawing games site with 16 interactive tools. No accounts, no downloads, just pure creative fun.",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
     title: "About DoodleLab",
-    description: "Free drawing games site with 15 interactive tools. Built for creativity, privacy-focused.",
+    description: "Free drawing games site with 16 interactive tools. Built for creativity, privacy-focused.",
     type: "website",
   },
 };
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <section>
           <h2 className="text-2xl font-bold text-ink mb-3">What is DoodleLab?</h2>
           <p>
-            DoodleLab is a free creative drawing games site featuring 15 interactive
+            DoodleLab is a free creative drawing games site featuring 16 interactive
             drawing tools and games. From pixel art and kaleidoscopes to speed
             sketching and mirror drawing, each game is designed to spark creativity
             and challenge your artistic skills.
