@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { saveImage } from "../utils/saveImage";
 
 export default function GradientPaint() {
@@ -10,6 +10,14 @@ export default function GradientPaint() {
   const [brushSize, setBrushSize] = useState(40);
   const drawing = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = "#111827";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }, []);
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
