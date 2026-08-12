@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { usePersonalBest } from "../hooks/usePersonalBest";
 
 type Phase = "ready" | "drawing" | "done";
@@ -20,18 +20,25 @@ export default function SpiralDraw() {
     setPhase("drawing");
     setScore(null);
     points.current = [];
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      // Draw center dot as reference
-      ctx.fillStyle = "#4b5563";
-      ctx.beginPath();
-      ctx.arc(256, 256, 4, 0, Math.PI * 2);
-      ctx.fill();
-    }
   };
+
+  // The canvas only mounts once phase !== "ready", so painting it inside
+  // startGame() read a stale (null) ref on the very first click — the
+  // background fill and center dot silently never happened until the user
+  // moved to a phase where the canvas was already in the DOM.
+  useEffect(() => {
+    if (phase !== "drawing") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = "#111827";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Draw center dot as reference
+    ctx.fillStyle = "#4b5563";
+    ctx.beginPath();
+    ctx.arc(256, 256, 4, 0, Math.PI * 2);
+    ctx.fill();
+  }, [phase]);
 
   const getPos = (e: React.MouseEvent | React.TouchEvent) => {
     const canvas = canvasRef.current!;
