@@ -10,6 +10,36 @@ const PALETTE = [
   "#78716c", "#8B4513", "#006400", "#a3e635",
 ];
 
+// Bresenham line between two cell indices on a `size`x`size` grid, inclusive
+// of both endpoints, ordered from `fromIdx` to `toIdx`. Used to fill in the
+// gap between two pointermove samples so fast drags don't skip cells.
+function cellLine(size: number, fromIdx: number, toIdx: number): number[] {
+  let x0 = fromIdx % size;
+  let y0 = Math.floor(fromIdx / size);
+  const x1 = toIdx % size;
+  const y1 = Math.floor(toIdx / size);
+  const dx = Math.abs(x1 - x0);
+  const dy = -Math.abs(y1 - y0);
+  const sx = x0 < x1 ? 1 : -1;
+  const sy = y0 < y1 ? 1 : -1;
+  let err = dx + dy;
+  const cells: number[] = [];
+  while (true) {
+    cells.push(y0 * size + x0);
+    if (x0 === x1 && y0 === y1) break;
+    const e2 = 2 * err;
+    if (e2 >= dy) {
+      err += dy;
+      x0 += sx;
+    }
+    if (e2 <= dx) {
+      err += dx;
+      y0 += sy;
+    }
+  }
+  return cells;
+}
+
 export default function PixelArt() {
   const [grid, setGrid] = useState<string[]>(
     Array(GRID_SIZE * GRID_SIZE).fill("#111827")
@@ -67,6 +97,21 @@ export default function PixelArt() {
     }
   }, [tool, color, gridSize, floodFill]);
 
+  // Paints several cells (e.g. an interpolated drag path) in a single
+  // setGrid update instead of one copy-and-set per cell. Only used for the
+  // draw/erase tools -- fill is single-shot and never interpolated.
+  const paintCells = useCallback((indices: number[]) => {
+    if (indices.length === 0) return;
+    const fillValue = tool === "erase" ? "#111827" : color;
+    setGrid((g) => {
+      const n = [...g];
+      for (const idx of indices) {
+        if (idx >= 0 && idx < gridSize * gridSize) n[idx] = fillValue;
+      }
+      return n;
+    });
+  }, [tool, color, gridSize]);
+
   const getCellFromPoint = (clientX: number, clientY: number): number => {
     const el = gridRef.current;
     if (!el) return -1;
@@ -91,11 +136,37 @@ export default function PixelArt() {
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!painting.current) return;
+    // Fill is a single-shot action fired on pointerdown -- ignore drag
+    // entirely so a finger drifting slightly while tapping the bucket
+    // doesn't flood-fill every region it crosses.
+    if (tool === "fill") return;
+
     const idx = getCellFromPoint(e.clientX, e.clientY);
-    if (idx !== lastPaintedCell.current && idx >= 0) {
+    if (idx === -1) {
+      // Left the grid. Drop the last-painted anchor so that if the pointer
+      // comes back inside, we don't draw a straight line from wherever it
+      // exited to wherever it re-enters -- painting simply resumes fresh
+      // at the re-entry cell.
+      lastPaintedCell.current = -1;
+      return;
+    }
+    if (idx === lastPaintedCell.current) return;
+
+    if (lastPaintedCell.current === -1) {
+      // Fresh start (first move after pointerdown, or re-entering the grid
+      // after leaving it): just paint this one cell, nothing to bridge to.
       lastPaintedCell.current = idx;
       paintCell(idx);
+      return;
     }
+
+    // Bridge the gap between the last sampled cell and this one so a fast
+    // drag paints a continuous stroke instead of leaving holes. The start
+    // cell was already painted on the previous move (or pointerdown), so
+    // skip it here.
+    const path = cellLine(gridSize, lastPaintedCell.current, idx);
+    lastPaintedCell.current = idx;
+    paintCells(path.slice(1));
   };
 
   const handlePointerUp = () => {
