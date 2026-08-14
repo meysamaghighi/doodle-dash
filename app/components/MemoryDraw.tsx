@@ -115,8 +115,11 @@ export default function MemoryDraw() {
     offCtx.fillRect(0, 0, 512, 512);
     newShapes.forEach((s) => drawShape(offCtx, s));
     setReferenceImage(offscreenRef.current.toDataURL());
+  }, [level]);
 
-    setTimeout(() => {
+  useEffect(() => {
+    if (phase !== "memorize") return;
+    if (memorizeTime <= 0) {
       setPhase("draw");
       const drawCanvas = drawRef.current;
       if (drawCanvas) {
@@ -124,12 +127,8 @@ export default function MemoryDraw() {
         ctx.fillStyle = "#111827";
         ctx.fillRect(0, 0, 512, 512);
       }
-    }, duration * 1000);
-  }, [level]);
-
-  useEffect(() => {
-    if (phase !== "memorize") return;
-    if (memorizeTime <= 0) return;
+      return;
+    }
     const t = setTimeout(() => setMemorizeTime((v) => v - 1), 1000);
     return () => clearTimeout(t);
   }, [phase, memorizeTime]);
