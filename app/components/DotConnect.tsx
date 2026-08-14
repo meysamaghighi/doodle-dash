@@ -146,6 +146,25 @@ export default function DotConnect() {
     };
   };
 
+  const drawFreehandStroke = useCallback(
+    (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      freehandRef.current.push({ from, to });
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext("2d")!;
+        ctx.beginPath();
+        ctx.strokeStyle = "#22c55e";
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(to.x, to.y);
+        ctx.stroke();
+      }
+    },
+    []
+  );
+
   const draw = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       if (!drawing.current || phase !== "playing") return;
@@ -182,33 +201,25 @@ export default function DotConnect() {
 
       // Draw freehand stroke
       if (lastPos.current) {
-        freehandRef.current.push({
-          from: { x: lastPos.current.x, y: lastPos.current.y },
-          to: { x: pos.x, y: pos.y },
-        });
-        // Incremental draw (no full redraw needed)
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const ctx = canvas.getContext("2d")!;
-          ctx.beginPath();
-          ctx.strokeStyle = "#22c55e";
-          ctx.lineWidth = 3;
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-          ctx.moveTo(lastPos.current.x, lastPos.current.y);
-          ctx.lineTo(pos.x, pos.y);
-          ctx.stroke();
-        }
+        drawFreehandStroke(lastPos.current, pos);
       }
       lastPos.current = pos;
     },
-    [phase, dots, currentDot, startTime]
+    [phase, dots, currentDot, startTime, drawFreehandStroke]
   );
 
   const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
     if (phase !== "playing") return;
     drawing.current = true;
-    lastPos.current = getPos(e);
+    const pos = getPos(e);
+    lastPos.current = pos;
+    // A tap with no intervening move never reaches draw()'s freehand stroke
+    // code — paint a zero-length stroke here through the same
+    // drawFreehandStroke function so a tap produces the round-cap dot a
+    // minimal drag would. This only paints the freehand mark; it
+    // deliberately doesn't run the dot-proximity/connection logic above,
+    // which stays move-driven and unchanged.
+    drawFreehandStroke(pos, pos);
   };
 
   const stopDraw = () => {
