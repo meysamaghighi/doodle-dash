@@ -31,13 +31,22 @@ export default function SpeedSketch() {
     setPrompt(p);
     setTimeLeft(30);
     setPhase("drawing");
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
   };
+
+  // The canvas only mounts once phase !== "ready", so painting it inside
+  // startGame() read a stale (null) ref on the very first click — the
+  // background fill silently never happened until the user moved to a
+  // phase where the canvas was already in the DOM. Kept separate from the
+  // countdown effect below so it doesn't refire (and wipe the drawing)
+  // every time timeLeft ticks.
+  useEffect(() => {
+    if (phase !== "drawing") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = "#111827";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "drawing") return;

@@ -39,21 +39,23 @@ export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
     const p = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
     setPrompt(p);
     setPhase("drawing");
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
   };
 
+  // The canvas only mounts once phase !== "ready", so this effect used to
+  // run once on true component mount (deps: []) — at that point phase was
+  // still "ready", the canvas wasn't in the DOM yet, and canvasRef.current
+  // was null, so the early return fired silently every time and the
+  // background fill never happened on the first click. Keying on [phase]
+  // and guarding for "drawing" makes it run after React has committed the
+  // canvas into the DOM.
   useEffect(() => {
+    if (phase !== "drawing") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#111827";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }, []);
+  }, [phase]);
 
   const getPos = (e: React.MouseEvent | React.TouchEvent) => {
     const canvas = canvasRef.current!;

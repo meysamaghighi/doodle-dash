@@ -172,16 +172,9 @@ export default function TraceMaster() {
     setElapsedTime(0);
     setScore(null);
 
-    // Draw ghost on main canvas (faded guide)
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#111827";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      drawShapeOnCanvas(canvas, 0.25);
-    }
-
-    // Draw ghost on hidden canvas (for comparison)
+    // Draw ghost on hidden canvas (for comparison). ghostCanvasRef's
+    // <canvas> renders unconditionally (outside the phase-gated block), so
+    // it's never null here and this synchronous paint works correctly.
     const ghost = ghostCanvasRef.current;
     if (ghost) {
       const ctx = ghost.getContext("2d")!;
@@ -192,6 +185,22 @@ export default function TraceMaster() {
       shape.draw(ctx, ghost.width, ghost.height);
     }
   };
+
+  // The visible canvas (canvasRef) only mounts once phase !== "ready", so
+  // painting it inside startGame() read a stale (null) ref on the very
+  // first click — the background fill and faded guide silently never
+  // happened until the user moved to a phase where the canvas was already
+  // in the DOM. Moved here so it runs after React has committed the
+  // canvas into the DOM.
+  useEffect(() => {
+    if (phase !== "tracing") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = "#111827";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawShapeOnCanvas(canvas, 0.25);
+  }, [phase, shape, drawShapeOnCanvas]);
 
   useEffect(() => {
     if (phase === "tracing") {
