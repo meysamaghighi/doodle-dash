@@ -115,24 +115,32 @@ export default function MemoryDraw() {
     offCtx.fillRect(0, 0, 512, 512);
     newShapes.forEach((s) => drawShape(offCtx, s));
     setReferenceImage(offscreenRef.current.toDataURL());
-
-    setTimeout(() => {
-      setPhase("draw");
-      const drawCanvas = drawRef.current;
-      if (drawCanvas) {
-        const ctx = drawCanvas.getContext("2d")!;
-        ctx.fillStyle = "#111827";
-        ctx.fillRect(0, 0, 512, 512);
-      }
-    }, duration * 1000);
   }, [level]);
 
   useEffect(() => {
     if (phase !== "memorize") return;
-    if (memorizeTime <= 0) return;
+    if (memorizeTime <= 0) {
+      setPhase("draw");
+      return;
+    }
     const t = setTimeout(() => setMemorizeTime((v) => v - 1), 1000);
     return () => clearTimeout(t);
   }, [phase, memorizeTime]);
+
+  // The draw canvas only mounts once phase === "draw", so painting it
+  // inside the countdown effect above read a stale (null) ref — the
+  // background fill silently never happened, leaving the canvas
+  // transparent and breaking compareImages()'s background detection. Kept
+  // as its own effect (keyed on [phase] only, not memorizeTime) so it
+  // doesn't refire every second and wipe the player's in-progress strokes.
+  useEffect(() => {
+    if (phase !== "draw") return;
+    const drawCanvas = drawRef.current;
+    if (!drawCanvas) return;
+    const ctx = drawCanvas.getContext("2d")!;
+    ctx.fillStyle = "#111827";
+    ctx.fillRect(0, 0, 512, 512);
+  }, [phase]);
 
   const getPos = (e: React.MouseEvent | React.TouchEvent) => {
     const canvas = drawRef.current!;
