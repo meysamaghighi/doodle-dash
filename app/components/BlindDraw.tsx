@@ -75,31 +75,43 @@ export default function BlindDraw({ onReveal }: BlindDrawProps = {}) {
     };
   };
 
+  const drawStroke = useCallback(
+    (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      const canvas = canvasRef.current!;
+      const ctx = canvas.getContext("2d")!;
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+    },
+    [color, brushSize]
+  );
+
   const onDraw = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       if (!drawingRef.current || phase !== "drawing") return;
-      const canvas = canvasRef.current!;
-      const ctx = canvas.getContext("2d")!;
       const pos = getPos(e);
       if (lastPos.current) {
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = brushSize;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.moveTo(lastPos.current.x, lastPos.current.y);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
+        drawStroke(lastPos.current, pos);
       }
       lastPos.current = pos;
     },
-    [phase, color, brushSize]
+    [phase, drawStroke]
   );
 
   const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
     if (phase !== "drawing") return;
     drawingRef.current = true;
-    lastPos.current = getPos(e);
+    const pos = getPos(e);
+    lastPos.current = pos;
+    // A tap with no intervening move never reaches onDraw()'s stroke code —
+    // paint a zero-length stroke here through the same drawStroke function
+    // so a tap produces the round-cap dot a minimal drag would.
+    drawStroke(pos, pos);
   };
 
   const stopDraw = () => {

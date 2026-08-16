@@ -127,25 +127,46 @@ export default function SketchCopy() {
     };
   };
 
+  const drawStroke = useCallback(
+    (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      const canvas = drawRef.current!;
+      const ctx = canvas.getContext("2d")!;
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+    },
+    [color, brushSize]
+  );
+
   const draw = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       if (!drawing.current || phase !== "drawing") return;
-      const canvas = drawRef.current!;
-      const ctx = canvas.getContext("2d")!;
       const pos = getPos(e);
       if (lastPos.current) {
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = brushSize;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.moveTo(lastPos.current.x, lastPos.current.y);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
+        drawStroke(lastPos.current, pos);
       }
       lastPos.current = pos;
     },
-    [phase, color, brushSize]
+    [phase, drawStroke]
+  );
+
+  const startDraw = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      if (phase !== "drawing") return;
+      drawing.current = true;
+      const pos = getPos(e);
+      lastPos.current = pos;
+      // A tap with no intervening move never reaches draw()'s stroke code —
+      // paint a zero-length stroke here through the same drawStroke function
+      // so a tap produces the round-cap dot a minimal drag would.
+      drawStroke(pos, pos);
+    },
+    [phase, drawStroke]
   );
 
   const handleCompare = async () => {
@@ -212,11 +233,7 @@ export default function SketchCopy() {
                 width={256}
                 height={256}
                 className="w-full aspect-square rounded-xl border border-line cursor-crosshair touch-none"
-                onMouseDown={(e) => {
-                  if (phase !== "drawing") return;
-                  drawing.current = true;
-                  lastPos.current = getPos(e);
-                }}
+                onMouseDown={startDraw}
                 onMouseMove={draw}
                 onMouseUp={() => {
                   drawing.current = false;
@@ -226,11 +243,7 @@ export default function SketchCopy() {
                   drawing.current = false;
                   lastPos.current = null;
                 }}
-                onTouchStart={(e) => {
-                  if (phase !== "drawing") return;
-                  drawing.current = true;
-                  lastPos.current = getPos(e);
-                }}
+                onTouchStart={startDraw}
                 onTouchMove={draw}
                 onTouchEnd={() => {
                   drawing.current = false;

@@ -100,7 +100,9 @@ export default function Kaleidoscope() {
 
   const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
     drawing.current = true;
-    lastPos.current = getPos(e);
+    const pos = getPos(e);
+    lastPos.current = pos;
+    drawMirroredStroke(pos.x, pos.y, pos.x, pos.y);
   };
 
   const stopDraw = () => {
