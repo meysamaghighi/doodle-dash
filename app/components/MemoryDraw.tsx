@@ -152,25 +152,45 @@ export default function MemoryDraw() {
     };
   };
 
+  const drawStroke = useCallback(
+    (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      const canvas = drawRef.current!;
+      const ctx = canvas.getContext("2d")!;
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+    },
+    [color, brushSize]
+  );
+
   const onDraw = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       if (!drawingRef.current || phase !== "draw") return;
-      const canvas = drawRef.current!;
-      const ctx = canvas.getContext("2d")!;
       const pos = getPos(e);
       if (lastPosRef.current) {
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = brushSize;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
+        drawStroke(lastPosRef.current, pos);
       }
       lastPosRef.current = pos;
     },
-    [phase, color, brushSize]
+    [phase, drawStroke]
+  );
+
+  const startDraw = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      drawingRef.current = true;
+      const pos = getPos(e);
+      lastPosRef.current = pos;
+      // A tap with no intervening move never reaches onDraw()'s stroke code —
+      // paint a zero-length stroke here through the same drawStroke function
+      // so a tap produces the round-cap dot a minimal drag would.
+      drawStroke(pos, pos);
+    },
+    [drawStroke]
   );
 
   const handleCompare = async () => {
@@ -252,10 +272,7 @@ export default function MemoryDraw() {
             width={512}
             height={512}
             className="w-full max-w-lg mx-auto aspect-square rounded-xl border border-line cursor-crosshair touch-none"
-            onMouseDown={(e) => {
-              drawingRef.current = true;
-              lastPosRef.current = getPos(e);
-            }}
+            onMouseDown={startDraw}
             onMouseMove={onDraw}
             onMouseUp={() => {
               drawingRef.current = false;
@@ -265,10 +282,7 @@ export default function MemoryDraw() {
               drawingRef.current = false;
               lastPosRef.current = null;
             }}
-            onTouchStart={(e) => {
-              drawingRef.current = true;
-              lastPosRef.current = getPos(e);
-            }}
+            onTouchStart={startDraw}
             onTouchMove={onDraw}
             onTouchEnd={() => {
               drawingRef.current = false;
