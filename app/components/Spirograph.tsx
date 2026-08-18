@@ -518,7 +518,22 @@ export default function Spirograph() {
         </button>
       </div>
 
-      <p className="mt-2 text-center font-mono text-[11px] text-ink-3">
+      {/* Undo/Clear/Save sit directly under Draw, not at the foot of the
+          controls — you reach for Clear right after a layer you dislike, and
+          it shouldn't need a scroll to find. */}
+      <div className="mt-2 flex items-center gap-2">
+        <button type="button" onClick={undo} disabled={layers === 0} className={`${pillBase} ${pillOff} disabled:opacity-40`}>
+          Undo layer
+        </button>
+        <button type="button" onClick={clearArt} disabled={layers === 0} className={`${pillBase} ${pillOff} disabled:opacity-40`}>
+          Clear
+        </button>
+        <button type="button" onClick={handleSave} className={`${pillBase} ${pillOff} ml-auto`}>
+          Save PNG
+        </button>
+      </div>
+
+      <p className="mt-3 text-center font-mono text-[11px] text-ink-3">
         {wheel} teeth · hole {hole + 1} · {mode === "inside" ? "inside" : "around"} · {g.revolutions} lap{g.revolutions === 1 ? "" : "s"}
       </p>
 
@@ -659,18 +674,6 @@ export default function Spirograph() {
         </div>
       </div>
 
-      {/* Secondary actions. */}
-      <div className="mt-5 flex items-center gap-2 flex-wrap">
-        <button type="button" onClick={undo} disabled={layers === 0} className={`${pillBase} ${pillOff} disabled:opacity-40`}>
-          Undo layer
-        </button>
-        <button type="button" onClick={clearArt} className={`${pillBase} ${pillOff}`}>
-          Clear
-        </button>
-        <button type="button" onClick={handleSave} className={`${pillBase} ${pillOff} ml-auto`}>
-          Save PNG
-        </button>
-      </div>
     </div>
   );
 }
