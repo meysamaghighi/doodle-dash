@@ -4,11 +4,11 @@ import DailyPrompt from "./DailyPrompt";
 export const metadata: Metadata = {
   title: "Today's Prompt · DoodleLab",
   description:
-    "A new drawing prompt every day. 60 seconds, no eraser. Build your streak by drawing every day at DoodleLab.",
+    "A new drawing challenge every day, judged by a robot that guesses your drawing. Collect stickers and unlock new art supplies. Free, no sign-up.",
   alternates: { canonical: "/daily" },
   openGraph: {
     title: "Today's Prompt · DoodleLab",
-    description: "A new drawing prompt every day. Build your streak.",
+    description: "A new drawing challenge every day. Make the robot see it, collect stickers, unlock new art supplies.",
     type: "website",
     siteName: "DoodleLab",
   },
@@ -28,7 +28,7 @@ export default function DailyPage() {
             url: "https://doodlelab.fun/daily",
             applicationCategory: "GameApplication",
             description:
-              "A new drawing prompt every day. 60 seconds, no eraser. Build your streak by drawing every day at DoodleLab.",
+              "A new drawing challenge every day, judged by a robot that guesses your drawing. Collect stickers and unlock new art supplies. Free, no sign-up.",
             operatingSystem: "All",
             offers: {
               "@type": "Offer",

@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CrossPromoCard } from "./components/CrossPromo";
+import DailyBanner from "./components/DailyBanner";
 
 export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
   description:
-    "Free online drawing games: speed sketch, pixel art, mirror draw, spiral draw, kaleidoscope, spirograph, gradient paint, memory draw, and more. 16 creative games. No sign-up required.",
+    "Free online drawing games: robot draw, speed sketch, pixel art, mirror draw, kaleidoscope, spirograph, gradient paint, and more. 17 creative games. No sign-up required.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "DoodleLab - Free Drawing Challenges",
     description:
-      "16 creative drawing games. Sketch, pixel art, symmetry draw, kaleidoscope, spirograph, gradient paint, and more. Free, no sign-up.",
+      "17 creative drawing games. Sketch, pixel art, symmetry draw, kaleidoscope, spirograph, gradient paint, and more. Free, no sign-up.",
     type: "website",
   },
 };
@@ -21,6 +22,21 @@ const gameCategories = [
   {
     category: "Most Popular",
     games: [
+      {
+        href: "/robot-draw",
+        label: "Robot Draw",
+        description: "Draw anything and a robot guesses it, stroke by stroke.",
+        color: "from-violet-500 to-fuchsia-600",
+        icon: (
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="4" y="7" width="16" height="12" rx="3" strokeWidth={1.5} />
+            <circle cx="9" cy="13" r="1.6" fill="currentColor" stroke="none" />
+            <circle cx="15" cy="13" r="1.6" fill="currentColor" stroke="none" />
+            <path strokeLinecap="round" strokeWidth={1.5} d="M12 7V4M9.5 22h5" />
+            <circle cx="12" cy="3" r="1.2" fill="currentColor" stroke="none" />
+          </svg>
+        ),
+      },
       {
         href: "/kaleidoscope",
         label: "Kaleidoscope",
@@ -235,7 +251,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "DoodleLab Drawing Games",
-    description: "16 free online drawing games — no sign-up required.",
+    description: "17 free online drawing games — no sign-up required.",
     numberOfItems: gameCategories.reduce((sum, c) => sum + c.games.length, 0),
     itemListElement: gameCategories
       .flatMap((c) => c.games)
@@ -265,10 +281,12 @@ export default function Home() {
           Draw, create, challenge.
         </h1>
         <p className="text-ink-2 text-sm sm:text-base max-w-xl mx-auto">
-          16 free drawing games to test your creativity and skill. No sign-up, no
+          17 free drawing games to test your creativity and skill. No sign-up, no
           downloads. Just pick a game and start drawing.
         </p>
       </section>
+
+      <DailyBanner />
 
       {gameCategories.map((category) => (
         <section key={category.category} className="mb-6 sm:mb-10">
