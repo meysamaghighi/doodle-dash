@@ -1,0 +1,266 @@
+{
+  "version": 1,
+  "dtype": "float32",
+  "input": {
+    "height": 28,
+    "width": 28,
+    "channels": 1,
+    "normalization": "pixel/255"
+  },
+  "categories": [
+    "ant",
+    "bear",
+    "bee",
+    "bird",
+    "butterfly",
+    "camel",
+    "cat",
+    "cow",
+    "crab",
+    "crocodile",
+    "dog",
+    "dolphin",
+    "dragon",
+    "duck",
+    "elephant",
+    "fish",
+    "flamingo",
+    "frog",
+    "giraffe",
+    "hedgehog",
+    "horse",
+    "kangaroo",
+    "lion",
+    "mermaid",
+    "monkey",
+    "octopus",
+    "owl",
+    "panda",
+    "parrot",
+    "penguin",
+    "pig",
+    "rabbit",
+    "raccoon",
+    "sea turtle",
+    "shark",
+    "sheep",
+    "snail",
+    "snake",
+    "squirrel",
+    "swan",
+    "tiger",
+    "whale",
+    "zebra",
+    "apple",
+    "banana",
+    "birthday cake",
+    "bread",
+    "broccoli",
+    "cake",
+    "carrot",
+    "cookie",
+    "donut",
+    "grapes",
+    "hamburger",
+    "hot dog",
+    "ice cream",
+    "peanut",
+    "pineapple",
+    "pizza",
+    "popsicle",
+    "sandwich",
+    "strawberry",
+    "watermelon",
+    "airplane",
+    "bicycle",
+    "bus",
+    "car",
+    "firetruck",
+    "helicopter",
+    "hot air balloon",
+    "motorbike",
+    "sailboat",
+    "school bus",
+    "train",
+    "truck",
+    "cactus",
+    "cloud",
+    "flower",
+    "leaf",
+    "lightning",
+    "moon",
+    "mountain",
+    "rain",
+    "rainbow",
+    "snowflake",
+    "star",
+    "sun",
+    "tree",
+    "book",
+    "chair",
+    "clock",
+    "crown",
+    "cup",
+    "door",
+    "envelope",
+    "eyeglasses",
+    "hat",
+    "house",
+    "key",
+    "umbrella"
+  ],
+  "layers": [
+    {
+      "name": "conv1",
+      "type": "conv2d",
+      "inChannels": 1,
+      "outChannels": 16,
+      "kernelSize": 3,
+      "padding": 1,
+      "stride": 1,
+      "weight": {
+        "byteOffset": 0,
+        "count": 144,
+        "shape": [
+          16,
+          1,
+          3,
+          3
+        ]
+      },
+      "bias": {
+        "byteOffset": 576,
+        "count": 16,
+        "shape": [
+          16
+        ]
+      }
+    },
+    {
+      "type": "relu"
+    },
+    {
+      "type": "maxpool2d",
+      "kernelSize": 2,
+      "stride": 2
+    },
+    {
+      "name": "conv2",
+      "type": "conv2d",
+      "inChannels": 16,
+      "outChannels": 32,
+      "kernelSize": 3,
+      "padding": 1,
+      "stride": 1,
+      "weight": {
+        "byteOffset": 640,
+        "count": 4608,
+        "shape": [
+          32,
+          16,
+          3,
+          3
+        ]
+      },
+      "bias": {
+        "byteOffset": 19072,
+        "count": 32,
+        "shape": [
+          32
+        ]
+      }
+    },
+    {
+      "type": "relu"
+    },
+    {
+      "type": "maxpool2d",
+      "kernelSize": 2,
+      "stride": 2
+    },
+    {
+      "name": "conv3",
+      "type": "conv2d",
+      "inChannels": 32,
+      "outChannels": 32,
+      "kernelSize": 3,
+      "padding": 1,
+      "stride": 1,
+      "weight": {
+        "byteOffset": 19200,
+        "count": 9216,
+        "shape": [
+          32,
+          32,
+          3,
+          3
+        ]
+      },
+      "bias": {
+        "byteOffset": 56064,
+        "count": 32,
+        "shape": [
+          32
+        ]
+      }
+    },
+    {
+      "type": "relu"
+    },
+    {
+      "type": "maxpool2d",
+      "kernelSize": 2,
+      "stride": 2
+    },
+    {
+      "type": "flatten"
+    },
+    {
+      "name": "fc1",
+      "type": "dense",
+      "inFeatures": 288,
+      "outFeatures": 128,
+      "weight": {
+        "byteOffset": 56192,
+        "count": 36864,
+        "shape": [
+          128,
+          288
+        ]
+      },
+      "bias": {
+        "byteOffset": 203648,
+        "count": 128,
+        "shape": [
+          128
+        ]
+      }
+    },
+    {
+      "type": "relu"
+    },
+    {
+      "name": "fc2",
+      "type": "dense",
+      "inFeatures": 128,
+      "outFeatures": 100,
+      "weight": {
+        "byteOffset": 204160,
+        "count": 12800,
+        "shape": [
+          100,
+          128
+        ]
+      },
+      "bias": {
+        "byteOffset": 255360,
+        "count": 100,
+        "shape": [
+          100
+        ]
+      }
+    }
+  ],
+  "weightsFile": "weights.bin",
+  "totalWeightBytes": 255760
+}
