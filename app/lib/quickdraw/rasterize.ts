@@ -16,7 +16,13 @@ import type { Point, Strokes } from "./types";
  */
 
 const OUTPUT_SIZE = 28;
-const SUPERSAMPLE = 8; // render at 224x224, then box-average down to 28x28
+// Render at 4x (112x112), then box-average down to 28x28. 8x measured ~2ms/call on
+// desktop V8; 4x halves that for headroom on the slow target device (Fire HD 8)
+// while still giving each output pixel 16 antialiased subsamples -- plenty, since
+// drawSegment already writes analytic (distance-based) soft coverage rather than
+// hard binary pixels, so most of the antialiasing quality comes from that, not
+// from supersample count.
+const SUPERSAMPLE = 4;
 const SUPER_SIZE = OUTPUT_SIZE * SUPERSAMPLE;
 // Fraction of the supersampled canvas the longer content dimension should fill.
 // Calibrated against real numpy_bitmap samples (bbox typically 21-26 / 28px).
