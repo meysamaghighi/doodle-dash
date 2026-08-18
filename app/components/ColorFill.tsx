@@ -1,532 +1,720 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { saveImage } from "../utils/saveImage";
 
-// Line-art patterns (SVG path data)
-const PATTERNS = {
-  cat: {
-    name: "Cat",
-    paths: [
-      // Head
-      "M256,180 Q200,180 180,220 Q170,250 180,280 L190,300 Q220,320 256,320 Q292,320 322,300 L332,280 Q342,250 332,220 Q312,180 256,180 Z",
-      // Left ear
-      "M200,180 L180,140 L210,160 Z",
-      // Right ear
-      "M312,180 L302,160 L332,140 Z",
-      // Eyes
-      "M220,230 Q220,220 230,220 Q240,220 240,230 Q240,240 230,240 Q220,240 220,230 Z",
-      "M272,230 Q272,220 282,220 Q292,220 292,230 Q292,240 282,240 Q272,240 272,230 Z",
-      // Nose
-      "M246,260 L256,270 L266,260",
-      // Mouth
-      "M256,270 Q246,280 240,275 M256,270 Q266,280 272,275",
-      // Whiskers left
-      "M200,250 L160,245 M200,260 L160,260 M200,270 L160,275",
-      // Whiskers right
-      "M312,250 L352,245 M312,260 L352,260 M312,270 L352,275",
-      // Body
-      "M190,300 Q180,340 190,380 L210,420 L240,440 L256,445 L272,440 L302,420 L322,380 Q332,340 322,300",
-    ],
-  },
-  dog: {
-    name: "Dog",
-    paths: [
-      // Head
-      "M256,200 Q210,200 190,230 Q180,260 190,290 L210,310 Q240,330 256,330 Q272,330 302,310 L322,290 Q332,260 322,230 Q302,200 256,200 Z",
-      // Left ear (floppy)
-      "M210,200 Q190,200 180,220 Q175,240 185,260 L200,240",
-      // Right ear (floppy)
-      "M302,200 Q322,200 332,220 Q337,240 327,260 L312,240",
-      // Eyes
-      "M220,240 A8,8 0 1,1 236,240 A8,8 0 1,1 220,240 Z",
-      "M276,240 A8,8 0 1,1 292,240 A8,8 0 1,1 276,240 Z",
-      // Nose
-      "M246,270 Q246,260 256,260 Q266,260 266,270 Q266,280 256,285 Q246,280 246,270 Z",
-      // Mouth
-      "M256,285 L256,295 M256,295 Q240,305 230,300 M256,295 Q272,305 282,300",
-      // Tongue
-      "M246,295 Q246,310 256,315 Q266,310 266,295",
-      // Body
-      "M210,310 Q200,350 210,390 L230,430 L256,440 L282,430 L302,390 Q312,350 302,310",
-      // Front legs
-      "M230,390 L220,450 M230,390 L240,450 M282,390 L272,450 M282,390 L292,450",
-    ],
-  },
-  butterfly: {
-    name: "Butterfly",
-    paths: [
-      // Body
-      "M256,200 Q250,250 250,280 Q250,320 256,350 Q262,320 262,280 Q262,250 256,200 Z",
-      // Head
-      "M246,200 A10,10 0 1,1 266,200 A10,10 0 1,1 246,200 Z",
-      // Antennae
-      "M250,200 Q245,180 240,170 M262,200 Q267,180 272,170",
-      // Upper left wing outer
-      "M250,240 Q210,210 180,220 Q150,240 160,280 Q170,310 200,300 Q230,290 250,270 Z",
-      // Upper left wing inner
-      "M250,240 Q230,235 215,245 Q205,260 215,275 Q225,285 240,280 Q248,270 250,260 Z",
-      // Upper right wing outer
-      "M262,240 Q302,210 332,220 Q362,240 352,280 Q342,310 312,300 Q282,290 262,270 Z",
-      // Upper right wing inner
-      "M262,240 Q282,235 297,245 Q307,260 297,275 Q287,285 272,280 Q264,270 262,260 Z",
-      // Lower left wing outer
-      "M250,280 Q220,300 190,320 Q170,350 185,380 Q205,395 230,380 Q248,360 250,340 Z",
-      // Lower left wing inner
-      "M250,290 Q235,305 225,320 Q220,335 230,345 Q240,350 248,340 Q252,325 250,310 Z",
-      // Lower right wing outer
-      "M262,280 Q292,300 322,320 Q342,350 327,380 Q307,395 282,380 Q264,360 262,340 Z",
-      // Lower right wing inner
-      "M262,290 Q277,305 287,320 Q292,335 282,345 Q272,350 264,340 Q260,325 262,310 Z",
-    ],
-  },
-  fish: {
-    name: "Fish",
-    paths: [
-      // Body
-      "M140,256 Q160,210 210,200 Q270,195 320,210 Q350,230 360,256 Q350,282 320,302 Q270,317 210,312 Q160,302 140,256 Z",
-      // Tail
-      "M360,256 L410,230 L400,256 L410,282 Z",
-      // Top fin
-      "M240,200 Q250,170 260,160 Q270,170 280,200",
-      // Bottom fin
-      "M240,312 Q250,342 260,352 Q270,342 280,312",
-      // Eye outer
-      "M200,240 A15,15 0 1,1 230,240 A15,15 0 1,1 200,240 Z",
-      // Eye inner (pupil)
-      "M210,240 A5,5 0 1,1 220,240 A5,5 0 1,1 210,240 Z",
-      // Mouth
-      "M170,256 Q175,265 185,268",
-      // Scales
-      "M220,230 Q230,230 235,240 Q230,250 220,250 Z",
-      "M245,230 Q255,230 260,240 Q255,250 245,250 Z",
-      "M270,230 Q280,230 285,240 Q280,250 270,250 Z",
-      "M220,260 Q230,260 235,270 Q230,280 220,280 Z",
-      "M245,260 Q255,260 260,270 Q255,280 245,280 Z",
-      "M270,260 Q280,260 285,270 Q280,280 270,280 Z",
-    ],
-  },
-  bird: {
-    name: "Bird",
-    paths: [
-      // Body
-      "M256,260 Q220,260 200,280 Q190,300 200,320 Q220,340 256,340 Q292,340 312,320 Q322,300 312,280 Q292,260 256,260 Z",
-      // Head
-      "M256,220 Q230,220 215,235 Q210,250 220,265 Q240,280 256,280 Q272,280 292,265 Q302,250 297,235 Q282,220 256,220 Z",
-      // Beak
-      "M215,245 L180,250 L215,255 Z",
-      // Eye
-      "M235,245 A6,6 0 1,1 247,245 A6,6 0 1,1 235,245 Z",
-      // Wing
-      "M220,280 Q200,290 190,310 Q195,320 210,315 Q225,305 235,295",
-      // Tail feathers
-      "M292,310 Q310,330 320,350 M297,315 Q315,335 325,355 M302,320 Q320,340 330,360",
-      // Legs
-      "M240,340 L235,380 L225,380 M235,380 L245,380 M272,340 L277,380 L267,380 M277,380 L287,380",
-      // Top feather
-      "M256,220 Q260,200 265,190 Q270,200 268,210",
-    ],
-  },
-  horse: {
-    name: "Horse",
-    paths: [
-      // Head
-      "M280,200 Q260,190 240,200 Q230,220 235,240 L240,260 Q250,275 270,275 Q290,275 300,260 L305,240 Q310,220 300,200 Z",
-      // Snout
-      "M235,240 Q225,245 225,255 Q225,265 235,270 L240,268",
-      // Eye
-      "M270,230 A6,6 0 1,1 282,230 A6,6 0 1,1 270,230 Z",
-      // Ear
-      "M280,200 L285,180 L275,190 Z",
-      // Mane
-      "M270,190 Q265,185 260,180 M275,195 Q270,190 265,185 M280,200 Q275,195 270,190",
-      // Neck
-      "M270,275 Q280,300 280,330 L275,360 M240,260 Q235,290 240,330 L245,360",
-      // Body
-      "M245,360 Q230,380 240,420 L260,450 L280,450 L300,420 Q310,380 295,360 Z",
-      // Front legs
-      "M260,420 L255,480 M265,420 L270,480",
-      // Back legs
-      "M280,420 L275,480 M285,420 L290,480",
-      // Tail
-      "M300,380 Q320,390 330,410 Q335,430 325,445",
-    ],
-  },
-  flower: {
-    name: "Flower",
-    paths: [
-      // Center
-      "M236,236 A20,20 0 1,1 276,236 A20,20 0 1,1 236,236 Z",
-      // Top petal
-      "M256,236 Q256,200 240,180 Q230,175 225,185 Q220,200 230,215 Q240,230 256,236 Z",
-      "M256,236 Q256,200 272,180 Q282,175 287,185 Q292,200 282,215 Q272,230 256,236 Z",
-      // Right petal
-      "M276,236 Q312,236 332,220 Q337,210 327,205 Q312,200 297,210 Q282,220 276,236 Z",
-      "M276,236 Q312,236 332,252 Q337,262 327,267 Q312,272 297,262 Q282,252 276,236 Z",
-      // Bottom petal
-      "M256,276 Q256,312 240,332 Q230,337 225,327 Q220,312 230,297 Q240,282 256,276 Z",
-      "M256,276 Q256,312 272,332 Q282,337 287,327 Q292,312 282,297 Q272,282 256,276 Z",
-      // Left petal
-      "M236,236 Q200,236 180,220 Q175,210 185,205 Q200,200 215,210 Q230,220 236,236 Z",
-      "M236,236 Q200,236 180,252 Q175,262 185,267 Q200,272 215,262 Q230,252 236,236 Z",
-      // Stem
-      "M256,276 L256,400 Q254,405 256,410 Q258,405 256,400",
-      // Leaves
-      "M256,320 Q240,330 235,345 Q240,355 256,350 Z",
-      "M256,360 Q272,370 277,385 Q272,395 256,390 Z",
-    ],
-  },
-  tree: {
-    name: "Tree",
-    paths: [
-      // Trunk
-      "M236,300 L236,420 L276,420 L276,300",
-      // Roots
-      "M236,420 Q220,435 210,440 M276,420 Q292,435 302,440 M246,420 L246,440 M266,420 L266,440",
-      // Bottom foliage
-      "M160,300 Q150,280 160,260 Q180,240 210,245 Q240,250 256,260 Q272,250 302,245 Q332,240 352,260 Q362,280 352,300 Z",
-      // Middle foliage
-      "M180,260 Q170,240 180,220 Q200,200 230,205 Q256,210 256,230 Q256,210 282,205 Q312,200 332,220 Q342,240 332,260 Z",
-      // Top foliage
-      "M200,220 Q195,200 205,180 Q220,165 240,170 Q256,175 256,190 Q256,175 272,170 Q292,165 307,180 Q317,200 312,220 Z",
-      // Small top
-      "M230,180 Q230,160 245,150 Q256,145 267,150 Q282,160 282,180 Z",
-    ],
-  },
-  sun: {
-    name: "Sun",
-    paths: [
-      // Center circle
-      "M196,256 A60,60 0 1,1 316,256 A60,60 0 1,1 196,256 Z",
-      // Inner circle
-      "M216,256 A40,40 0 1,1 296,256 A40,40 0 1,1 216,256 Z",
-      // Top ray
-      "M256,136 L246,176 L266,176 Z",
-      // Top-right ray
-      "M325,165 L297,195 L315,210 Z",
-      // Right ray
-      "M376,256 L336,246 L336,266 Z",
-      // Bottom-right ray
-      "M325,347 L315,302 L297,317 Z",
-      // Bottom ray
-      "M256,376 L266,336 L246,336 Z",
-      // Bottom-left ray
-      "M187,347 L197,302 L215,317 Z",
-      // Left ray
-      "M136,256 L176,266 L176,246 Z",
-      // Top-left ray
-      "M187,165 L215,195 L197,210 Z",
-    ],
-  },
-  mountain: {
-    name: "Mountain",
-    paths: [
-      // Back mountain
-      "M50,350 L180,180 L280,280 L350,200 L460,350 Z",
-      // Front mountain left
-      "M80,350 L200,220 L320,350 Z",
-      // Front mountain right
-      "M280,350 L380,240 L450,350 Z",
-      // Snow cap left
-      "M200,220 L180,250 L220,250 Z",
-      // Snow cap right
-      "M380,240 L365,265 L395,265 Z",
-      // Sun
-      "M400,120 A30,30 0 1,1 460,120 A30,30 0 1,1 400,120 Z",
-      // Clouds
-      "M120,140 Q110,130 120,120 Q130,115 140,120 Q150,115 160,120 Q170,130 160,140 Z",
-      "M300,100 Q290,90 300,80 Q310,75 320,80 Q330,75 340,80 Q350,90 340,100 Z",
-      // Ground
-      "M50,350 L460,350 L460,450 L50,450 Z",
-      // Trees on ground
-      "M100,350 L90,390 L110,390 Z M95,365 L105,365 L105,385 L95,385 Z",
-      "M250,350 L240,390 L260,390 Z M245,365 L255,365 L255,385 L245,385 Z",
-    ],
-  },
-  house: {
-    name: "House",
-    paths: [
-      // Main house body
-      "M160,250 L160,390 L352,390 L352,250 Z",
-      // Roof
-      "M140,250 L256,150 L372,250 Z",
-      // Chimney
-      "M300,180 L300,150 L330,150 L330,200",
-      // Door
-      "M220,310 L220,390 L270,390 L270,310 Z",
-      // Door knob
-      "M258,350 A4,4 0 1,1 266,350 A4,4 0 1,1 258,350 Z",
-      // Left window
-      "M180,270 L180,310 L220,310 L220,270 Z M200,270 L200,310 M180,290 L220,290",
-      // Right window
-      "M290,270 L290,310 L330,310 L330,270 Z M310,270 L310,310 M290,290 L330,290",
-      // Upper window
-      "M230,200 Q230,185 245,185 L267,185 Q282,185 282,200 L282,230 L230,230 Z M256,185 L256,230 M230,215 L282,215",
-      // Ground
-      "M120,390 L392,390 L392,395 L120,395 Z",
-      // Bushes
-      "M140,370 Q135,360 140,350 Q150,345 160,350 Q170,345 180,350 Q185,360 180,370 Z",
-      "M332,370 Q327,360 332,350 Q342,345 352,350 Q362,345 372,350 Q377,360 372,370 Z",
-    ],
-  },
-  rocket: {
-    name: "Rocket",
-    paths: [
-      // Main body
-      "M226,200 L226,360 Q226,380 256,380 Q286,380 286,360 L286,200 Z",
-      // Nose cone
-      "M226,200 Q226,160 256,140 Q286,160 286,200 Z",
-      // Window
-      "M236,210 A20,20 0 1,1 276,210 A20,20 0 1,1 236,210 Z",
-      // Window inner
-      "M244,210 A12,12 0 1,1 268,210 A12,12 0 1,1 244,210 Z",
-      // Left fin
-      "M226,330 L180,380 L180,420 L226,370 Z",
-      // Right fin
-      "M286,330 L332,380 L332,420 L286,370 Z",
-      // Left wing detail
-      "M190,390 L205,390 L205,410 L190,410 Z",
-      // Right wing detail
-      "M307,390 L322,390 L322,410 L307,410 Z",
-      // Body stripes
-      "M226,250 L286,250 M226,280 L286,280 M226,310 L286,310",
-      // Flames
-      "M236,380 Q230,400 236,420 Q236,400 240,420 Q240,400 246,420 Q246,400 256,430 Q256,400 266,420 Q266,400 272,420 Q272,400 276,420 Q276,400 286,380",
-    ],
-  },
-  heart: {
-    name: "Heart",
-    paths: [
-      // Main heart
-      "M256,380 Q200,330 170,290 Q150,260 150,230 Q150,190 180,170 Q210,150 240,170 Q256,185 256,200 Q256,185 272,170 Q302,150 332,170 Q362,190 362,230 Q362,260 342,290 Q312,330 256,380 Z",
-      // Inner heart
-      "M256,350 Q215,310 195,280 Q185,260 185,240 Q185,215 205,200 Q225,185 245,200 Q256,210 256,220 Q256,210 267,200 Q287,185 307,200 Q327,215 327,240 Q327,260 317,280 Q297,310 256,350 Z",
-      // Smallest heart
-      "M256,310 Q235,290 225,270 Q220,255 220,245 Q220,230 232,220 Q244,210 256,220 Q268,210 280,220 Q292,230 292,245 Q292,255 287,270 Q277,290 256,310 Z",
-      // Shine detail top-left
-      "M200,200 Q195,195 200,190 Q205,185 210,190 Q215,195 210,200 Q205,205 200,200 Z",
-    ],
-  },
-  mandala: {
-    name: "Mandala",
-    paths: [
-      // Outer circle
-      "M106,256 A150,150 0 1,1 406,256 A150,150 0 1,1 106,256 Z",
-      // Ring 1
-      "M136,256 A120,120 0 1,1 376,256 A120,120 0 1,1 136,256 Z",
-      // Ring 2
-      "M166,256 A90,90 0 1,1 346,256 A90,90 0 1,1 166,256 Z",
-      // Ring 3
-      "M196,256 A60,60 0 1,1 316,256 A60,60 0 1,1 196,256 Z",
-      // Center circle
-      "M226,256 A30,30 0 1,1 286,256 A30,30 0 1,1 226,256 Z",
-      // Top petal
-      "M256,106 Q246,136 256,166 Q266,136 256,106 Z",
-      "M256,166 Q246,186 256,196 Q266,186 256,166 Z",
-      // Right petal
-      "M406,256 Q376,246 346,256 Q376,266 406,256 Z",
-      "M346,256 Q326,246 316,256 Q326,266 346,256 Z",
-      // Bottom petal
-      "M256,406 Q266,376 256,346 Q246,376 256,406 Z",
-      "M256,346 Q266,326 256,316 Q246,326 256,346 Z",
-      // Left petal
-      "M106,256 Q136,266 166,256 Q136,246 106,256 Z",
-      "M166,256 Q186,266 196,256 Q186,246 166,256 Z",
-      // Diagonal petals
-      "M331,181 Q311,191 301,211 Q311,201 331,181 Z",
-      "M181,181 Q201,191 211,211 Q201,201 181,181 Z",
-      "M181,331 Q191,311 211,301 Q201,311 181,331 Z",
-      "M331,331 Q321,311 301,301 Q311,311 331,331 Z",
-    ],
-  },
+/*
+ * Colouring works on real SVG regions, not a bitmap flood fill.
+ *
+ * The old version rasterised line art and flood-filled pixels, which meant
+ * every anti-aliased edge left a grey halo the fill could never cross, and any
+ * outline with a gap (a whisker, a leg) leaked colour across the whole page.
+ * Here each region IS a closed <path>; tapping one sets its fill. That is
+ * exact, instant, undoable, and crisp at any size — and it makes patterns with
+ * two hundred regions practical, which is where the good colouring is.
+ */
+
+const S = 512; // viewBox size
+const C = S / 2;
+const R = 238; // working radius for the round patterns
+const INK = "#1b2233";
+const PAPER = "#FFFDF8";
+
+// ---------------------------------------------------------------- geometry
+
+const px = (r: number, a: number) => `${(C + r * Math.cos(a)).toFixed(1)},${(C + r * Math.sin(a)).toFixed(1)}`;
+const xy = (x: number, y: number) => `${x.toFixed(1)},${y.toFixed(1)}`;
+
+const circlePath = (cx: number, cy: number, r: number) =>
+  `M${xy(cx - r, cy)}a${r},${r} 0 1,0 ${(2 * r).toFixed(1)},0a${r},${r} 0 1,0 ${(-2 * r).toFixed(1)},0Z`;
+
+const poly = (pts: [number, number][]) => `M${pts.map(([x, y]) => xy(x, y)).join("L")}Z`;
+
+const ellipsePath = (cx: number, cy: number, rx: number, ry: number) =>
+  `M${xy(cx - rx, cy)}a${rx},${ry} 0 1,0 ${(2 * rx).toFixed(1)},0a${rx},${ry} 0 1,0 ${(-2 * rx).toFixed(1)},0Z`;
+
+/** Closed Catmull-Rom through the points, emitted as cubics. */
+function smooth(pts: [number, number][]) {
+  const n = pts.length;
+  let d = `M${xy(pts[0][0], pts[0][1])}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i - 1 + n) % n];
+    const p1 = pts[i];
+    const p2 = pts[(i + 1) % n];
+    const p3 = pts[(i + 2) % n];
+    d +=
+      `C${xy(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6)} ` +
+      `${xy(p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6)} ${xy(p2[0], p2[1])}`;
+  }
+  return `${d}Z`;
+}
+
+/**
+ * A closed organic shape from a radial profile, scaled about its OWN centre.
+ * That last part matters: scaling a wing about the body anchor instead makes
+ * the inner bands crowd the anchor rather than nest inside the wing.
+ */
+function blob(
+  cx: number,
+  cy: number,
+  scale: number,
+  prof: (t: number) => number,
+  rot = 0,
+  flip = 1,
+  steps = 44,
+) {
+  const pts: [number, number][] = [];
+  for (let i = 0; i < steps; i++) {
+    const t = (i / steps) * Math.PI * 2;
+    const r = prof(t) * scale;
+    pts.push([cx + flip * r * Math.cos(t + rot), cy + r * Math.sin(t + rot)]);
+  }
+  return smooth(pts);
+}
+
+/** One cell of an annulus, between two radii and two angles. */
+function ringCell(r0: number, r1: number, a0: number, a1: number) {
+  const big = a1 - a0 > Math.PI ? 1 : 0;
+  if (r0 < 0.5) return `M${xy(C, C)}L${px(r1, a0)}A${r1},${r1} 0 ${big} 1 ${px(r1, a1)}Z`;
+  return `M${px(r1, a0)}A${r1},${r1} 0 ${big} 1 ${px(r1, a1)}L${px(r0, a1)}A${r0},${r0} 0 ${big} 0 ${px(r0, a0)}Z`;
+}
+
+/** A leaf/petal: two quadratic curves bulging either side of a radial axis. */
+function petal(a: number, r0: number, r1: number, w: number) {
+  const p = a + Math.PI / 2;
+  const mid = (r0 + r1) / 2;
+  const base = xy(C + r0 * Math.cos(a), C + r0 * Math.sin(a));
+  const tip = xy(C + r1 * Math.cos(a), C + r1 * Math.sin(a));
+  const c1 = xy(C + mid * Math.cos(a) + w * Math.cos(p), C + mid * Math.sin(a) + w * Math.sin(p));
+  const c2 = xy(C + mid * Math.cos(a) - w * Math.cos(p), C + mid * Math.sin(a) - w * Math.sin(p));
+  return `M${base}Q${c1} ${tip}Q${c2} ${base}Z`;
+}
+
+/**
+ * Concentric bands inside a shape. `shape(scale)` returns the same outline at
+ * a given size; each band is the gap between two of them, drawn as two
+ * subpaths and resolved with fill-rule evenodd. This is what gives petals and
+ * wings their nested colouring-book look.
+ */
+function bands(shape: (scale: number) => string, scales: number[]) {
+  const out: string[] = [];
+  for (let i = 0; i < scales.length - 1; i++) out.push(`${shape(scales[i])} ${shape(scales[i + 1])}`);
+  out.push(shape(scales[scales.length - 1]));
+  return out;
+}
+
+// ---------------------------------------------------------------- patterns
+
+/** A ring of plain annular cells — solid, gap-free, easy to fill. */
+function sectorRing(out: string[], n: number, r0: number, r1: number, rot = 0) {
+  const step = (Math.PI * 2) / n;
+  for (let i = 0; i < n; i++) {
+    const a0 = (i + rot) * step - Math.PI / 2;
+    out.push(ringCell(r0, r1, a0, a0 + step));
+  }
+}
+
+/** A ring of petals. Leaves negative space between them, which is what stops
+ *  a mandala reading as a brick wall. */
+function petalRing(out: string[], n: number, r0: number, r1: number, rot = 0, fat = 0.46) {
+  const step = (Math.PI * 2) / n;
+  const w = fat * step * ((r0 + r1) / 2);
+  for (let i = 0; i < n; i++) {
+    const a = (i + rot) * step - Math.PI / 2;
+    out.push(petal(a, r0, r1, w));
+  }
+}
+
+function mandala() {
+  const out: string[] = [];
+  out.push(...bands(s => circlePath(C, C, 32 * s), [1, 0.6]));
+  petalRing(out, 8, 32, 76, 0, 0.5);
+  sectorRing(out, 16, 76, 100, 0.5);
+  petalRing(out, 16, 100, 152, 0, 0.44);
+  sectorRing(out, 24, 152, 174, 0);
+  sectorRing(out, 24, 174, 198, 0.5);
+  petalRing(out, 32, 198, R, 0, 0.46);
+  return out;
+}
+
+function rosette() {
+  const out: string[] = [circlePath(C, C, 36)];
+  const petals = (n: number, r0: number, r1: number, rot: number) => {
+    const step = (Math.PI * 2) / n;
+    for (let i = 0; i < n; i++) {
+      const a0 = (i + rot) * step - Math.PI / 2;
+      const a1 = a0 + step;
+      const mid = (a0 + a1) / 2;
+      out.push(
+        `M${px(r0, a0)}Q${px(r0 + (r1 - r0) * 0.55, a0 + step * 0.1)} ${px(r1, mid)}` +
+          `Q${px(r0 + (r1 - r0) * 0.55, a1 - step * 0.1)} ${px(r0, a1)}` +
+          `A${r0},${r0} 0 0 0 ${px(r0, a0)}Z`,
+      );
+    }
+  };
+  petals(12, 36, 128, 0);
+  const step = (Math.PI * 2) / 24;
+  for (let i = 0; i < 24; i++) {
+    const a0 = i * step - Math.PI / 2;
+    out.push(ringCell(128, 158, a0, a0 + step));
+  }
+  for (let i = 0; i < 24; i++) {
+    const a0 = (i + 0.5) * step - Math.PI / 2;
+    out.push(ringCell(158, 186, a0, a0 + step));
+  }
+  petals(12, 186, R, 0.5);
+  return out;
+}
+
+function kaleidoscope() {
+  const wedges = 16;
+  const radii = [42, 82, 120, 158, 198, R];
+  const step = (Math.PI * 2) / wedges;
+  const out: string[] = [circlePath(C, C, radii[0])];
+  for (let b = 1; b < radii.length; b++) {
+    const r0 = radii[b - 1];
+    const r1 = radii[b];
+    for (let k = 0; k < wedges; k++) {
+      const a0 = k * step - Math.PI / 2;
+      const a1 = a0 + step;
+      // Flip the splitting diagonal every other cell so the mesh reads as woven.
+      if ((b + k) % 2) {
+        out.push(`M${px(r1, a0)}A${r1},${r1} 0 0 1 ${px(r1, a1)}L${px(r0, a1)}Z`);
+        out.push(`M${px(r1, a0)}L${px(r0, a1)}A${r0},${r0} 0 0 0 ${px(r0, a0)}Z`);
+      } else {
+        out.push(`M${px(r1, a0)}A${r1},${r1} 0 0 1 ${px(r1, a1)}L${px(r0, a0)}Z`);
+        out.push(`M${px(r1, a1)}L${px(r0, a1)}A${r0},${r0} 0 0 0 ${px(r0, a0)}Z`);
+      }
+    }
+  }
+  return out;
+}
+
+function hexagons() {
+  const s = 25;
+  const dx = Math.sqrt(3) * s;
+  const dy = 1.5 * s;
+  const out: string[] = [];
+  for (let row = -9; row <= 9; row++) {
+    for (let col = -8; col <= 8; col++) {
+      const cx = C + col * dx + (Math.abs(row % 2) ? dx / 2 : 0);
+      const cy = C + row * dy;
+      if (Math.hypot(cx - C, cy - C) > R + s) continue;
+      const pts: [number, number][] = [];
+      for (let k = 0; k < 6; k++) {
+        const a = ((60 * k - 90) * Math.PI) / 180;
+        pts.push([cx + s * Math.cos(a), cy + s * Math.sin(a)]);
+      }
+      out.push(poly(pts));
+    }
+  }
+  return out;
+}
+
+function triangles() {
+  const w = 52;
+  const h = (w * Math.sqrt(3)) / 2;
+  const out: string[] = [];
+  for (let row = -8; row <= 8; row++) {
+    const y0 = C + row * h;
+    for (let col = -8; col <= 8; col++) {
+      const x0 = C + col * w + (Math.abs(row % 2) ? w / 2 : 0);
+      const up: [number, number][] = [[x0, y0 + h], [x0 + w, y0 + h], [x0 + w / 2, y0]];
+      const down: [number, number][] = [[x0 + w / 2, y0], [x0 + w * 1.5, y0], [x0 + w, y0 + h]];
+      for (const t of [up, down]) {
+        const gx = (t[0][0] + t[1][0] + t[2][0]) / 3;
+        const gy = (t[0][1] + t[1][1] + t[2][1]) / 3;
+        if (Math.hypot(gx - C, gy - C) > R + w) continue;
+        out.push(poly(t));
+      }
+    }
+  }
+  return out;
+}
+
+function scales() {
+  const s = 30;
+  const out: string[] = [];
+  for (let row = -9; row <= 9; row++) {
+    const cy = C + row * s;
+    for (let col = -9; col <= 9; col++) {
+      const cx = C + col * 2 * s + (Math.abs(row % 2) ? s : 0);
+      if (Math.hypot(cx - C, cy + s * 0.4 - C) > R + 2 * s) continue;
+      out.push(`M${xy(cx - s, cy)}A${s},${s} 0 0,1 ${xy(cx + s, cy)}Z`);
+    }
+  }
+  return out;
+}
+
+function spiral() {
+  // Three fat turns, not seven thin ones. A thin spiral is geometrically
+  // correct and reads as concentric circles — the offset per turn has to be
+  // big enough to see. Each turn is split across its thickness so the ribbon
+  // still has plenty of pieces to colour.
+  const thickness = 56;
+  const turns = 3;
+  const sub = 2;
+  const k = thickness / (Math.PI * 2);
+  const r0 = 12;
+  const end = turns * Math.PI * 2;
+  const at = (t: number) => r0 + k * t;
+  const out: string[] = [circlePath(C, C, r0)];
+  // Divide by arc length, not by angle. A fixed angular step puts every turn's
+  // dividers at the same bearing, and the aligned spokes read as a wheel
+  // instead of a ribbon.
+  for (let t = 0; t < end - 1e-6; ) {
+    const rMid = at(t) + thickness / 2;
+    const t1 = Math.min(t + Math.min(Math.max(46 / rMid, 0.17), 0.95), end);
+    for (let s = 0; s < sub; s++) {
+      const lo = (thickness * s) / sub;
+      const hi = (thickness * (s + 1)) / sub;
+      const fwd: string[] = [];
+      const back: string[] = [];
+      const N = 4;
+      for (let i = 0; i <= N; i++) {
+        const a = t + ((t1 - t) * i) / N;
+        fwd.push(px(at(a) + lo, a - Math.PI / 2));
+        back.push(px(at(a) + hi, a - Math.PI / 2));
+      }
+      out.push(`M${fwd.join("L")}L${back.reverse().join("L")}Z`);
+    }
+    t = t1;
+  }
+  return out;
+}
+
+function quilt() {
+  const n = 7;
+  const cell = 68;
+  const origin = C - (n * cell) / 2;
+  const out: string[] = [];
+  for (let r = 0; r < n; r++) {
+    for (let c = 0; c < n; c++) {
+      const x = origin + c * cell;
+      const y = origin + r * cell;
+      const m: [number, number] = [x + cell / 2, y + cell / 2];
+      out.push(poly([[x, y], [x + cell, y], m]));
+      out.push(poly([[x + cell, y], [x + cell, y + cell], m]));
+      out.push(poly([[x + cell, y + cell], [x, y + cell], m]));
+      out.push(poly([[x, y + cell], [x, y], m]));
+    }
+  }
+  return out;
+}
+
+function diamonds() {
+  // Sized for ~200 pieces. Tighter than this and the pattern is unreadable at
+  // thumbnail size and needlessly heavy in the DOM.
+  const d = 56;
+  const out: string[] = [];
+  for (let i = -8; i <= 8; i++) {
+    for (let j = -8; j <= 8; j++) {
+      const cx = C + (i - j) * d;
+      const cy = C + (i + j) * d * 0.62;
+      if (Math.hypot(cx - C, cy - C) > R + d) continue;
+      const top: [number, number] = [cx, cy - d * 0.62];
+      const right: [number, number] = [cx + d, cy];
+      const bot: [number, number] = [cx, cy + d * 0.62];
+      const left: [number, number] = [cx - d, cy];
+      const m: [number, number] = [cx, cy];
+      out.push(poly([top, right, m]));
+      out.push(poly([right, bot, m]));
+      out.push(poly([bot, left, m]));
+      out.push(poly([left, top, m]));
+    }
+  }
+  return out;
+}
+
+function sunburst() {
+  const out: string[] = [circlePath(C, C, 40)];
+  const step = (Math.PI * 2) / 20;
+  for (let i = 0; i < 20; i++) {
+    const a0 = i * step - Math.PI / 2;
+    out.push(ringCell(40, 78, a0, a0 + step));
+  }
+  for (let i = 0; i < 20; i++) {
+    const a0 = (i + 0.5) * step - Math.PI / 2;
+    out.push(ringCell(78, 112, a0, a0 + step));
+  }
+  // Alternating long and short rays.
+  for (let i = 0; i < 20; i++) {
+    const a0 = i * step - Math.PI / 2;
+    const mid = a0 + step / 2;
+    const tip = i % 2 ? R : 186;
+    out.push(`M${px(112, a0)}L${px(tip, mid)}L${px(112, a0 + step)}A112,112 0 0 0 ${px(112, a0)}Z`);
+  }
+  return out;
+}
+
+function flower() {
+  const out: string[] = [];
+  // Petals are wide relative to their length — narrow ones read as a spiky
+  // star, not a flower.
+  const ring = (n: number, r0: number, r1: number, w: number, rot: number, layers: number[]) => {
+    const step = (Math.PI * 2) / n;
+    for (let i = 0; i < n; i++) {
+      const a = (i + rot) * step - Math.PI / 2;
+      out.push(...bands(s => petal(a, r0, r0 + (r1 - r0) * s, w * s), layers));
+    }
+  };
+  ring(6, 46, R, 68, 0, [1, 0.72, 0.44]);
+  ring(6, 44, 174, 54, 0.5, [1, 0.66, 0.36]);
+  ring(12, 40, 100, 24, 0.25, [1, 0.55]);
+  out.push(...bands(s => circlePath(C, C, 42 * s), [1, 0.68, 0.36]));
+  return out;
+}
+
+function butterfly() {
+  const out: string[] = [];
+  const upperProf = (t: number) => 1 + 0.3 * Math.cos(t) + 0.14 * Math.cos(2 * t) - 0.07 * Math.sin(t);
+  // Keep the cos(2t) term small — a strong one pinches the wing into a peanut
+  // once the inner bands shrink.
+  const lowerProf = (t: number) => 1 + 0.22 * Math.cos(t) - 0.09 * Math.cos(2 * t) + 0.08 * Math.sin(t);
+
+  for (const side of [-1, 1]) {
+    const ux = C + side * 92;
+    const lx = C + side * 66;
+    out.push(...bands(s => blob(ux, 224, 88 * s, upperProf, -0.35, side), [1, 0.74, 0.5, 0.27]));
+    out.push(...bands(s => blob(lx, 336, 68 * s, lowerProf, 0.5, side), [1, 0.68, 0.38]));
+    // Eyespots, placed out along the wing so they sit inside the outer bands.
+    out.push(circlePath(ux + side * 46, 200, 15));
+    out.push(circlePath(ux + side * 18, 268, 11));
+    out.push(circlePath(lx + side * 22, 356, 12));
+  }
+
+  // Body, head to tail.
+  out.push(circlePath(C, 186, 21));
+  out.push(...bands(s => ellipsePath(C, 232, 23 * s, 36 * s), [1, 0.54]));
+  out.push(ellipsePath(C, 292, 18, 30));
+  out.push(ellipsePath(C, 340, 13, 24));
+
+  const decor = [
+    `M${xy(C - 9, 170)}Q${xy(C - 36, 132)} ${xy(C - 58, 118)}`,
+    `M${xy(C + 9, 170)}Q${xy(C + 36, 132)} ${xy(C + 58, 118)}`,
+    circlePath(C - 60, 116, 7),
+    circlePath(C + 60, 116, 7),
+  ];
+  return { regions: out, decor };
+}
+
+type Pattern = { name: string; regions: string[]; decor?: string[]; stroke: number; clip?: boolean };
+
+const BUILDERS: Record<string, () => Pattern> = {
+  mandala: () => ({ name: "Mandala", regions: mandala(), stroke: 1.8 }),
+  rosette: () => ({ name: "Rose window", regions: rosette(), stroke: 1.8 }),
+  kaleidoscope: () => ({ name: "Kaleidoscope", regions: kaleidoscope(), stroke: 1.5 }),
+  spiral: () => ({ name: "Spiral", regions: spiral(), stroke: 1.6 }),
+  sunburst: () => ({ name: "Sunburst", regions: sunburst(), stroke: 2 }),
+  flower: () => ({ name: "Flower", regions: flower(), stroke: 2 }),
+  butterfly: () => ({ name: "Butterfly", ...butterfly(), stroke: 2.2 }),
+  hexagons: () => ({ name: "Honeycomb", regions: hexagons(), stroke: 1.8, clip: true }),
+  triangles: () => ({ name: "Triangles", regions: triangles(), stroke: 1.5, clip: true }),
+  scales: () => ({ name: "Scales", regions: scales(), stroke: 1.8, clip: true }),
+  diamonds: () => ({ name: "Diamonds", regions: diamonds(), stroke: 1.5, clip: true }),
+  quilt: () => ({ name: "Quilt", regions: quilt(), stroke: 1.5 }),
 };
 
-type PatternKey = keyof typeof PATTERNS;
+const PATTERN_KEYS = Object.keys(BUILDERS);
+
+// ---------------------------------------------------------------- palette
+
+// Twenty-three, so the eraser completes the second row of twelve.
+const PALETTE = [
+  "#e11d48", "#f43f5e", "#fb7185", "#ea580c", "#f97316", "#f59e0b",
+  "#eab308", "#facc15", "#84cc16", "#22c55e", "#15803d", "#0d9488",
+  "#06b6d4", "#0ea5e9", "#2563eb", "#1e3a8a", "#8b5cf6", "#a855f7",
+  "#d946ef", "#ec4899", "#7c2d12", "#a8a29e", "#44403c",
+];
 
 export default function ColorFill() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [selectedPattern, setSelectedPattern] = useState<PatternKey>("mandala");
-  const [color, setColor] = useState("#3b82f6");
-  const [regions, setRegions] = useState<ImageData | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const painting = useRef(false);
+  const [key, setKey] = useState("mandala");
+  const [color, setColor] = useState("#2563eb");
+  const [fills, setFills] = useState<Record<number, string>>({});
+  const [history, setHistory] = useState<Record<number, string>[]>([]);
+
+  const pattern = useMemo(() => BUILDERS[key](), [key]);
+  const clipId = `cf-clip-${key}`;
+
+  const reset = useCallback(() => {
+    setFills({});
+    setHistory([]);
+  }, []);
 
   useEffect(() => {
-    drawPattern();
-  }, [selectedPattern]);
+    reset();
+    // On a phone the picker sits below the fold, so choosing a pattern would
+    // otherwise leave you looking at the picker instead of the pattern you
+    // just chose. "nearest" is a no-op when the canvas is already on screen.
+    svgRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [key, reset]);
 
-  const drawPattern = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
+  // Snapshot before a change so undo reverts a whole stroke, not one region.
+  const snapshot = useCallback(() => {
+    setHistory(h => [...h.slice(-39), fills]);
+  }, [fills]);
 
-    // Clear canvas
-    ctx.fillStyle = "#111827";
-    ctx.fillRect(0, 0, 512, 512);
-
-    // Draw white background for coloring
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, 512, 512);
-
-    // Draw pattern outlines
-    const pattern = PATTERNS[selectedPattern];
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 3;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    pattern.paths.forEach((pathData) => {
-      const path = new Path2D(pathData);
-      ctx.stroke(path);
+  const undo = useCallback(() => {
+    setHistory(h => {
+      if (!h.length) return h;
+      setFills(h[h.length - 1]);
+      return h.slice(0, -1);
     });
+  }, []);
 
-    // Store original image data for flood fill reference
-    setRegions(ctx.getImageData(0, 0, 512, 512));
+  const paintAt = useCallback(
+    (clientX: number, clientY: number) => {
+      const el = document.elementFromPoint(clientX, clientY);
+      const raw = el instanceof Element ? el.getAttribute("data-region") : null;
+      if (raw === null) return;
+      const i = Number(raw);
+      setFills(f => (f[i] === color ? f : { ...f, [i]: color }));
+    },
+    [color],
+  );
+
+  const onDown = (e: React.PointerEvent) => {
+    snapshot();
+    painting.current = true;
+    paintAt(e.clientX, e.clientY);
   };
 
-  const handleCanvasClick = (e: React.MouseEvent | React.TouchEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !regions) return;
+  // Drag to paint. Hit-testing via elementFromPoint rather than per-path
+  // pointerenter, because a touch drag stays captured by the first element it
+  // touched and never fires enter on its neighbours.
+  const onMove = (e: React.PointerEvent) => {
+    if (!painting.current) return;
+    paintAt(e.clientX, e.clientY);
+  };
 
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+  useEffect(() => {
+    const up = () => { painting.current = false; };
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, []);
 
-    let clientX: number, clientY: number;
-    if ("touches" in e) {
-      const touch = e.touches[0] || e.changedTouches[0];
-      clientX = touch.clientX;
-      clientY = touch.clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
+  /**
+   * Auto-colour everything on one sweep of the colour wheel. Region order is
+   * spatial in every generator (rings outward, turns of the spiral, rows of
+   * the grid), so walking hue by index lands as a coherent gradient rather
+   * than confetti.
+   */
+  const surprise = () => {
+    snapshot();
+    const base = Math.random() * 360;
+    const span = 70 + Math.random() * 250;
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    const n = pattern.regions.length;
+    const next: Record<number, string> = {};
+    for (let i = 0; i < n; i++) {
+      const t = i / n;
+      const h = (((base + dir * span * t) % 360) + 360) % 360;
+      const s = 62 + 22 * Math.sin(i * 1.7);
+      const l = 55 + 14 * Math.sin(i * 0.85);
+      next[i] = `hsl(${h.toFixed(0)} ${s.toFixed(0)}% ${l.toFixed(0)}%)`;
     }
-
-    const x = Math.floor((clientX - rect.left) * scaleX);
-    const y = Math.floor((clientY - rect.top) * scaleY);
-
-    floodFill(x, y);
+    setFills(next);
   };
 
-  const floodFill = (startX: number, startY: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
-    const imageData = ctx.getImageData(0, 0, 512, 512);
-    const data = imageData.data;
-
-    const startIdx = (startY * 512 + startX) * 4;
-    const startR = data[startIdx];
-    const startG = data[startIdx + 1];
-    const startB = data[startIdx + 2];
-
-    // Parse target color
-    const hex = color.replace("#", "");
-    const targetR = parseInt(hex.substring(0, 2), 16);
-    const targetG = parseInt(hex.substring(2, 4), 16);
-    const targetB = parseInt(hex.substring(4, 6), 16);
-
-    // Don't fill if clicking on same color or black outline
-    if (
-      (startR === targetR && startG === targetG && startB === targetB) ||
-      (startR === 0 && startG === 0 && startB === 0)
-    ) {
-      return;
-    }
-
-    const stack: Array<[number, number]> = [[startX, startY]];
-    const visited = new Set<number>();
-
-    while (stack.length > 0) {
-      const [x, y] = stack.pop()!;
-      if (x < 0 || x >= 512 || y < 0 || y >= 512) continue;
-
-      const idx = (y * 512 + x) * 4;
-      if (visited.has(idx)) continue;
-
-      const r = data[idx];
-      const g = data[idx + 1];
-      const b = data[idx + 2];
-
-      // Check if this pixel matches the start color
-      if (r !== startR || g !== startG || b !== startB) continue;
-
-      visited.add(idx);
-      data[idx] = targetR;
-      data[idx + 1] = targetG;
-      data[idx + 2] = targetB;
-
-      stack.push([x + 1, y]);
-      stack.push([x - 1, y]);
-      stack.push([x, y + 1]);
-      stack.push([x, y - 1]);
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-    setRegions(imageData);
+  const handleSave = async () => {
+    const src = svgRef.current;
+    if (!src) return;
+    const clone = src.cloneNode(true) as SVGSVGElement;
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    clone.setAttribute("width", "1024");
+    clone.setAttribute("height", "1024");
+    const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(clone))}`;
+    const img = new Image();
+    await new Promise<void>((res, rej) => {
+      img.onload = () => res();
+      img.onerror = () => rej(new Error("render failed"));
+      img.src = url;
+    });
+    const out = document.createElement("canvas");
+    out.width = 1024;
+    out.height = 1024;
+    const ctx = out.getContext("2d");
+    if (!ctx) return;
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, 1024, 1024);
+    ctx.drawImage(img, 0, 0, 1024, 1024);
+    saveImage(out.toDataURL(), `coloring-${key}.png`);
   };
 
-  const handleSave = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    saveImage(canvas.toDataURL(), `color-fill-${selectedPattern}.png`);
-  };
-
-  const COLORS = [
-    "#ef4444", "#f97316", "#eab308", "#22c55e", "#006400",
-    "#0033CC", "#6366f1", "#8b5cf6", "#ec4899", "#f43f5e",
-    "#8B4513", "#a3a3a3", "#ffffff", "#000000"
-  ];
+  const filled = Object.keys(fills).length;
+  const pill = "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors";
+  const pillOff = "bg-paper text-ink-2 border-line hover:bg-paper-2";
 
   return (
-    <div className="max-w-lg mx-auto">
-      <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <select
-          value={selectedPattern}
-          onChange={(e) => setSelectedPattern(e.target.value as PatternKey)}
-          className="bg-paper-2 text-ink-2 text-sm rounded-lg px-3 py-1.5 border border-line"
+    <div className="mx-auto w-full max-w-lg px-4 pb-8 pt-4">
+      <div className="rounded-2xl border border-line overflow-hidden" style={{ background: PAPER }}>
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${S} ${S}`}
+          className="block w-full h-auto select-none"
+          style={{ touchAction: "none" }}
+          onPointerDown={onDown}
+          onPointerMove={onMove}
         >
-          {Object.entries(PATTERNS).map(([key, pattern]) => (
-            <option key={key} value={key}>
-              {pattern.name}
-            </option>
+          <defs>
+            <clipPath id={clipId}>
+              <circle cx={C} cy={C} r={R} />
+            </clipPath>
+          </defs>
+          <rect x="0" y="0" width={S} height={S} fill={PAPER} />
+          <g clipPath={pattern.clip ? `url(#${clipId})` : undefined}>
+            {pattern.regions.map((d, i) => (
+              <path
+                key={i}
+                d={d}
+                data-region={i}
+                fill={fills[i] ?? PAPER}
+                fillRule="evenodd"
+                stroke={INK}
+                strokeWidth={pattern.stroke}
+                strokeLinejoin="round"
+                style={{ cursor: "pointer" }}
+              />
+            ))}
+          </g>
+          {pattern.clip && (
+            <circle cx={C} cy={C} r={R} fill="none" stroke={INK} strokeWidth={pattern.stroke * 1.4} />
+          )}
+          {pattern.decor?.map((d, i) => (
+            <path
+              key={`d${i}`}
+              d={d}
+              fill="none"
+              stroke={INK}
+              strokeWidth={pattern.stroke}
+              strokeLinecap="round"
+              style={{ pointerEvents: "none" }}
+            />
           ))}
-        </select>
+        </svg>
+      </div>
+
+      <div className="mt-3 flex items-center gap-2">
         <button
-          onClick={drawPattern}
-          className="px-3 py-1.5 text-sm bg-paper-2 text-ink-2 hover:bg-paper-2 rounded-lg"
+          type="button"
+          onClick={surprise}
+          className="flex-1 py-3 rounded-full text-base font-semibold text-paper transition-transform active:scale-[0.98]"
+          style={{ background: "var(--accent)" }}
         >
-          Reset
+          Surprise colours
         </button>
-        <button
-          onClick={handleSave}
-          className="px-3 py-1.5 text-sm bg-purple-500 hover:bg-purple-600 text-ink rounded-lg ml-auto"
-        >
+        <button type="button" onClick={undo} disabled={!history.length} className={`${pill} ${pillOff} py-3 disabled:opacity-40`}>
+          Undo
+        </button>
+        <button type="button" onClick={reset} disabled={!filled} className={`${pill} ${pillOff} py-3 disabled:opacity-40`}>
+          Clear
+        </button>
+        <button type="button" onClick={handleSave} className={`${pill} ${pillOff} py-3`}>
           Save
         </button>
       </div>
 
-      <div className="flex gap-1.5 mb-3 flex-wrap">
-        {COLORS.map((c) => (
+      <p className="mt-2 text-center font-mono text-[11px] text-ink-3">
+        {pattern.name} · {pattern.regions.length} pieces · {filled} coloured
+      </p>
+
+      <div className="mt-5">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-ink-3 mb-2">Colour</p>
+        <div className="flex flex-wrap gap-1.5">
+          {PALETTE.map(c => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setColor(c)}
+              aria-label={`Colour ${c}`}
+              aria-pressed={color === c}
+              className={`w-8 h-8 rounded-full border-2 transition-transform ${color === c ? "scale-110" : ""}`}
+              style={{ backgroundColor: c, borderColor: color === c ? "var(--accent)" : "var(--line)" }}
+            />
+          ))}
           <button
-            key={c}
-            onClick={() => setColor(c)}
-            className={`w-7 h-7 rounded-md border-2 transition-transform ${color === c ? "border-white scale-110" : "border-line"}`}
-            style={{ backgroundColor: c }}
-          />
-        ))}
+            type="button"
+            onClick={() => setColor(PAPER)}
+            aria-label="Eraser"
+            aria-pressed={color === PAPER}
+            className={`w-8 h-8 rounded-full border-2 text-[10px] transition-transform ${color === PAPER ? "scale-110" : ""}`}
+            style={{ backgroundColor: PAPER, borderColor: color === PAPER ? "var(--accent)" : "var(--line)" }}
+          >
+            ⌫
+          </button>
+        </div>
       </div>
 
-      <canvas
-        ref={canvasRef}
-        width={512}
-        height={512}
-        className="w-full aspect-square rounded-xl border border-line cursor-pointer touch-none"
-        onClick={handleCanvasClick}
-        onTouchStart={handleCanvasClick}
-      />
-
-      <p className="text-xs text-ink-3 text-center mt-3">
-        Tap or click a region to fill it with the selected color
-      </p>
+      <div className="mt-5">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-ink-3 mb-2">Pattern</p>
+        <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+          {PATTERN_KEYS.map(k => (
+            <PatternThumb key={k} id={k} selected={k === key} onSelect={() => setKey(k)} />
+          ))}
+        </div>
+      </div>
     </div>
+  );
+}
+
+/**
+ * Thumbnails render to a small canvas rather than nested SVGs: twelve previews
+ * of two-hundred-path patterns would put thousands of extra nodes in the DOM
+ * for something the size of a postage stamp.
+ */
+function PatternThumb({ id, selected, onSelect }: { id: string; selected: boolean; onSelect: () => void }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const p = BUILDERS[id]();
+    setName(p.name);
+    const size = canvas.width;
+    ctx.clearRect(0, 0, size, size);
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, size, size);
+    ctx.save();
+    ctx.scale(size / S, size / S);
+    if (p.clip) {
+      ctx.beginPath();
+      ctx.arc(C, C, R, 0, Math.PI * 2);
+      ctx.clip();
+    }
+    ctx.strokeStyle = INK;
+    ctx.lineWidth = Math.max(1.6, p.stroke) * (S / size) * 1.6;
+    ctx.lineJoin = "round";
+    for (const d of p.regions) ctx.stroke(new Path2D(d));
+    ctx.restore();
+    if (p.clip) {
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, (R / S) * size, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }, [id]);
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-label={name}
+      aria-pressed={selected}
+      className={`rounded-xl border p-1 transition-colors ${selected ? "border-transparent bg-paper-2" : "border-line hover:bg-paper-2"}`}
+      style={selected ? { outline: "2px solid var(--accent)", outlineOffset: "-2px" } : undefined}
+    >
+      <canvas ref={ref} width={128} height={128} className="w-full h-auto rounded-lg" />
+      <span className={`block mt-0.5 font-mono text-[9px] truncate ${selected ? "text-ink" : "text-ink-3"}`}>{name}</span>
+    </button>
   );
 }

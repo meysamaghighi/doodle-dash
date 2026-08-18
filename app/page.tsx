@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CrossPromoCard } from "./components/CrossPromo";
 import DailyBanner from "./components/DailyBanner";
+import { GAME_ICONS } from "./components/GameIcons";
 
 export const metadata: Metadata = {
   title: "DoodleLab - Free Drawing Challenges & Creative Games",
@@ -26,107 +27,49 @@ const gameCategories = [
         href: "/robot-draw",
         label: "Robot Draw",
         description: "Draw anything and a robot guesses it, stroke by stroke.",
-        color: "from-violet-500 to-fuchsia-600",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <rect x="4" y="7" width="16" height="12" rx="3" strokeWidth={1.5} />
-            <circle cx="9" cy="13" r="1.6" fill="currentColor" stroke="none" />
-            <circle cx="15" cy="13" r="1.6" fill="currentColor" stroke="none" />
-            <path strokeLinecap="round" strokeWidth={1.5} d="M12 7V4M9.5 22h5" />
-            <circle cx="12" cy="3" r="1.2" fill="currentColor" stroke="none" />
-          </svg>
-        ),
+        color: "from-cyan-400 to-indigo-600",
       },
       {
         href: "/kaleidoscope",
         label: "Kaleidoscope",
-        description: "Draw and watch it reflect in beautiful 4-12 way symmetry.",
-        color: "from-purple-500 to-pink-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l2 7h7l-5.5 4.5L17 21l-5-4-5 4 1.5-6.5L3 10h7l2-7z" />
-            <circle cx="12" cy="12" r="3" strokeWidth={1.5} />
-          </svg>
-        ),
+        description: "Every stroke is rotated and mirrored into 4-12 wedges at once.",
+        color: "from-fuchsia-500 to-violet-600",
       },
       {
         href: "/symmetry",
         label: "Symmetry Draw",
-        description: "Draw on the left and watch it mirror on the right in real-time.",
-        color: "from-blue-500 to-cyan-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18 M9 7l-4 5 4 5 M15 7l4 5-4 5" />
-          </svg>
-        ),
+        description: "Your stroke repeats around the centre in 4, 6, 8 or 12-way symmetry.",
+        color: "from-sky-500 to-blue-600",
       },
       {
         href: "/mirror-draw",
         label: "Mirror Draw",
-        description: "Draw on one side and watch it mirror in real time.",
-        color: "from-cyan-500 to-blue-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v18" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l-4 5 4 5" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7l4 5-4 5" />
-          </svg>
-        ),
+        description: "Reflect your strokes across a vertical, horizontal or four-way axis.",
+        color: "from-teal-500 to-cyan-600",
       },
       {
         href: "/color-fill",
         label: "Color Fill",
-        description: "Fill line-art patterns with colors by tapping regions.",
-        color: "from-purple-500 to-pink-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-          </svg>
-        ),
+        description: "Tap or drag to colour in twelve generated line-art patterns.",
+        color: "from-rose-500 to-orange-500",
       },
       {
         href: "/pixel-art",
         label: "Pixel Art",
         description: "Create pixel art on a grid with a full color palette.",
-        color: "from-purple-500 to-pink-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="3" y="3" width="4" height="4" rx="0.5" />
-            <rect x="10" y="3" width="4" height="4" rx="0.5" />
-            <rect x="17" y="3" width="4" height="4" rx="0.5" />
-            <rect x="3" y="10" width="4" height="4" rx="0.5" />
-            <rect x="10" y="10" width="4" height="4" rx="0.5" />
-            <rect x="17" y="10" width="4" height="4" rx="0.5" />
-            <rect x="3" y="17" width="4" height="4" rx="0.5" />
-            <rect x="10" y="17" width="4" height="4" rx="0.5" />
-            <rect x="17" y="17" width="4" height="4" rx="0.5" />
-          </svg>
-        ),
+        color: "from-amber-500 to-orange-600",
       },
       {
         href: "/gradient-paint",
         label: "Gradient Paint",
-        description: "Paint with beautiful gradient brushes. Create colorful art!",
-        color: "from-pink-500 to-purple-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485" />
-            <circle cx="7" cy="17" r="1" fill="currentColor" />
-          </svg>
-        ),
+        description: "Paint with soft gradient brushes. Create colorful art!",
+        color: "from-pink-500 to-purple-600",
       },
       {
         href: "/spirograph",
         label: "Spirograph",
-        description: "Draw gear-in-gear curves with adjustable ring, gear, and pen offset.",
-        color: "from-violet-500 to-indigo-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="9" strokeWidth={1.5} />
-            <circle cx="12" cy="8" r="3.2" strokeWidth={1.5} />
-            <circle cx="12" cy="8" r="0.6" fill="currentColor" />
-          </svg>
-        ),
+        description: "Roll a toothed wheel around a ring and watch it draw.",
+        color: "from-indigo-500 to-violet-600",
       },
     ],
   },
@@ -137,110 +80,55 @@ const gameCategories = [
         href: "/speed-sketch",
         label: "Speed Sketch",
         description: "Draw the prompt as fast as you can in 30 seconds!",
-        color: "from-orange-500 to-red-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-          </svg>
-        ),
+        color: "from-orange-500 to-red-600",
       },
       {
         href: "/memory-draw",
         label: "Memory Draw",
         description: "Study a shape, then draw it from memory.",
-        color: "from-green-500 to-emerald-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-          </svg>
-        ),
+        color: "from-emerald-500 to-green-700",
       },
       {
         href: "/blind-draw",
         label: "Blind Draw",
         description: "The canvas is hidden while you draw. Reveal at the end!",
-        color: "from-red-500 to-rose-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18" />
-          </svg>
-        ),
+        color: "from-slate-600 to-slate-900",
       },
       {
         href: "/dot-connect",
         label: "Dot Connect",
         description: "Connect numbered dots in order as fast as you can!",
-        color: "from-cyan-500 to-blue-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="4" cy="4" r="2" fill="currentColor" />
-            <circle cx="20" cy="8" r="2" fill="currentColor" />
-            <circle cx="12" cy="20" r="2" fill="currentColor" />
-            <path strokeLinecap="round" strokeWidth={1.5} d="M5.5 5l13 2.5M19 9.5L13 19" />
-          </svg>
-        ),
+        color: "from-cyan-500 to-blue-600",
       },
       {
         href: "/trace-master",
         label: "Trace Master",
         description: "Trace over ghost shapes as accurately as possible.",
-        color: "from-green-500 to-emerald-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} strokeDasharray="3 3" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2l3.09 6.26L22 9.27" opacity="0.5" />
-          </svg>
-        ),
+        color: "from-lime-500 to-emerald-600",
       },
       {
         href: "/one-line",
         label: "One Line",
         description: "Draw without lifting your pen. One continuous stroke.",
-        color: "from-yellow-500 to-orange-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 17c3-6 6 2 9-4s6 2 9-4" />
-          </svg>
-        ),
+        color: "from-yellow-500 to-amber-600",
       },
       {
         href: "/spiral-draw",
         label: "Spiral Draw",
         description: "Draw a smooth spiral from center outward. How perfect can you get?",
-        color: "from-indigo-500 to-purple-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" opacity="0.3" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6c-3.314 0-6 2.686-6 6s2.686 6 6 6" />
-          </svg>
-        ),
+        color: "from-violet-500 to-indigo-700",
       },
       {
         href: "/sketch-copy",
         label: "Sketch Copy",
         description: "Copy the reference shape as accurately as you can. 5 levels!",
-        color: "from-teal-500 to-cyan-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-        ),
+        color: "from-teal-600 to-sky-700",
       },
       {
         href: "/shape-builder",
         label: "Shape Builder",
         description: "Combine circles, squares, triangles to build images. 10 levels!",
-        color: "from-pink-500 to-rose-500",
-        icon: (
-          <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="8" cy="8" r="3" strokeWidth={1.5} />
-            <rect x="14" y="5" width="6" height="6" strokeWidth={1.5} />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16l3 5 3-5z" />
-          </svg>
-        ),
+        color: "from-rose-500 to-pink-700",
       },
     ],
   },
@@ -307,7 +195,7 @@ export default function Home() {
                   <div
                     className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br ${game.color} text-white mb-2`}
                   >
-                    {game.icon}
+                    {GAME_ICONS[game.href]}
                   </div>
                   <h3 className="text-sm sm:text-base font-bold mb-1 text-ink">{game.label}</h3>
                   <p className="text-ink-2 text-xs hidden sm:block">{game.description}</p>
