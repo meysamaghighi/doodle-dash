@@ -26,11 +26,11 @@ function downloadItem(item: GalleryItem) {
 }
 
 export default function GalleryView() {
-  const { state, removeDrawing } = useProgress();
-  const [hydrated, setHydrated] = useState(false);
+  const { state, removeDrawing, galleryReady } = useProgress();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setHydrated(true);
+    setMounted(true);
   }, []);
 
   // Newest first
@@ -38,7 +38,11 @@ export default function GalleryView() {
     b.createdAt.localeCompare(a.createdAt)
   );
 
-  if (!hydrated) {
+  // Gallery images now load asynchronously from IndexedDB (see
+  // app/lib/gallery-store.ts), so `mounted` alone (which only guards SSR)
+  // is no longer enough to know the list is final — wait for `galleryReady`
+  // too, otherwise a kid with saved drawings briefly sees "Empty for now."
+  if (!mounted || !galleryReady) {
     return (
       <main className="max-w-5xl mx-auto px-4 py-12">
         <p className="font-mono text-xs uppercase tracking-wider text-ink-3">
