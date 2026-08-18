@@ -13,20 +13,16 @@ import type { CompiledModel, Point, Prediction, Strokes } from "../lib/quickdraw
 // eagerly-loaded bundle. See ensureModelLoaded() for the actual import().
 type QuickdrawModule = typeof import("../lib/quickdraw");
 
-// The original prompt pool was hand-written and almost certainly contains
-// words the on-device recogniser was never trained on (e.g. "ghost",
-// "robot") -- prompting for one of those would make the game unwinnable, no
-// matter how well a kid draws. DAILY_WORDS is exactly the model's 100
-// category list (see app/lib/daily-word.ts), so intersecting against it
-// keeps this pool automatically correct even if that list changes later.
-const ALL_PROMPTS = [
-  "cat", "house", "tree", "sun", "car", "fish", "star", "heart", "flower",
-  "rocket", "pizza", "ghost", "robot", "mountain", "boat", "umbrella",
-  "guitar", "crown", "cactus", "snowman", "bicycle", "butterfly", "mushroom",
-  "whale", "castle", "lightning", "alien", "cupcake", "dragon", "penguin",
-];
-const RECOGNISABLE_WORDS = new Set<string>(DAILY_WORDS);
-const PROMPTS = ALL_PROMPTS.filter((w) => RECOGNISABLE_WORDS.has(w));
+// The old pool was 30 hand-written words, and a third of them ("ghost",
+// "robot", "alien", "castle") are things the recogniser was never trained on
+// — prompting for one would be unwinnable however well a kid draws.
+//
+// Intersecting the old list against the model would have left just 19 words,
+// making an already-repetitive game more repetitive. But the model is the
+// richer source here, not the constraint: DAILY_WORDS is exactly its 100
+// curated kid-safe categories, so drawing prompts straight from it more than
+// triples the variety AND guarantees every prompt is winnable.
+const PROMPTS: readonly string[] = DAILY_WORDS;
 
 type Phase = "ready" | "drawing" | "done";
 type ModelState = "idle" | "loading" | "ready" | "error";
