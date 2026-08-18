@@ -1,173 +1,171 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import DrawPad, { type DrawPadHandle, type Point } from "../robot-draw/DrawPad";
+import RobotSays from "../robot-draw/RobotSays";
+import { useRobot, type Guess } from "../robot-draw/useRobot";
 import { useProgress } from "../hooks/useProgress";
-import { generateShareCard, shareCard } from "../lib/shareCard";
+import { UNLOCKS, type UnlockDef } from "../lib/artbox";
+import { dayKey, wordForDay } from "../lib/daily-word";
 
-type Prompt = {
-  noun: string;
-  qualifier: string;
-};
-
-const POOL: Prompt[] = [
-  { noun: "cat",         qualifier: "wearing a hat." },
-  { noun: "robot",       qualifier: "in love." },
-  { noun: "dragon",      qualifier: "drinking tea." },
-  { noun: "spaceship",   qualifier: "made of cheese." },
-  { noun: "monster",     qualifier: "under a bed." },
-  { noun: "dinosaur",    qualifier: "on a skateboard." },
-  { noun: "pirate ship", qualifier: "in a bathtub." },
-  { noun: "wizard",      qualifier: "lost at the mall." },
-  { noun: "octopus",     qualifier: "playing chess." },
-  { noun: "ghost",       qualifier: "doing yoga." },
-  { noun: "alien",       qualifier: "on vacation." },
-  { noun: "robot dog",   qualifier: "fetching the moon." },
-  { noun: "house",       qualifier: "with chicken legs." },
-  { noun: "snowman",     qualifier: "on fire." },
-  { noun: "knight",      qualifier: "afraid of the dark." },
-  { noun: "panda",       qualifier: "running a coffee shop." },
-  { noun: "tornado",     qualifier: "made of frogs." },
-  { noun: "submarine",   qualifier: "on a mountain." },
-  { noun: "vampire",     qualifier: "at the beach." },
-  { noun: "skeleton",    qualifier: "throwing a party." },
-  { noun: "tree",        qualifier: "with feelings." },
-  { noun: "fish",        qualifier: "riding a bicycle." },
-  { noun: "robot king",  qualifier: "made of toast." },
-  { noun: "rainbow",     qualifier: "going the wrong way." },
-  { noun: "sandwich",    qualifier: "with too many secrets." },
-  { noun: "mountain",    qualifier: "wearing a sweater." },
-  { noun: "bear",        qualifier: "writing a novel." },
-  { noun: "bird",        qualifier: "running for mayor." },
-  { noun: "cloud",       qualifier: "with a job." },
-  { noun: "moon",        qualifier: "on a coffee break." },
-];
-
-function todayKey(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
-
-function daySeed(dateKey: string): number {
-  let hash = 0;
-  for (let i = 0; i < dateKey.length; i++) {
-    hash = ((hash << 5) - hash + dateKey.charCodeAt(i)) | 0;
-  }
-  return Math.abs(hash);
-}
-
-function todayPrompt(dateKey: string): Prompt {
-  const seed = daySeed(dateKey);
-  return POOL[seed % POOL.length];
-}
-
-function formatToday(): string {
-  const d = new Date();
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  return `${d.getDate()} ${months[d.getMonth()]}`;
-}
+/**
+ * The robot only has to *see* it, not be certain. Requiring the target as the
+ * outright top guess makes the challenge brittle — a child's dragon is a hard
+ * drawing, and 100-way top-1 is 72% even on adult reference doodles. Landing
+ * in the top three is a fair, winnable bar that still means the drawing really
+ * does read as the thing.
+ */
+const WIN_RANK = 3;
 
 export default function DailyPrompt() {
-  const { state, bumpStreak } = useProgress();
-  const [hydrated, setHydrated] = useState(false);
-  const dateKey = todayKey();
-  const prompt = todayPrompt(dateKey);
+  const padRef = useRef<DrawPadHandle>(null);
+  const { state, load, guess } = useRobot();
+  const { state: progress, completeDaily, saveDrawing } = useProgress();
 
+  const [word, setWord] = useState<string | null>(null);
+  const [today, setToday] = useState<string | null>(null);
+  const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [wonAt, setWonAt] = useState<number | null>(null);
+  const [unlocked, setUnlocked] = useState<UnlockDef[]>([]);
+  // Whether this win is what earned today's sticker. Has to be captured at win
+  // time: `alreadyDone` is derived from state that completeDaily has, by the
+  // time we render, already updated — so reading it afterwards always says yes.
+  const [earnedSticker, setEarnedSticker] = useState(false);
+  const startedAt = useRef<number | null>(null);
+
+  // Resolve the date client-side: the word is a function of the *viewer's*
+  // UTC day, and prerendering it on the server would freeze yesterday's word
+  // into the static HTML.
   useEffect(() => {
-    setHydrated(true);
+    setWord(wordForDay());
+    setToday(dayKey());
   }, []);
 
-  const drewToday = hydrated && state.streak.lastDate === dateKey;
-  const streakCount = hydrated ? state.streak.count : 0;
+  useEffect(() => {
+    void load();
+  }, [load]);
 
-  const handleStart = () => {
-    bumpStreak();
+  const alreadyDone = today !== null && progress.artbox.completedDates.includes(today);
+  const stickers = progress.artbox.completedDates.length;
+  const next = UNLOCKS.find(u => u.threshold > stickers);
+
+  const onStrokesChange = useCallback(
+    (strokes: Point[][]) => {
+      if (startedAt.current === null && strokes.length) startedAt.current = Date.now();
+      const g = guess(strokes);
+      setGuesses(g);
+
+      if (wonAt !== null || !word) return;
+      const rank = g.findIndex(x => x.label === word);
+      if (rank >= 0 && rank < WIN_RANK) {
+        const secs = startedAt.current ? (Date.now() - startedAt.current) / 1000 : 0;
+        setWonAt(secs);
+        setEarnedSticker(!alreadyDone);
+        const url = padRef.current?.toDataURL();
+        if (url) saveDrawing("daily", url);
+        const { newlyUnlocked } = completeDaily(today ?? undefined);
+        setUnlocked(newlyUnlocked);
+      }
+    },
+    [guess, word, wonAt, today, alreadyDone, completeDaily, saveDrawing],
+  );
+
+  const retry = () => {
+    padRef.current?.clear();
+    setGuesses([]);
+    setWonAt(null);
+    startedAt.current = null;
   };
 
-  const handleShare = async () => {
-    const dataUrl = generateShareCard({
-      headline: `${streakCount}-day streak`,
-      subline: `Today's prompt · Draw a ${prompt.noun}`,
-    });
-    if (!dataUrl) return;
-    await shareCard(dataUrl, `doodlelab-streak-${streakCount}.png`);
-  };
+  const pill = "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors";
+  const pillOff = "bg-paper text-ink-2 border-line hover:bg-paper-2";
+
+  if (!word || !today) {
+    return <div className="mx-auto w-full max-w-lg px-4 py-16 text-center text-ink-3">Loading today&apos;s word…</div>;
+  }
 
   return (
-    <main className="max-w-5xl mx-auto px-4 pt-6 pb-12">
-      <section
-        className="relative overflow-hidden rounded-3xl border border-line p-8 sm:p-12"
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(0.96 0.04 80) 0%, oklch(0.94 0.04 25) 100%)",
-        }}
-      >
-        <p className="font-mono text-xs uppercase tracking-wider text-ink-3">
-          Today&apos;s Prompt · {formatToday()}
+    <div className="mx-auto w-full max-w-lg px-4 pb-8 pt-4">
+      <div className="text-center">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-ink-3">
+          {alreadyDone && wonAt === null ? "You already did today's" : "Today's challenge"}
         </p>
+        <h2 className="font-display text-4xl sm:text-5xl text-ink mt-1" style={{ fontWeight: 700 }}>
+          {word}
+        </h2>
+        <p className="mt-1 text-sm text-ink-2">Can you make the robot see it?</p>
+      </div>
 
-        <h1
-          className="font-display text-ink mt-2"
-          style={{ fontSize: "clamp(64px, 11vw, 120px)", fontWeight: 700, lineHeight: 0.9 }}
-        >
-          Draw a {prompt.noun}
-          <br />
-          <span style={{ color: "var(--accent)" }}>{prompt.qualifier}</span>
-        </h1>
+      <div className="mt-4">
+        <DrawPad ref={padRef} onStrokesChange={onStrokesChange} />
+      </div>
 
-        <p className="text-ink-2 text-base sm:text-lg mt-5 max-w-md">
-          A new prompt every day. 60 seconds, no eraser. Share your doodle, see
-          what others made.
-        </p>
+      <div className="mt-3">
+        <RobotSays
+          state={state}
+          guesses={guesses}
+          won={wonAt !== null}
+          idleHint={`Draw a ${word} and I'll try to guess it!`}
+        />
+      </div>
 
-        <div className="flex flex-wrap items-center gap-3 mt-8">
-          <Link
-            href="/speed-sketch"
-            onClick={handleStart}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-paper transition-opacity hover:opacity-90"
-            style={{ background: "var(--ink)", fontSize: 15 }}
-          >
-            {drewToday ? "Draw it again →" : "Start drawing →"}
-          </Link>
-          <Link
-            href="/"
-            className="px-5 py-3 rounded-full text-sm text-ink-2 border border-line hover:bg-paper-2 transition-colors"
-          >
-            Skip · pick a tool
-          </Link>
-          <div
-            className="px-4 py-3 rounded-full text-sm text-ink-2"
-            style={{ background: "rgba(19,26,42,0.06)" }}
-          >
-            Streak ·{" "}
-            <span className="font-bold text-ink">
-              {streakCount} {streakCount === 1 ? "day" : "days"}
-            </span>
-          </div>
-          {streakCount >= 1 && (
-            <button
-              type="button"
-              onClick={handleShare}
-              className="px-5 py-3 rounded-full text-sm text-ink-2 border border-line hover:bg-paper-2 transition-colors"
-            >
-              Share streak
-            </button>
+      {wonAt !== null && (
+        <div className="mt-3 rounded-2xl border border-line bg-paper-2 p-4 text-center">
+          <p className="font-display text-2xl text-ink" style={{ fontWeight: 700 }}>
+            Got it in {wonAt.toFixed(1)}s!
+          </p>
+          <p className="mt-1 text-sm text-ink-2">
+            {earnedSticker
+              ? `Sticker earned. That's ${stickers} day${stickers === 1 ? "" : "s"}.`
+              : "Already counted for today — but that's a better one."}
+          </p>
+          <p className="mt-1 text-xs text-ink-3">Keep drawing if you want to finish your picture.</p>
+          {unlocked.length > 0 && (
+            <p className="mt-2 font-medium" style={{ color: "var(--accent)" }}>
+              🎁 Unlocked: {unlocked.map(u => u.label).join(", ")}
+            </p>
           )}
+          <div className="mt-3 flex justify-center gap-2">
+            <button type="button" onClick={retry} className={`${pill} ${pillOff}`}>
+              Draw it again
+            </button>
+            <Link href="/gallery" className={`${pill} ${pillOff}`}>
+              See your drawings
+            </Link>
+          </div>
         </div>
+      )}
 
-        <p
-          className="font-display mt-6 text-ink-3"
-          style={{ fontSize: 22, fontWeight: 500 }}
-        >
-          ↑ no account · your art stays in your browser
-        </p>
-      </section>
+      <div className="mt-4 flex items-center gap-2 flex-wrap">
+        <button type="button" onClick={() => padRef.current?.undo()} className={`${pill} ${pillOff}`}>
+          Undo
+        </button>
+        <button type="button" onClick={retry} className={`${pill} ${pillOff}`}>
+          Start over
+        </button>
+        <Link href="/robot-draw" className={`${pill} ${pillOff} ml-auto`}>
+          Free draw →
+        </Link>
+      </div>
 
-      <section className="mt-10 text-center">
-        <p className="text-sm text-ink-3">
-          Today&apos;s prompt is the same for everyone, every day.
+      <div className="mt-6 rounded-2xl border border-line bg-paper-2 p-4">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-ink-3">Your art box</p>
+        <p className="mt-1 text-ink">
+          <span className="font-display text-2xl" style={{ fontWeight: 700 }}>{stickers}</span>
+          <span className="text-sm text-ink-2"> sticker{stickers === 1 ? "" : "s"}</span>
         </p>
-      </section>
-    </main>
+        {next ? (
+          <p className="mt-1 text-sm text-ink-2">
+            {next.threshold - stickers} more to unlock <strong className="text-ink">{next.label}</strong>.
+          </p>
+        ) : (
+          <p className="mt-1 text-sm text-ink-2">Everything unlocked. You legend.</p>
+        )}
+        <p className="mt-2 font-mono text-[11px] text-ink-3">
+          Miss a day and you lose nothing — stickers only ever add up.
+        </p>
+      </div>
+    </div>
   );
 }

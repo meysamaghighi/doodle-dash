@@ -105,6 +105,20 @@ const PIXELS: [number, number, boolean][] = [
 ];
 
 export const GAME_ICONS: Record<string, ReactNode> = {
+  // A robot that looks back at you. Nothing else in the grid is a character,
+  // so it reads as the odd one out at a glance — which it is.
+  "/robot-draw": (
+    <Icon>
+      <rect x="3.4" y="7.6" width="17.2" height="12.4" rx="3.4" strokeWidth={1.5} />
+      <circle cx="9" cy="13.4" r="1.7" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="13.4" r="1.7" fill="currentColor" stroke="none" />
+      <path d="M9.6 17.2h4.8" strokeWidth={1.4} opacity={0.75} />
+      <path d="M12 7.6V4.6" strokeWidth={1.5} />
+      <circle cx="12" cy="3.3" r="1.4" fill="currentColor" stroke="none" />
+      <path d="M1.6 12.4v2.8M22.4 12.4v2.8" strokeWidth={1.4} opacity={0.7} />
+    </Icon>
+  ),
+
   // Rotated AND mirrored wedges, seen down the tube. The enclosing circle is
   // what keeps this from reading as the same radial mark as Symmetry Draw.
   "/kaleidoscope": (
