@@ -10,21 +10,32 @@
  * `assertWordsAreRecognisable` enforces that against the shipped manifest.
  */
 
-/** Words the robot knows, picked for being fun and drawable by a child. */
+/**
+ * The challenge words ARE the model's categories, in its own index order.
+ *
+ * This list used to be hand-written and drifted: 34 of its words were never
+ * trained on, so a third of days would have been unwinnable — the robot could
+ * not have recognised them however well the child drew. Regenerate with
+ * scripts/quickdraw/sync_daily_words.py rather than editing by hand.
+ */
 export const DAILY_WORDS = [
-  "cat", "dog", "house", "tree", "car", "fish", "bird", "flower", "sun", "star",
-  "boat", "apple", "butterfly", "elephant", "rocket", "crown", "cake", "hat",
-  "moon", "cloud", "umbrella", "guitar", "bicycle", "snowman", "penguin",
-  "octopus", "owl", "rainbow", "ice cream", "pizza", "key", "ladder", "mushroom",
-  "lion", "frog", "duck", "crab", "whale", "shark", "spider", "snail", "bee",
-  "camel", "giraffe", "horse", "monkey", "panda", "rabbit", "sheep", "pig",
-  "castle", "bridge", "lighthouse", "windmill", "tent", "train", "bus",
-  "airplane", "helicopter", "submarine", "anchor", "sailboat", "kite",
-  "balloon", "candle", "clock", "book", "pencil", "scissors", "cup", "shoe",
-  "sock", "shirt", "glasses", "backpack", "basket", "broom", "chair", "door",
-  "envelope", "eye", "hand", "leaf", "lightning", "mountain", "river",
-  "cactus", "carrot", "banana", "strawberry", "donut", "cookie", "lollipop",
-  "drums", "piano", "trumpet", "violin", "swan", "dolphin", "dragon", "hedgehog",
+  "ant", "bear", "bee", "bird", "butterfly", "camel",
+  "cat", "cow", "crab", "crocodile", "dog", "dolphin",
+  "dragon", "duck", "elephant", "fish", "flamingo", "frog",
+  "giraffe", "hedgehog", "horse", "kangaroo", "lion", "mermaid",
+  "monkey", "octopus", "owl", "panda", "parrot", "penguin",
+  "pig", "rabbit", "raccoon", "sea turtle", "shark", "sheep",
+  "snail", "snake", "squirrel", "swan", "tiger", "whale",
+  "zebra", "apple", "banana", "birthday cake", "bread", "broccoli",
+  "cake", "carrot", "cookie", "donut", "grapes", "hamburger",
+  "hot dog", "ice cream", "peanut", "pineapple", "pizza", "popsicle",
+  "sandwich", "strawberry", "watermelon", "airplane", "bicycle", "bus",
+  "car", "firetruck", "helicopter", "hot air balloon", "motorbike", "sailboat",
+  "school bus", "train", "truck", "cactus", "cloud", "flower",
+  "leaf", "lightning", "moon", "mountain", "rain", "rainbow",
+  "snowflake", "star", "sun", "tree", "book", "chair",
+  "clock", "crown", "cup", "door", "envelope", "eyeglasses",
+  "hat", "house", "key", "umbrella",
 ] as const;
 
 export type DailyWord = (typeof DAILY_WORDS)[number];
