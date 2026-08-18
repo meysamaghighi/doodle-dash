@@ -4,15 +4,32 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { saveImage } from "../utils/saveImage";
 import { getDrawingStats } from "../utils/canvasStats";
 import { usePersonalBest } from "../hooks/usePersonalBest";
+import { DAILY_WORDS } from "../lib/daily-word";
+import type { CompiledModel, Point, Prediction, Strokes } from "../lib/quickdraw";
 
-const PROMPTS = [
+// The type of the quickdraw module's exports, used only to type the ref that
+// holds the dynamically-imported module -- this line has zero runtime cost
+// (erased by TypeScript) and does NOT pull the model into this route's
+// eagerly-loaded bundle. See ensureModelLoaded() for the actual import().
+type QuickdrawModule = typeof import("../lib/quickdraw");
+
+// The original prompt pool was hand-written and almost certainly contains
+// words the on-device recogniser was never trained on (e.g. "ghost",
+// "robot") -- prompting for one of those would make the game unwinnable, no
+// matter how well a kid draws. DAILY_WORDS is exactly the model's 100
+// category list (see app/lib/daily-word.ts), so intersecting against it
+// keeps this pool automatically correct even if that list changes later.
+const ALL_PROMPTS = [
   "cat", "house", "tree", "sun", "car", "fish", "star", "heart", "flower",
   "rocket", "pizza", "ghost", "robot", "mountain", "boat", "umbrella",
   "guitar", "crown", "cactus", "snowman", "bicycle", "butterfly", "mushroom",
   "whale", "castle", "lightning", "alien", "cupcake", "dragon", "penguin",
 ];
+const RECOGNISABLE_WORDS = new Set<string>(DAILY_WORDS);
+const PROMPTS = ALL_PROMPTS.filter((w) => RECOGNISABLE_WORDS.has(w));
 
 type Phase = "ready" | "drawing" | "done";
+type ModelState = "idle" | "loading" | "ready" | "error";
 
 export default function SpeedSketch() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -26,11 +43,59 @@ export default function SpeedSketch() {
   const drawing = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
 
+  // Recogniser state. Kept separate from `stats`/`pb` above so a model that
+  // fails to load never touches the scoring the game already had.
+  const [modelState, setModelState] = useState<ModelState>("idle");
+  const quickdrawRef = useRef<QuickdrawModule | null>(null);
+  const modelRef = useRef<CompiledModel | null>(null);
+  const [liveGuess, setLiveGuess] = useState<Prediction[] | null>(null);
+  const [recognisedAt, setRecognisedAt] = useState<number | null>(null);
+  const recognisedRef = useRef(false);
+  const strokesRef = useRef<Strokes>([]);
+  const currentStrokeRef = useRef<Point[]>([]);
+  const startTimeRef = useRef(0);
+  const speedPb = usePersonalBest(
+    "pb-speed-sketch-robot-time",
+    "lower",
+    phase === "done" && recognisedAt !== null ? recognisedAt : null
+  );
+
+  // Dynamic import so the ~model + inference code never lands in the shared
+  // bundle the other 15 games pay for -- only fetched once a round of Speed
+  // Sketch actually starts. Safe to call repeatedly: guarded against
+  // re-entry, and loadModel() itself caches the parsed model after the
+  // first successful fetch.
+  const ensureModelLoaded = useCallback(() => {
+    if (modelState === "loading" || modelState === "ready") return;
+    setModelState("loading");
+    (async () => {
+      try {
+        const mod = quickdrawRef.current ?? (await import("../lib/quickdraw"));
+        quickdrawRef.current = mod;
+        modelRef.current = await mod.loadModel();
+        setModelState("ready");
+      } catch (err) {
+        // Offline, a flaky fetch, or a slow tablet timing out -- the game
+        // must stay exactly as playable as it was before this feature, just
+        // without a score. Never let a network failure break the canvas.
+        console.warn("speed-sketch: quickdraw model unavailable, playing unscored", err);
+        setModelState("error");
+      }
+    })();
+  }, [modelState]);
+
   const startGame = () => {
     const p = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
     setPrompt(p);
     setTimeLeft(30);
     setPhase("drawing");
+    strokesRef.current = [];
+    currentStrokeRef.current = [];
+    recognisedRef.current = false;
+    setRecognisedAt(null);
+    setLiveGuess(null);
+    startTimeRef.current = Date.now();
+    ensureModelLoaded();
   };
 
   // The canvas only mounts once phase !== "ready", so painting it inside
@@ -94,6 +159,33 @@ export default function SpeedSketch() {
     [color, brushSize]
   );
 
+  // Runs the recogniser on the strokes drawn so far. Called once per
+  // completed stroke (pointer up), never on every pointer move -- at ~5ms
+  // (measured) to ~50ms (slow tablet, assumed) per call, running it on
+  // every move event would burn a noticeable chunk of frame budget for no
+  // extra signal, since a stroke in progress doesn't change the picture the
+  // model would see until it's finished.
+  const classifyCurrentDrawing = useCallback(() => {
+    if (modelState !== "ready" || !modelRef.current || !quickdrawRef.current) return;
+    if (strokesRef.current.length === 0) return;
+    try {
+      const { classify, strokesToBitmap } = quickdrawRef.current;
+      const bitmap = strokesToBitmap(strokesRef.current);
+      const preds = classify(modelRef.current, bitmap, 3);
+      setLiveGuess(preds);
+      if (!recognisedRef.current && preds[0]?.label === prompt) {
+        recognisedRef.current = true;
+        setRecognisedAt((Date.now() - startTimeRef.current) / 1000);
+      }
+    } catch (err) {
+      // A malformed bitmap or an unexpected model shape shouldn't ever take
+      // the canvas down with it -- fall back to unscored play, same as a
+      // failed model load.
+      console.warn("speed-sketch: classification failed, disabling robot feedback", err);
+      setModelState("error");
+    }
+  }, [modelState, prompt]);
+
   const draw = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
       if (!drawing.current || phase !== "drawing") return;
@@ -102,6 +194,7 @@ export default function SpeedSketch() {
         drawStroke(lastPos.current, pos);
       }
       lastPos.current = pos;
+      currentStrokeRef.current.push(pos);
     },
     [phase, drawStroke]
   );
@@ -111,6 +204,7 @@ export default function SpeedSketch() {
     drawing.current = true;
     const pos = getPos(e);
     lastPos.current = pos;
+    currentStrokeRef.current = [pos];
     // A tap with no intervening move never reaches draw()'s stroke code —
     // paint a zero-length stroke here through the same drawStroke function
     // so a tap produces the round-cap dot a minimal drag would.
@@ -118,6 +212,11 @@ export default function SpeedSketch() {
   };
 
   const stopDraw = () => {
+    if (drawing.current && currentStrokeRef.current.length > 0) {
+      strokesRef.current = [...strokesRef.current, currentStrokeRef.current];
+      currentStrokeRef.current = [];
+      if (phase === "drawing") classifyCurrentDrawing();
+    }
     drawing.current = false;
     lastPos.current = null;
   };
@@ -178,6 +277,21 @@ export default function SpeedSketch() {
             onTouchEnd={stopDraw}
           />
 
+          {/* Fixed-height row so the robot's live guess popping in/out never
+              shifts the color palette below it. */}
+          {phase === "drawing" && (
+            <div className="mt-2 h-6 flex items-center justify-center text-sm">
+              {modelState === "loading" && (
+                <span className="text-ink-3">🤖 waking up…</span>
+              )}
+              {modelState === "ready" && liveGuess && liveGuess[0] && (
+                <span className={recognisedRef.current ? "text-green-400 font-bold" : "text-ink-2"}>
+                  🤖 I think it&apos;s a {liveGuess[0].label}!
+                </span>
+              )}
+            </div>
+          )}
+
           {phase === "drawing" && (
             <div className="mt-3 flex items-center gap-3 flex-wrap">
               <div className="flex gap-1">
@@ -224,6 +338,31 @@ export default function SpeedSketch() {
             <div className="text-center mt-2">
               {pb.isNewBest && <p className="text-yellow-400 font-bold text-sm animate-pulse">New Personal Best!</p>}
               {pb.best !== null && !pb.isNewBest && <p className="text-ink-3 text-xs">Personal Best: {pb.best}% coverage</p>}
+            </div>
+          )}
+
+          {/* Robot score. Only rendered when the model actually loaded --
+              if it didn't (offline, slow tablet, fetch error), the game
+              ends exactly the way it always has, just without this block. */}
+          {phase === "done" && modelState === "ready" && (
+            <div className="text-center mt-3">
+              {recognisedAt !== null ? (
+                <>
+                  <p className="text-2xl font-bold text-green-400">
+                    🤖 GOT IT in {recognisedAt.toFixed(1)}s!
+                  </p>
+                  {speedPb.isNewBest && (
+                    <p className="text-yellow-400 font-bold text-xs animate-pulse mt-1">New fastest robot guess!</p>
+                  )}
+                  {speedPb.best !== null && !speedPb.isNewBest && (
+                    <p className="text-ink-3 text-xs mt-1">Fastest robot guess: {speedPb.best.toFixed(1)}s</p>
+                  )}
+                </>
+              ) : (
+                <p className="text-ink-2 text-sm">
+                  🤖 The robot couldn&apos;t tell it was a {prompt} this time.
+                </p>
+              )}
             </div>
           )}
 
